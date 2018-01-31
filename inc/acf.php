@@ -206,10 +206,10 @@ $eventfields[] = array(
 		'class' => '',
 		'id' => '',
 	),
-	'center_lat' => '',
-	'center_lng' => '',
-	'zoom' => '',
-	'height' => '',
+	'center_lat' => '40.6976701',
+	'center_lng' => '-74.25987,10',
+	'zoom' => '14',
+	'height' => '280',
 );
 $eventfields[] = array(
 	'key' => 'field_5616befced0ab',

@@ -8,12 +8,23 @@ function squarecandy_events_func($atts)
 	// is this a "compact" display? [squarecandy_events style=compact]
 	$compact = ( isset($atts['style']) && $atts['style'] == 'compact' ) ? true : false;
 
+	$archive_by_year = get_field('archive_by_year','option');
+	$accordion = false;
+	if ( $archive_by_year && get_field('accordion','option') ) $accordion = true;
+
 	$orderby = array(
 		'start_date' => 'ASC',
 		'start_time' => 'ASC',
 	);
 
 	if ( isset($atts['type']) && $atts['type'] == 'past' ) {
+
+		if ( !$archive_by_year ) {
+			$orderby = array(
+				'start_date' => 'DESC',
+				'start_time' => 'ASC',
+			);
+		}
 
 		// past events archive [squarecandy_events type=past]
 		$args = array(
@@ -59,8 +70,8 @@ function squarecandy_events_func($atts)
 	}
 
 	if ($compact) {
-		$args['posts_per_page'] = 3;
-		$thisid = get_the_ID();
+		$args['posts_per_page'] = get_field('number_of_upcoming', 'option');
+		// $thisid = get_the_ID();
 		// $args['post__not_in'] = array($thisid);
 	}
 
@@ -70,6 +81,8 @@ function squarecandy_events_func($atts)
 	$output = '';
 
 	if ($the_query2->have_posts()):
+
+
 		$output .= '<section class="event-listing';
 		if ($compact) {
 			$output .= ' event-listing-compact';
@@ -77,11 +90,16 @@ function squarecandy_events_func($atts)
 		if ($past) {
 			$output .= ' event-listing-past';
 		}
+		if ( $past && $accordion ) {
+			$output .= ' event-listing-past-accordion';
+		}
+		if ( $past && $archive_by_year) {
+			$output .= ' event-listing-past-by-year';
+		}
 		$output .= '">';
 
-		if ($past) {
-			// $output .= '<h2 class="acf-events-title">' . __( 'Past Events', 'squarecandy-acf-events' ) . '</h2>';
-
+		// if this is a past event type and is grouped by year
+		if ($past && $archive_by_year ) {
 			// @TODO make grouping by year optional
 			$pastevents = array();
 			while ($the_query2->have_posts()) : $the_query2->the_post();
@@ -90,7 +108,14 @@ function squarecandy_events_func($atts)
 			endwhile;
 			krsort($pastevents);
 			foreach ($pastevents as $year => $items) {
-				$output .= '<h2 class="accordion-header">'.$year.'</h2><div class="accordion-content">';
+				$output .= '<h2 class="events-year-header';
+				if ($accordion) $output .= ' accordion-header';
+				$output .= '">' . $year . '</h2>';
+
+				$output .= '<div class="event-year-content';
+				if ($accordion) $output .= ' accordion-content';
+				$output .= '">';
+
 				$args['post__in'] = $items;
 				$the_query3 = new WP_Query($args);
 				if ($the_query3->have_posts()):
@@ -102,11 +127,19 @@ function squarecandy_events_func($atts)
 				$output .= '</div>';
 			}
 		} else {
-			// $output .= '<h2 class="acf-events-title">' . __( 'Upcoming Events', 'squarecandy-acf-events' ) . '</h2>';
 			while ($the_query2->have_posts()) : $the_query2->the_post();
 				include(ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php');
 				// $output .= get_the_title();
 			endwhile;
+		}
+
+		pre_r( get_field('more_link', 'option') );
+
+		pre_r( $the_query2->post_count );
+		pre_r( $args['posts_per_page'] );
+
+		if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link = get_field('more_link', 'option') ) {
+			$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
 		}
 
 		$output .= '</section>';

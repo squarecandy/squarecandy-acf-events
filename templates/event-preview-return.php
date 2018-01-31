@@ -12,7 +12,9 @@ if ( !empty($event['end_date']) ) {
 }
 
 $output .= '<meta itemprop="endDate" content="' . $meta_end_date .'">';
-$output .= '<h2 class="entry-title" itemprop="name"><a href="' . get_permalink() . '">' . get_the_title() .'</a></h2>';
+if ( !$compact || ( $compact && get_field('show_title', 'option') ) ) {
+	$output .= '<h2 class="entry-title" itemprop="name"><a href="' . get_permalink() . '">' . get_the_title() .'</a></h2>';
+}
 $output .= '<meta itemprop="url" content="' . get_permalink() . '">';
 
 if ( !empty($event['venue']) ) :
@@ -28,16 +30,20 @@ if ( !empty($event['venue']) ) :
 		$output .= '<span class="city-state">' . $event['city_state'] . '</span>';
 	}
 	if ( !empty($event['venue_location']) && !empty($event['venue_location']['address']) ) {
-		$output .= '<a class="button small button-gray button-map" href="https://www.google.com/maps/search/' . urlencode($event['venue_location']['address']) .'">';
-		$output .= '<i class="fa fa-map"></i> ' . __('map', 'squarecandy-acf-events');
-		$output .= '</a>';
+		if ( get_field('map_link', 'option') ) {
+			$output .= '<a class="button small button-gray button-map" href="https://www.google.com/maps/search/' . urlencode($event['venue_location']['address']) .'">';
+			$output .= '<i class="fa fa-map"></i> ' . __('map', 'squarecandy-acf-events');
+			$output .= '</a>';
+		}
 		$output .= '<meta itemprop="address" content="' .$event['venue_location']['address'] .'">';
 	}
 	$output .= '</div>';
 endif;
 
 if ( !empty($event['short_description']) ) {
-	$output .= '<div class="short-description" itemprop="description">' . $event['short_description'] . '</div>';
+	if ( !$compact || ( $compact && get_field('show_description', 'option') ) ) {
+		$output .= '<div class="short-description" itemprop="description">' . $event['short_description'] . '</div>';
+	}
 }
 
 $output .= '<div class="more-info-buttons">';
@@ -49,33 +55,40 @@ $output .= '<div class="more-info-buttons">';
 		</span> ';
 	}
 
-	if ( !empty($event['more_info_link']) ) {
+	if ( !empty($event['more_info_link']) && !$compact ) {
 		$output .= '<a class="button button-bold" href="' . $event['more_info_link'] . '">
 			<i class="fa fa-info-circle"></i> ' . __('More Info', 'squarecandy-acf-events') . '
 		</a> ';
 	}
-
-	$startdate = $event['start_date'];
-	if ( isset($event['start_time']) ) $startdate .= ' ' . $event['start_time'];
-
-	if ($event['multi_day']==1) {
-		$enddate = $event['end_date'];
-		if ( isset($event['end_time']) ) $enddate .= ' ' . $event['end_time'];
+	if ( $compact ) {
+		$output .= '<a class="button button-bold" href="' . get_permalink() . '">
+			<i class="fa fa-info-circle"></i> ' . __('More Info', 'squarecandy-acf-events') . '
+		</a> ';
 	}
-	else {
-		$enddate = false;
-	}
-	$event_address = isset($event['venue_location']['address']) ? $event['venue_location']['address'] : null;
-	$output .= squarecandy_add_to_gcal(
-		get_the_title(),
-		$startdate,
-		$enddate,
-		$event['short_description'],
-		$event_address,
-		$event['all_day'],
-		$linktext = '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __('add to google calendar', 'squarecandy-acf-events') . '</span>',
-		$classes = array('gcal-button', 'button', 'button-bold')
-	);
+
+	if ( get_field('add_to_gcal', 'option') ) :
+		$startdate = $event['start_date'];
+		if ( isset($event['start_time']) ) $startdate .= ' ' . $event['start_time'];
+
+		if ($event['multi_day']==1) {
+			$enddate = $event['end_date'];
+			if ( isset($event['end_time']) ) $enddate .= ' ' . $event['end_time'];
+		}
+		else {
+			$enddate = false;
+		}
+		$event_address = isset($event['venue_location']['address']) ? $event['venue_location']['address'] : null;
+		$output .= squarecandy_add_to_gcal(
+			get_the_title(),
+			$startdate,
+			$enddate,
+			$event['short_description'],
+			$event_address,
+			$event['all_day'],
+			$linktext = '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __('add to google calendar', 'squarecandy-acf-events') . '</span>',
+			$classes = array('gcal-button', 'button', 'button-bold')
+		);
+	endif;
 
 $output .= '</div>
 </article>';

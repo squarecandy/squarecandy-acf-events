@@ -92,7 +92,7 @@ function squarecandy_acf_events_template_chooser( $template ) {
 }
 
 
-function get_squarecandy_acf_events_date_display($event, $compact) {
+function get_squarecandy_acf_events_date_display($event, $compact = null) {
 	$formats = get_field('date_formats','option');
 	if ($compact) {
 		$formats['date_format'] = $formats['date_format_compact'];

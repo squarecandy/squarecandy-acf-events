@@ -7,6 +7,7 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 		<?php while ( have_posts() ) : the_post(); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(array('events-full')); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
+				<?php the_post_thumbnail(); // @TODO - make this better: custom banner size, allow for caption, etc.  ?>
 				<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
 				<h2 class="event-date-time" itemprop="startDate" content="<?php echo date('Y-m-d',strtotime($event['start_date'])); ?>">
 					<?php squarecandy_acf_events_date_display($event); ?>
@@ -26,9 +27,11 @@ get_header(); ?>
 					<?php } ?>
 
 					<?php if ( !empty($event['venue_location']) && !empty($event['venue_location']['address']) ) { ?>
-						<a class="button small button-gray button-map" href="https://www.google.com/maps/search/<?php echo urlencode($event['venue_location']['address']); ?>">
-							<i class="fa fa-map"></i> map
-						</a>
+						<?php if ( get_field('map_link', 'option') ) { ?>
+							<a class="button small button-gray button-map" href="https://www.google.com/maps/search/<?php echo urlencode($event['venue_location']['address']); ?>">
+								<i class="fa fa-map"></i> map
+							</a>
+						<?php } ?>
 						<meta itemprop="address" content="<?php echo $event['venue_location']['address']; ?>"/>
 					<?php } ?>
 
@@ -52,23 +55,36 @@ get_header(); ?>
 				<?php } ?>
 
 				<?php
-					if ($event['multi_day']==1) {
-						$enddate = $event['end_date'].' '.$event['end_time'];
-					}
-					else {
-						$enddate = false;
-					}
-					$event_address = isset($event['venue_location']['address']) ? $event['venue_location']['address'] : null;
-					echo squarecandy_add_to_gcal(
-						get_the_title(),
-						$event['start_date'].' '.$event['start_time'],
-						$enddate,
-						$event['short_description'],
-						$event_address,
-						$event['all_day'],
-						$linktext = '<i class="fa fa-google"></i> add to gCal',
-						$classes = array('gcal-button', 'button', 'button-bold')
-					);
+					if ( get_field('add_to_gcal', 'option') ) :
+						$startdate = $event['start_date'];
+						if ( isset($event['start_time']) ) $startdate .= ' ' . $event['start_time'];
+
+						if ($event['multi_day']==1) {
+							$enddate = $event['end_date'];
+							if ( isset($event['end_time']) ) $enddate .= ' ' . $event['end_time'];
+						}
+						else {
+							$enddate = false;
+						}
+
+						if ($event['multi_day']==1) {
+							$enddate = $event['end_date'].' '.$event['end_time'];
+						}
+						else {
+							$enddate = false;
+						}
+						$event_address = isset($event['venue_location']['address']) ? $event['venue_location']['address'] : null;
+						echo squarecandy_add_to_gcal(
+							get_the_title(),
+							$startdate,
+							$enddate,
+							$event['short_description'],
+							$event_address,
+							$event['all_day'],
+							$linktext = '<i class="fa fa-google"></i> add to gCal',
+							$classes = array('gcal-button', 'button', 'button-bold')
+						);
+					endif;
 				?>
 
 				</div>
@@ -102,12 +118,21 @@ get_header(); ?>
 						?>
 					</div>
 				<?php endif; ?>
+
+				<?php if ( get_field('show_map_on_detail_page', 'option') &&
+					!empty($event['venue_location']) &&
+					!empty($event['venue_location']['lat']) &&
+					!empty($event['venue_location']['lng'])
+				) : ?>
+					<div class="map">
+						<h2>@TODO - full map display on single event page</h2>
+					</div>
+				<?php endif; ?>
 			</article><!-- #post-## -->
 		<?php endwhile; // End of the loop. ?>
 		</main><!-- #main -->
 	</div><!-- #primary -->
 <?php
-// pre_r($event);
 
 get_sidebar();
 get_footer();
