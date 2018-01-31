@@ -1,0 +1,81 @@
+<?php
+// Square Candy ACF Events Preview/Listing Post Template
+$event = get_fields();
+?>
+<article id="post-<?php the_ID(); ?>" <?php post_class(array('events-preview')); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
+	<h1 class="event-date-time" itemprop="startDate" content="<?php echo date('Y-m-d',strtotime($event['start_date'])); ?>">
+		<a href="<?php the_permalink(); ?>">
+			<?php squarecandy_acf_events_date_display($event); ?>
+		</a>
+	</h1>
+	<?php
+		if ( !empty($event['end_date']) ) {
+			$meta_end_date = date( 'Y-m-d', strtotime( $event['end_date'] ) );
+		} else {
+			$meta_end_date = date( 'Y-m-d', strtotime( $event['start_date'] ) );
+		}
+	?>
+	<meta itemprop="endDate" content="<?php echo $meta_end_date; ?>">
+
+	<h2 class="entry-title " itemprop="name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+	<meta itemprop="url" content="<?php the_permalink(); ?>">
+
+	<?php if ( !empty($event['venue']) ) : ?>
+		<div class="venue" itemprop="location" itemscope="" itemtype="http://schema.org/MusicVenue">
+			<?php if ( !empty($event['venue_link']) ) { ?><a href="<?php $event['venue_link']; ?>" itemprop="url"><?php } ?>
+				<span itemprop="name"><?php echo $event['venue']; ?></span>
+			<?php if ( !empty($event['venue_link']) ) { ?></a><?php } ?>
+			<?php if ( !empty($event['city_state']) ) { ?>
+				<span class="city-state"><?php echo $event['city_state']; ?></span>
+			<?php } ?>
+			<?php if ( !empty($event['venue_location']) && !empty($event['venue_location']['address']) ) { ?>
+				<a class="button small button-gray button-map" href="https://www.google.com/maps/search/<?php echo urlencode($event['venue_location']['address']); ?>">
+					<i class="fa fa-map"></i> map
+				</a>
+				<meta itemprop="address" content="<?php echo $event['venue_location']['address']; ?>"/>
+			<?php } ?>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( !empty($event['short_description']) ) { ?>
+		<div class="short-description" itemprop="description"><?php echo $event['short_description']; ?></div>
+	<?php } ?>
+
+	<div class="more-info-buttons">
+
+	<?php if ( !empty($event['tickets_link']) ) { ?>
+		<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+			<a class="button button-bold" itemprop="url" href="<?php echo $event['tickets_link']; ?>">
+				<i class="fa fa-ticket"></i> Tickets
+			</a>
+		</span>
+	<?php } ?>
+
+	<?php if ( !empty($event['more_info_link']) ) { ?>
+		<a class="button button-bold" href="<?php echo $event['more_info_link']; ?>">
+			<i class="fa fa-info-circle"></i> More Info
+		</a>
+	<?php } ?>
+
+	<?php
+		if ($event['multi_day']==1) {
+			$enddate = $event['end_date'].' '.$event['end_time'];
+		}
+		else {
+			$enddate = false;
+		}
+		$event_address = isset($event['venue_location']['address']) ? $event['venue_location']['address'] : null;
+		echo squarecandy_add_to_gcal(
+			get_the_title(),
+			$event['start_date'].' '.$event['start_time'],
+			$enddate,
+			$event['short_description'],
+			$event_address,
+			$event['all_day'],
+			$linktext = '<i class="fa fa-google"></i> add to gCal',
+			$classes = array('gcal-button', 'button', 'button-bold')
+		);
+	?>
+	</div>
+
+</article><!-- #post-## -->
