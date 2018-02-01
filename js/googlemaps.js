@@ -3,7 +3,7 @@ jQuery(document).ready(function($){
 	$('#map').css('height','60vh');
 
 	// edit style settings at https://mapstyle.withgoogle.com/
-	var styles = [
+	var styles =[
 		{
 			"elementType": "geometry",
 			"stylers": [
@@ -179,15 +179,6 @@ jQuery(document).ready(function($){
 		},
 		{
 			"featureType": "road.arterial",
-			"elementType": "labels",
-			"stylers": [
-				{
-					"visibility": "off"
-				}
-			]
-		},
-		{
-			"featureType": "road.arterial",
 			"elementType": "labels.text",
 			"stylers": [
 				{
@@ -201,15 +192,6 @@ jQuery(document).ready(function($){
 			"stylers": [
 				{
 					"color": "#3c3c3c"
-				}
-			]
-		},
-		{
-			"featureType": "road.highway",
-			"elementType": "labels",
-			"stylers": [
-				{
-					"visibility": "off"
 				}
 			]
 		},
@@ -233,9 +215,10 @@ jQuery(document).ready(function($){
 		},
 		{
 			"featureType": "road.local",
+			"elementType": "geometry.stroke",
 			"stylers": [
 				{
-					"visibility": "off"
+					"visibility": "on"
 				}
 			]
 		},
