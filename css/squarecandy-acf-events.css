@@ -17,15 +17,22 @@
 	line-height: 1.1;
 	font-size: 130%;
 }
-
 .events-preview h2 {
 	margin: 0 0 5px;
 	line-height: 1.1;
 	font-size: 120%;
 }
+.events-preview h1 a,
+.events-preview h2 a,
+.events-preview h1 a:hover,
+.events-preview h2 a:hover {
+	text-decoration: none;
+	box-shadow: none;
+}
 
 .events-preview {
 	position: relative;
+	padding: 0 0 1.5em;
 }
 
 .events-preview .more-info-buttons {
@@ -66,7 +73,7 @@
 	margin: 0 0 6px 6px;
 }
 
-.event-listing-past-accordion .events-preview {
+.event-listing-past .events-preview {
 	border-top: 1px solid #999;
 	padding-top: 15px;
 }
@@ -122,14 +129,38 @@ a.button.small {
 	margin: 5px 40px;
 }
 
-h2.events-year-header {
+h2.accordion-header {
 	background: #555;
 	color: #fff;
 	font-size: 2em;
 	line-height: 1.1;
 	margin: 20px 0;
-	padding: 10px;
-}
-h2.accordion-header {
+	padding: 10px 10px 5px 10px;
 	cursor: pointer;
+}
+
+
+a.button {
+	background-color: #777;
+	color: #fff;
+	text-decoration: none;
+	box-shadow: none;
+	display: inline-block;
+	padding: 10px;
+	font-size: 1em;
+	line-height: 1;
+	border-radius: 3px;
+	transition: background-color 300ms;
+	margin: 0 10px 10px 0;
+	border: 0;
+}
+a.button:hover {
+	background-color: #999;
+	color: #fff;
+}
+a.button:focus,
+a.button:active {
+	background-color: #666;
+	color: #fff;
+	outline: none;
 }

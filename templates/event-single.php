@@ -124,9 +124,7 @@ get_header(); ?>
 					!empty($event['venue_location']['lat']) &&
 					!empty($event['venue_location']['lng'])
 				) : ?>
-					<div class="map">
-						<h2>@TODO - full map display on single event page</h2>
-					</div>
+					<div id="map"></div>
 				<?php endif; ?>
 			</article><!-- #post-## -->
 		<?php endwhile; // End of the loop. ?>

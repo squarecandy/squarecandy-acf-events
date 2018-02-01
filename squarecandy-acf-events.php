@@ -24,8 +24,27 @@ function squarecandy_acf_events_activate(){
 
 // Front End Scripts and Styles
 function squarecandy_acf_events_enqueue_scripts() {
-	// add colorpicker js to the admin
+
+	wp_enqueue_style('squarecandy-fontawesome', plugins_url('css/vendor/font-awesome/css/font-awesome.min.css', __FILE__));
 	wp_enqueue_style('squarecandy-acf-events-css', plugins_url('css/squarecandy-acf-events.css', __FILE__));
+
+	if (
+		// if maps option is on
+		get_field('show_map_on_detail_page', 'option') &&
+		// and there's a google maps API key entered
+		get_field('google_maps_api_key', 'option') &&
+		// and it's a single page view
+		is_single() &&
+		// and it's an event
+		'event' == get_post_type( get_the_ID() )
+	) {
+		$google_maps_api_key = get_field('google_maps_api_key', 'option');
+		wp_enqueue_script( 'squarecandy-acf-events-gmapapi', 'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key, array(), '20180101', true );
+		wp_enqueue_script('squarecandy-acf-events-maps', plugins_url('js/googlemaps.js', __FILE__), array('jquery'), false, true);
+		$data = get_field('venue_location');
+		wp_localize_script( 'squarecandy-acf-events-maps', 'LOCATION', $data);
+	}
+
 	wp_enqueue_script('squarecandy-acf-events-js', plugins_url('js/squarecandy-acf-events.js', __FILE__), array('jquery'), false, true);
 }
 add_action('wp_enqueue_scripts', 'squarecandy_acf_events_enqueue_scripts');
@@ -35,6 +54,23 @@ function squarecandy_acf_events_admin_enqueue() {
 	wp_enqueue_style( 'squarecandy-acf-events-admin-css',  plugins_url('css/squarecandy-acf-events-admin.css', __FILE__), false, '1.0.0' );
 }
 add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_admin_enqueue' );
+
+
+// Load some scripts with async/defer
+// https://matthewhorne.me/defer-async-wordpress-scripts/
+function squarecandy_acf_events_async_attribute($tag, $handle) {
+	// add script handles to the array below
+	$scripts_to_async = array('squarecandy-acf-events-gmapapi');
+
+	foreach($scripts_to_async as $async_script) {
+		if ($async_script === $handle) {
+			return str_replace(' src', ' async="async" defer="defer" src', $tag);
+		}
+	}
+	return $tag;
+}
+add_filter('script_loader_tag', 'squarecandy_acf_events_async_attribute', 10, 2);
+
 
 
 // add a new custom post type for events

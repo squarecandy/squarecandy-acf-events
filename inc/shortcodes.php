@@ -133,11 +133,7 @@ function squarecandy_events_func($atts)
 			endwhile;
 		}
 
-		pre_r( get_field('more_link', 'option') );
-
-		pre_r( $the_query2->post_count );
-		pre_r( $args['posts_per_page'] );
-
+		// for the "compact" view, show the link to the full events page if there are more events.
 		if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link = get_field('more_link', 'option') ) {
 			$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
 		}
