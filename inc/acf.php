@@ -193,12 +193,22 @@ $eventfields[] = array(
 	'prepend' => '',
 	'append' => '',
 );
+
+$instructions = '';
+if ( !get_field('google_maps_api_key') ) {
+	$instructions = 'Looks like you don‘t have a Google Maps API key yet. First,
+		<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
+		target="_blank">get your API key here</a>. Then enter it on the
+		<a href="/wp-admin/edit.php?post_type=event&page=acf-options-event-settings">Events
+		Settings page here</a>.';
+}
+
 $eventfields[] = array(
 	'key' => 'field_5616c0e68be8f',
 	'label' => 'Venue Location',
 	'name' => 'venue_location',
 	'type' => 'google_map',
-	'instructions' => '',
+	'instructions' => $instructions,
 	'required' => 0,
 	'conditional_logic' => 0,
 	'wrapper' => array(
@@ -657,7 +667,8 @@ acf_add_local_field_group(array(
 			'label' => 'Google Maps API Key',
 			'name' => 'google_maps_api_key',
 			'type' => 'text',
-			'instructions' => '',
+			'instructions' => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
+			target="_blank">Get Your API Key Here</a>',
 			'required' => 0,
 			'conditional_logic' => 0,
 			'wrapper' => array(
