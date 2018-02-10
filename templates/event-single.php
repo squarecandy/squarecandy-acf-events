@@ -7,7 +7,6 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 		<?php while ( have_posts() ) : the_post(); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(array('events-full')); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
-				<?php the_post_thumbnail(); // @TODO - make this better: custom banner size, allow for caption, etc.  ?>
 				<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
 				<h2 class="event-date-time" itemprop="startDate" content="<?php echo date('Y-m-d',strtotime($event['start_date'])); ?>">
 					<?php squarecandy_acf_events_date_display($event); ?>
@@ -54,6 +53,12 @@ get_header(); ?>
 					</a>
 				<?php } ?>
 
+				<?php if ( !empty($event['facebook_link']) ) { ?>
+					<a class="button button-bold button-facebook" href="<?php echo $event['facebook_link']; ?>">
+						<i class="fa fa-facebook"></i><?php _e('Facebook Event', 'squarecandy-acf-events'); ?>
+					</a>
+				<?php } ?>
+
 				<?php
 					if ( get_field('add_to_gcal', 'option') ) :
 						$startdate = $event['start_date'];
@@ -88,6 +93,8 @@ get_header(); ?>
 				?>
 
 				</div>
+
+				<?php the_post_thumbnail(); // @TODO - make this better: custom banner size, allow for caption, etc.  ?>
 
 				<?php
 					$test_empty_content = get_the_content();

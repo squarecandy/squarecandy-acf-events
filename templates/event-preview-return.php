@@ -1,6 +1,7 @@
 <?php
 // Square Candy ACF Events Preview/Listing Post Template
 $event = get_fields();
+
 $output .= '<article id="post-' . get_the_ID() .'" class="events-preview" itemscope="" itemtype="http://schema.org/MusicEvent">
 	<h1 class="event-date-time" itemprop="startDate" content="' . date('Y-m-d',strtotime($event['start_date'])) . '">
 		<a href="' . get_permalink() . '">' . get_squarecandy_acf_events_date_display($event, $compact) . '</a>
@@ -22,7 +23,7 @@ if ( !empty($event['venue']) ) :
 	if ( !empty($event['venue_link']) ) {
 		$output .= '<a href="' . $event['venue_link'] .'" itemprop="url">';
 	}
-	$output .= '<span itemprop="name">' . $event['venue'] .'</span>';
+	$output .= '<span itemprop="name">' . $event['venue'] .'</span> ';
 	if ( !empty($event['venue_link']) ) {
 		$output .= '</a> ';
 	}
@@ -41,7 +42,8 @@ if ( !empty($event['venue']) ) :
 endif;
 
 if ( !empty($event['short_description']) ) {
-	if ( !$compact || ( $compact && get_field('show_description', 'option') ) ) {
+	$show_description = get_field('show_description', 'option');
+	if ( !$compact || ( $compact && $show_description ) ) {
 		$output .= '<div class="short-description" itemprop="description">' . $event['short_description'] . '</div>';
 	}
 }
@@ -60,10 +62,23 @@ $output .= '<div class="more-info-buttons">';
 			<i class="fa fa-info-circle"></i> ' . __('More Info', 'squarecandy-acf-events') . '
 		</a> ';
 	}
+
 	if ( $compact ) {
 		$output .= '<a class="button button-bold" href="' . get_permalink() . '">
 			<i class="fa fa-info-circle"></i> ' . __('More Info', 'squarecandy-acf-events') . '
 		</a> ';
+	}
+
+	if ( !empty($event['facebook_link']) ) {
+		$output .= '<a class="button button-bold button-facebook" href="' . $event['facebook_link'] . '">
+			<i class="fa fa-facebook"></i> ';
+		if ( $compact ) {
+			$output .= '<span class="screen-reader-text">' . __('Facebook Event', 'squarecandy-acf-events') . '</span>';
+		}
+		else {
+			$output .= __('Facebook', 'squarecandy-acf-events');
+		}
+		$output .= '</a> ';
 	}
 
 	if ( get_field('add_to_gcal', 'option') ) :

@@ -37,23 +37,32 @@
 
 .events-preview .more-info-buttons {
 	position: absolute;
-	top: 10px;
-	right: 10px;
-	width: 45%;
+	top: 20px;
+	right: 0;
+	width: 52%;
 	margin: 0;
 	padding: 0;
-	text-align: right;
+	text-align: right; 
+}
+.event-listing-compact .more-info-buttons {
+	position: relative;
+	top: auto;
+	right: auto;
+	width: auto;
+	text-align: left;
 }
 
 .events-preview h1,
 .events-preview h2 {
-	max-width: 53%;
+	max-width: 47%;
 }
-
+.event-listing-compact h1,
+.event-listing-compact h2 {
+	max-width: none;
+}
 @media only screen and (max-width: 570px) {
 	.events-preview .more-info-buttons {
 		position: relative;
-		;
 		top: auto;
 		right: auto;
 		width: 100%;
@@ -73,12 +82,15 @@
 	margin: 0 0 6px 6px;
 }
 
-.event-listing-past .events-preview {
+.events-preview {
 	border-top: 1px solid #999;
-	padding-top: 15px;
+	padding: 20px 0;
+	margin-bottom: 20px;
 }
-
-.event-listing-past .events-preview:last-child {
+.events-preview:first-child {
+	border-top: none;
+}
+.events-preview:last-child {
 	margin-bottom: 0;
 	padding-bottom: 35px;
 }
@@ -123,7 +135,10 @@ a.button.small {
 	margin-top: 10px;
 	margin-left: 40px;
 }
-
+.event-listing-compact .venue {
+	margin-left: 0;
+	margin-top: 5px;
+}
 .short-description {
 	font-size: 0.85em;
 	margin: 5px 40px;

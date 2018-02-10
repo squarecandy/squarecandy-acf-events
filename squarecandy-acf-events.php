@@ -43,6 +43,8 @@ function squarecandy_acf_events_enqueue_scripts() {
 		wp_enqueue_script('squarecandy-acf-events-maps', plugins_url('js/googlemaps.js', __FILE__), array('jquery'), false, true);
 		$data = get_field('venue_location');
 		wp_localize_script( 'squarecandy-acf-events-maps', 'LOCATION', $data);
+		$mapjson = get_field('google_maps_json', 'option');
+		wp_localize_script( 'squarecandy-acf-events-maps', 'MAPJSON', $mapjson);
 	}
 
 	wp_enqueue_script('squarecandy-acf-events-js', plugins_url('js/squarecandy-acf-events.js', __FILE__), array('jquery'), false, true);
@@ -54,23 +56,6 @@ function squarecandy_acf_events_admin_enqueue() {
 	wp_enqueue_style( 'squarecandy-acf-events-admin-css',  plugins_url('css/squarecandy-acf-events-admin.css', __FILE__), false, '1.0.0' );
 }
 add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_admin_enqueue' );
-
-
-// Load some scripts with async/defer
-// https://matthewhorne.me/defer-async-wordpress-scripts/
-function squarecandy_acf_events_async_attribute($tag, $handle) {
-	// add script handles to the array below
-	$scripts_to_async = array('squarecandy-acf-events-gmapapi');
-
-	foreach($scripts_to_async as $async_script) {
-		if ($async_script === $handle) {
-			return str_replace(' src', ' async="async" defer="defer" src', $tag);
-		}
-	}
-	return $tag;
-}
-add_filter('script_loader_tag', 'squarecandy_acf_events_async_attribute', 10, 2);
-
 
 
 // add a new custom post type for events
@@ -130,6 +115,10 @@ function squarecandy_acf_events_template_chooser( $template ) {
 
 function get_squarecandy_acf_events_date_display($event, $compact = null) {
 	$formats = get_field('date_formats','option');
+	$sep = '<span class="datetime-sep">' . $formats['datetime_sep'] . '</span>';
+	$sep2 = '<span class="datetime-sep">' . $formats['datetime_sep2'] . '</span>';
+	$range = '<span class="datetime-range">' . $formats['datetime_range'] . '</span>';
+
 	if ($compact) {
 		$formats['date_format'] = $formats['date_format_compact'];
 		$formats['date_format_multi_start'] = $formats['date_format_compact_multi_start'];
@@ -142,7 +131,7 @@ function get_squarecandy_acf_events_date_display($event, $compact = null) {
 		$output .= date( $formats['date_format'], strtotime($event['start_date']) );
 		if ( $event['all_day'] != 1 ) {
 			// with time
-			$output .= ' &ndash; ' . date( $formats['time_format'], strtotime($event['start_time']) );
+			$output .= $sep . '<span class="time">' . date( $formats['time_format'], strtotime($event['start_time']) ) . '</span>';
 		}
 	}
 	else {
@@ -150,23 +139,29 @@ function get_squarecandy_acf_events_date_display($event, $compact = null) {
 		if ( $event['all_day'] == 1 && $event['start_date'] != $event['end_date'] ) {
 			// range of dates with no time (all day)
 			$output .= date( $formats['date_format_multi_start'], strtotime($event['start_date']) );
-			$output .= ' &ndash; ';
+			$output .= $range;
 			$output .= date( $formats['date_format_multi_end'], strtotime($event['end_date']) );
 		}
 		elseif ( $event['all_day'] == 1 && $event['start_date'] == $event['end_date'] ) {
 			// fringe case: start and end date are set the same, no time (all day)
 			$output .= date( $formats['date_format'], strtotime($event['start_date']) );
 		}
+		elseif ( $event['all_day'] != 1 && $event['start_date'] == $event['end_date'] && $event['start_time'] == $event['end_time'] ) {
+			// fringe case: start and end time and date are set the same
+			$output .= date( $formats['date_format'], strtotime($event['start_date']) );
+			$output .= $sep . '<span class="time">' . date( $formats['time_format'], strtotime($event['start_time']) ) . '</span>';
+		}
 		elseif ( $event['all_day'] != 1 && $event['start_date'] == $event['end_date'] ) {
 			// start and end date the same; range of times
 			$output .= date( $formats['date_format_multi_start'], strtotime($event['start_date']) );
-			$output .= ' &ndash; ';
-			$output .= date( $formats['time_format'], strtotime($event['start_time']) );
-			$output .= '&ndash;';
-			$output .= date( $formats['time_format'], strtotime($event['end_time']) );
+			$output .= $sep;
+			$output .= '<span class="time">' . date( $formats['time_format'], strtotime($event['start_time']) );
+			$output .= $range;
+			$output .= date( $formats['time_format'], strtotime($event['end_time']) ) . '</span>';
 		}
 		elseif ( $event['all_day'] != 1 && $event['start_date'] != $event['end_date'] ) {
-			$output .= $event['start_date'].', '.$event['start_time'].' &ndash; '.$event['end_date'].', '.$event['end_time'];
+			$output .= $event['start_date'] . $sep2 . '<span class="time">' . $event['start_time'] . '</span> ';
+			$output .= $range . ' ' . $event['end_date'] . $sep2 . '<span class="time">' . $event['end_time'] . '</span>';
 		}
 	}
 	return $output;

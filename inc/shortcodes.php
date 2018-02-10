@@ -1,9 +1,10 @@
 <?php
 
 // [squarecandy_events]
-function squarecandy_events_func($atts)
-{
-	$today = get_the_date('Ymd');
+function squarecandy_events_func($atts) {
+
+	$today = date('Ymd', time());
+	// pre_r($today);
 
 	// is this a "compact" display? [squarecandy_events style=compact]
 	$compact = ( isset($atts['style']) && $atts['style'] == 'compact' ) ? true : false;
@@ -71,17 +72,16 @@ function squarecandy_events_func($atts)
 
 	if ($compact) {
 		$args['posts_per_page'] = get_field('number_of_upcoming', 'option');
-		// $thisid = get_the_ID();
-		// $args['post__not_in'] = array($thisid);
 	}
+
+	// pre_r($args);
 
 	// query
 	$the_query2 = new WP_Query($args);
 
 	$output = '';
 
-	if ($the_query2->have_posts()):
-
+	if ( $the_query2->have_posts() ):
 
 		$output .= '<section class="event-listing';
 		if ($compact) {
@@ -127,9 +127,8 @@ function squarecandy_events_func($atts)
 				$output .= '</div>';
 			}
 		} else {
-			while ($the_query2->have_posts()) : $the_query2->the_post();
+			while ( $the_query2->have_posts() ) : $the_query2->the_post();
 				include(ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php');
-				// $output .= get_the_title();
 			endwhile;
 		}
 
@@ -137,15 +136,15 @@ function squarecandy_events_func($atts)
 		if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link = get_field('more_link', 'option') ) {
 			$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
 		}
-
 		$output .= '</section>';
+
 	else:
 		$output .= get_field('no_events_text','option');
 
 	endif;
 
-	return $output;
-
 	wp_reset_query();   // Restore global post data stomped by the_post().
+
+	return $output;
 }
 add_shortcode('squarecandy_events', 'squarecandy_events_func');

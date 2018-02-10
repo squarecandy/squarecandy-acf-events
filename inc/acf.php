@@ -254,6 +254,12 @@ $eventfields[] = array(
 	'placeholder' => '',
 );
 $eventfields[] = array(
+	'key' => 'field_facebooklink7293484',
+	'label' => 'Facebook Event Link',
+	'name' => 'facebook_link',
+	'type' => 'url',
+);
+$eventfields[] = array(
 	'key' => 'field_5616bf8eed0ad',
 	'label' => 'Short Description',
 	'name' => 'short_description',
@@ -660,7 +666,29 @@ acf_add_local_field_group(array(
 					'return_format' => 'value',
 					'placeholder' => '',
 				),
+				array(
+					'key' => 'field_timedatesep73847927483',
+					'label' => 'Date/Time Separator',
+					'name' => 'datetime_sep',
+					'type' => 'text',
+					'default_value' => ' – ',
+				),
+				array(
+					'key' => 'field_timedatesep2_729385610',
+					'label' => 'Date/Time Separator 2',
+					'name' => 'datetime_sep2',
+					'type' => 'text',
+					'default_value' => ', ',
+				),
+				array(
+					'key' => 'field_timedaterange733636483',
+					'label' => 'Date/Time Range Character',
+					'name' => 'datetime_range',
+					'type' => 'text',
+					'default_value' => '–',
+				),
 			),
+
 		),
 		array(
 			'key' => 'field_5a6e820093be4',
@@ -719,6 +747,13 @@ acf_add_local_field_group(array(
 			'ui' => 0,
 			'ui_on_text' => '',
 			'ui_off_text' => '',
+		),
+		array(
+			'key' => 'field_mapjson738474635',
+			'label' => 'Google Maps JSON',
+			'name' => 'google_maps_json',
+			'type' => 'textarea',
+			'instructions' => 'Generate JSON map stype code or edit existing code here: <a href="https://mapstyle.withgoogle.com/">https://mapstyle.withgoogle.com</a>',
 		),
 		array(
 			'key' => 'field_5a711b987ee7c',
