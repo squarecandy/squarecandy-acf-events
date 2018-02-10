@@ -175,23 +175,37 @@ $eventfields[] = array(
 	'placeholder' => '',
 );
 $eventfields[] = array(
-	'key' => 'field_585d8171a157e',
-	'label' => 'City, State',
-	'name' => 'city_state',
+	'key' => 'field_address226474957',
+	'label' => 'Address',
+	'name' => 'address',
 	'type' => 'text',
-	'instructions' => 'For US events, enter the city and state (example: Fort Worth, TX). For International, enter city and country (example: Paris, France).',
-	'required' => 0,
-	'conditional_logic' => 0,
+);
+$eventfields[] = array(
+	'key' => 'field_city585d8171a157e',
+	'label' => 'City',
+	'name' => 'city',
+	'type' => 'text',
 	'wrapper' => array(
-		'width' => '',
-		'class' => '',
-		'id' => '',
+		'width' => 50,
 	),
-	'default_value' => '',
-	'maxlength' => '',
-	'placeholder' => '',
-	'prepend' => '',
-	'append' => '',
+);
+$eventfields[] = array(
+	'key' => 'field_state94823hf873',
+	'label' => 'State/Province',
+	'name' => 'state',
+	'type' => 'text',
+	'wrapper' => array(
+		'width' => 25,
+	),
+);
+$eventfields[] = array(
+	'key' => 'field_zipfj8392y38r9',
+	'label' => 'Postal Code',
+	'name' => 'zip',
+	'type' => 'text',
+	'wrapper' => array(
+		'width' => 25,
+	),
 );
 
 $instructions = '';
