@@ -18,27 +18,12 @@ if ( !$compact || ( $compact && get_field('show_title', 'option') ) ) {
 }
 $output .= '<meta itemprop="url" content="' . get_permalink() . '">';
 
-if ( !empty($event['venue']) ) :
-	$output .= '<div class="venue" itemprop="location" itemscope="" itemtype="http://schema.org/MusicVenue">';
-	if ( !empty($event['venue_link']) ) {
-		$output .= '<a href="' . $event['venue_link'] .'" itemprop="url">';
+if ( !empty($event['venue']) || !empty($event['address']) || !empty($event['city']) ) :
+	if ($compact) {
+		$output .= get_squarecandy_acf_events_address_display($event, 'citystate', true);
+	} else {
+		$output .= get_squarecandy_acf_events_address_display($event, '2line', true);
 	}
-	$output .= '<span itemprop="name">' . $event['venue'] .'</span> ';
-	if ( !empty($event['venue_link']) ) {
-		$output .= '</a> ';
-	}
-	if ( !empty($event['city_state']) ) {
-		$output .= '<span class="city-state">' . $event['city_state'] . '</span>';
-	}
-	if ( !empty($event['venue_location']) && !empty($event['venue_location']['address']) ) {
-		if ( get_field('map_link', 'option') ) {
-			$output .= '<a class="button small button-gray button-map" href="https://www.google.com/maps/search/' . urlencode($event['venue_location']['address']) .'">';
-			$output .= '<i class="fa fa-map"></i> ' . __('map', 'squarecandy-acf-events');
-			$output .= '</a>';
-		}
-		$output .= '<meta itemprop="address" content="' .$event['venue_location']['address'] .'">';
-	}
-	$output .= '</div>';
 endif;
 
 if ( !empty($event['short_description']) ) {
@@ -71,14 +56,9 @@ $output .= '<div class="more-info-buttons">';
 
 	if ( !empty($event['facebook_link']) ) {
 		$output .= '<a class="button button-bold button-facebook" href="' . $event['facebook_link'] . '">
-			<i class="fa fa-facebook"></i> ';
-		if ( $compact ) {
-			$output .= '<span class="screen-reader-text">' . __('Facebook Event', 'squarecandy-acf-events') . '</span>';
-		}
-		else {
-			$output .= __('Facebook', 'squarecandy-acf-events');
-		}
-		$output .= '</a> ';
+			<i class="fa fa-facebook"></i>
+			<span class="screen-reader-text">' . __('Facebook Event', 'squarecandy-acf-events') . '</span>
+			</a> ';
 	}
 
 	if ( get_field('add_to_gcal', 'option') ) :

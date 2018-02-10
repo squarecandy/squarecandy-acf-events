@@ -2,7 +2,7 @@ jQuery(document).ready(function($){
 
 	$('#map').css('height','60vh');
 
-	if (MAPJSON.length > 2) {
+	if (MAPJSON && MAPJSON.length > 2) {
 		var styles = JSON.parse(MAPJSON);
 	}
 	else {
@@ -283,8 +283,6 @@ jQuery(document).ready(function($){
 		];
 	}
 
-	console.log(styles);
-
 	var myLatLng = new google.maps.LatLng(LOCATION.lat,LOCATION.lng);
 
 	var options = {
@@ -309,10 +307,10 @@ jQuery(document).ready(function($){
 		title: LOCATION.address
 	});
 
-	LOCATION.address = LOCATION.address.replace(", United States", "");
+	console.log(INFOWINDOW);
 
 	var infowindow = new google.maps.InfoWindow({
-		content: LOCATION.address,
+		content: INFOWINDOW,
 		maxWidth: 300
 	});
 	marker.addListener('click', function() {

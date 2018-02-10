@@ -158,6 +158,12 @@ $eventfields[] = array(
 		'width' => 25,
 	),
 );
+$eventfields[] = array(
+	'key' => 'field_country1749283947',
+	'label' => 'Country',
+	'name' => 'country',
+	'type' => 'text',
+);
 
 $instructions = '';
 if ( !get_field('google_maps_api_key','option') ) {
@@ -465,6 +471,18 @@ acf_add_local_field_group(array(
 			'type' => 'true_false',
 			'message' => 'Display Add to Google Calendar Buttons',
 			'default_value' => 1,
+		),
+		array(
+			'key' => 'field_homecountry17593483',
+			'label' => 'Home Country',
+			'name' => 'home_country',
+			'type' => 'text',
+			'instructions' => 'If the majority of your events are in one country, enter
+				your home country here to override some location displays. Hides the home
+				country name in most places. Provides <strong>City, State/Province</strong>
+				for the short version of you home country and <strong>City, Country</strong>
+				short version display for others.',
+			'default_value' => 'United States',
 		),
 		array(
 			'key' => 'field_5a711c1103fad',

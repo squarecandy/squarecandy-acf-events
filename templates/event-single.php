@@ -13,29 +13,7 @@ get_header(); ?>
 				</h2>
 
 				<meta itemprop="url" content="<?php the_permalink(); ?>">
-
-				<?php if (!empty($event['venue'])) : ?>
-					<div class="venue" itemprop="location" itemscope="" itemtype="http://schema.org/MusicVenue">
-
-					<?php if (!empty($event['venue_link'])) { ?><a href="<?php echo $event['venue_link']; ?>" itemprop="url"><?php } ?>
-						<span itemprop="name"><?php echo $event['venue']; ?></span>
-					<?php if (!empty($event['venue_link'])) { ?></a><?php } ?>
-
-					<?php if (!empty($event['city_state'])) { ?>
-						<span class="city-state"><?php echo $event['city_state']; ?></span>
-					<?php } ?>
-
-					<?php if ( !empty($event['venue_location']) && !empty($event['venue_location']['address']) ) { ?>
-						<?php if ( get_field('map_link', 'option') ) { ?>
-							<a class="button small button-gray button-map" href="https://www.google.com/maps/search/<?php echo urlencode($event['venue_location']['address']); ?>">
-								<i class="fa fa-map"></i> map
-							</a>
-						<?php } ?>
-						<meta itemprop="address" content="<?php echo $event['venue_location']['address']; ?>"/>
-					<?php } ?>
-
-					</div>
-				<?php endif; ?>
+				<?php squarecandy_acf_events_address_display($event, '3line'); ?>
 
 				<div class="more-info-buttons">
 
@@ -55,7 +33,7 @@ get_header(); ?>
 
 				<?php if ( !empty($event['facebook_link']) ) { ?>
 					<a class="button button-bold button-facebook" href="<?php echo $event['facebook_link']; ?>">
-						<i class="fa fa-facebook"></i><?php _e('Facebook Event', 'squarecandy-acf-events'); ?>
+						<i class="fa fa-facebook"></i> <?php _e('Facebook', 'squarecandy-acf-events'); ?>
 					</a>
 				<?php } ?>
 
