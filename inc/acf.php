@@ -195,7 +195,7 @@ $eventfields[] = array(
 );
 
 $instructions = '';
-if ( !get_field('google_maps_api_key') ) {
+if ( !get_field('google_maps_api_key','option') ) {
 	$instructions = 'Looks like you don‘t have a Google Maps API key yet. First,
 		<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
 		target="_blank">get your API key here</a>. Then enter it on the

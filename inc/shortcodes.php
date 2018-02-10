@@ -1,5 +1,4 @@
 <?php
-
 // [squarecandy_events]
 function squarecandy_events_func($atts) {
 
