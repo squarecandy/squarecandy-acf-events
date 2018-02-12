@@ -180,7 +180,7 @@ a.button:active {
 	outline: none;
 }
 
-
+/* hide empty button in upper left of google maps */
 .gm-style-mtc {
 	display: none;
 }

@@ -41,13 +41,21 @@ function squarecandy_acf_events_enqueue_scripts() {
 		$google_maps_api_key = get_field('google_maps_api_key', 'option');
 		wp_enqueue_script( 'squarecandy-acf-events-gmapapi', 'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key, array(), '20180101', true );
 		wp_enqueue_script('squarecandy-acf-events-maps', plugins_url('js/googlemaps.js', __FILE__), array('jquery'), false, true);
-		$data = get_field('venue_location');
-		wp_localize_script( 'squarecandy-acf-events-maps', 'LOCATION', $data);
-		$mapjson = get_field('google_maps_json', 'option');
-		wp_localize_script( 'squarecandy-acf-events-maps', 'MAPJSON', $mapjson);
+		// gather data to localize in the google maps script
+		$data['location'] = get_field('venue_location');
+		$data['mapjson'] = get_field('google_maps_json', 'option');
 		$event = get_fields();
-		$infowindow = get_squarecandy_acf_events_address_display($event, 'infowindow', false);
-		wp_localize_script( 'squarecandy-acf-events-maps', 'INFOWINDOW', $infowindow);
+		$data['infowindow'] = get_squarecandy_acf_events_address_display($event, 'infowindow', false);
+		if ( !isset($event['zoom_level']) ) {
+			if ( get_field('default_zoom_level', 'option') ) $event['zoom_level'] = get_field('default_zoom_level', 'option');
+			else $event['zoom_level'] = 15;
+		}
+		$data['zoomlevel'] = $event['zoom_level'];
+		wp_localize_script( 'squarecandy-acf-events-maps', 'DATA', $data);
+
+		// wp_localize_script( 'squarecandy-acf-events-maps', 'MAPJSON', $mapjson);
+
+		// wp_localize_script( 'squarecandy-acf-events-maps', 'INFOWINDOW', $infowindow);
 	}
 
 	wp_enqueue_script('squarecandy-acf-events-js', plugins_url('js/squarecandy-acf-events.js', __FILE__), array('jquery'), false, true);

@@ -174,6 +174,7 @@ if ( !get_field('google_maps_api_key','option') ) {
 		Settings page here</a>.';
 }
 
+$default_zoom = get_field('default_zoom_level', 'option') ? get_field('default_zoom_level', 'option') : 15;
 $eventfields[] = array(
 	'key' => 'field_5616c0e68be8f',
 	'label' => 'Venue Location',
@@ -182,8 +183,21 @@ $eventfields[] = array(
 	'instructions' => $instructions,
 	'center_lat' => '40.6976701',
 	'center_lng' => '-74.25987,10',
-	'zoom' => '14',
+	'zoom' => $default_zoom,
 	'height' => '280',
+);
+$eventfields[] = array(
+	'key' => 'field_mapzoom273489241f6',
+	'label' => 'Map Zoom Level',
+	'name' => 'zoom_level',
+	'type' => 'range',
+	'instructions' => 'select how far zoomed in this map appears (setting reflected on front-end event page only, not in the map box above)',
+	'default_value' => $default_zoom,
+	'min' => 8,
+	'max' => 21,
+	'step' => 1,
+	'prepend' => '-',
+	'append' => '+',
 );
 $eventfields[] = array(
 	'key' => 'field_5616befced0ab',
@@ -456,6 +470,19 @@ acf_add_local_field_group(array(
 			'type' => 'true_false',
 			'message' => 'Show a Google map with pin on the individual event page',
 			'default_value' => 0,
+		),
+		array(
+			'key' => 'field_5a8123e9241f6',
+			'label' => 'Default Map Zoom Level',
+			'name' => 'default_zoom_level',
+			'type' => 'range',
+			'instructions' => 'select how far zoomed in the maps appear by default',
+			'default_value' => 15,
+			'min' => 8,
+			'max' => 21,
+			'step' => 1,
+			'prepend' => '-',
+			'append' => '+',
 		),
 		array(
 			'key' => 'field_mapjson738474635',
