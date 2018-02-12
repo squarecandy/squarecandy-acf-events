@@ -290,7 +290,7 @@ jQuery(document).ready(function($){
 			mapTypeIds: ['Styled']
 		},
 		center: myLatLng,
-		zoom: 16,
+		zoom: 15,
 		mapTypeId: 'Styled',
 		scrollwheel: false,
 		draggable: !("ontouchend" in document),

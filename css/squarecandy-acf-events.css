@@ -42,7 +42,7 @@
 	width: 52%;
 	margin: 0;
 	padding: 0;
-	text-align: right; 
+	text-align: right;
 }
 .event-listing-compact .more-info-buttons {
 	position: relative;
@@ -178,4 +178,9 @@ a.button:active {
 	background-color: #666;
 	color: #fff;
 	outline: none;
+}
+
+
+.gm-style-mtc {
+	display: none;
 }

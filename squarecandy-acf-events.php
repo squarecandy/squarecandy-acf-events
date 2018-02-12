@@ -256,7 +256,7 @@ function get_squarecandy_acf_events_address_display($event, $style = '2line', $m
 				$output .= ' <span class="zip">' . $event['zip'] . '</span>';
 			}
 			if ( !empty($event['country']) && $home_country != $event['country'] ) {
-				$output .= '<br><span class="country">' . $event['country'] . '</span>';
+				$output .= ', <span class="country">' . $event['country'] . '</span>';
 			}
 			break;
 
