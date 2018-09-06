@@ -18,17 +18,23 @@ A custom events plugin using Advanced Custom Fields
 
 ## Shortcodes
 
-Default: Show Upcoming Events in the standard formats  
+**Default:**  
+Show Upcoming Events in the standard formats
+
 `[squarecandy_events]`  
 or  
 `echo squarecandy_events_func();`
 
-Archive: Show Past Events in the standard formats  
+**Archive:**  
+Show Past Events in the standard formats
+
 `[squarecandy_events type=past]`  
 or  
-`echo squarecandy_events_func( array('type'=>'past') );`  
+`echo squarecandy_events_func( array('type'=>'past') );`
 
-Show the compact events block  
+**Compact:**
+Show the compact events block. This is good for sidebars, a homepage block, or other place where a compact preview of upcoming events is needed.
+
 `[squarecandy_events style=compact]`  
 or  
-`echo squarecandy_events_func( array('style'=>'compact') );`  
+`echo squarecandy_events_func( array('style'=>'compact') );`
