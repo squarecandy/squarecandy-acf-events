@@ -1,6 +1,6 @@
 <?php
 // [squarecandy_events]
-function squarecandy_events_func($atts) {
+function squarecandy_events_func( $atts = array() ) {
 
 	$today = date('Ymd', time());
 	// pre_r($today);
