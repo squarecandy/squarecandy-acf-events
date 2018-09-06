@@ -38,7 +38,7 @@ function github_plugin_updater_test_init() {
 			'api_url' => 'https://api.github.com/repos/squarecandy/squarecandy-acf-events',
 			'raw_url' => 'https://raw.github.com/squarecandy/squarecandy-acf-events/master',
 			'github_url' => 'https://github.com/squarecandy/squarecandy-acf-events',
-			'zip_url' => 'https://github.com/squarecandy/squarecandy-acf-events/zipball/master',
+			'zip_url' => 'https://github.com/squarecandy/squarecandy-acf-events/archive/master.zip',
 			'sslverify' => true,
 			'requires' => '4.0',
 			'tested' => '4.9.8',
