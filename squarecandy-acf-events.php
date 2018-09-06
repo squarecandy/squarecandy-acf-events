@@ -43,7 +43,7 @@ function github_plugin_updater_test_init() {
 			'requires' => '4.0',
 			'tested' => '4.9.8',
 			'readme' => 'README.md',
-			'access_token' => '',
+			// 'access_token' => '', // only needed for private repository
 		);
 
 		new WP_GitHub_Updater( $config );
