@@ -3,6 +3,7 @@
 
 if ( function_exists('acf_add_local_field_group') ):
 
+function squarecandy_events_add_fields() {
 $eventfields = array();
 $eventfields[] = array(
 	'key' => 'field_5616bbe39fbec',
@@ -266,7 +267,7 @@ if ( get_field('enable_categories', 'option') ) :
 endif;
 
 // allow linking to "works" if the Square Candy ACF Composer Works plugin is enabled
-if ( post_type_exists('works') ) :
+if ( is_plugin_active('squarecandy-acf-works/squarecandy-acf-works.php') ) :
 	$eventfields[] = array(
 		'key' => 'field_5841cdf6350d1',
 		'label' => 'Featured Works',
@@ -314,6 +315,11 @@ acf_add_local_field_group(array(
 	'active' => 1,
 	'description' => '',
 ));
+
+
+}
+add_action( 'after_setup_theme', 'squarecandy_events_add_fields' );
+
 
 $date_formats = array(
 	'l, F j, Y' => 'Saturday, October 26, 1985',
