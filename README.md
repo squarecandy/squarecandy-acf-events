@@ -18,14 +18,16 @@ A custom events plugin using Advanced Custom Fields
 
 ## Shortcodes
 
-**Default:**  
+**Default:**
+
 Show Upcoming Events in the standard formats
 
 `[squarecandy_events]`  
 or  
 `echo squarecandy_events_func();`
 
-**Archive:**  
+**Archive:**
+
 Show Past Events in the standard formats
 
 `[squarecandy_events type=past]`  
@@ -33,11 +35,26 @@ or
 `echo squarecandy_events_func( array('type'=>'past') );`
 
 **Compact:**
+
 Show the compact events block. This is good for sidebars, a homepage block, or other place where a compact preview of upcoming events is needed.
 
 `[squarecandy_events style=compact]`  
 or  
 `echo squarecandy_events_func( array('style'=>'compact') );`
+
+**Category Filter:**
+
+Filter the list by Event Category. The example below assumes you have already created an event category called "My Example Category" and applied that category to some event items.
+
+`[squarecandy_events cat=my-example-category]`  
+or  
+`echo squarecandy_events_func( array('cat'=>'my-example-category') );`
+
+**Combinations:**
+
+Combine any of the above as needed...
+
+`[squarecandy_events type=past style=compact cat=my-example-category]` 
 
 ## History
 

@@ -21,15 +21,13 @@ function squarecandy_events_func( $atts = array() ) {
 	);
 
 	if ( isset($atts['type']) && $atts['type'] == 'past' ) {
-
+		// past events archive [squarecandy_events type=past]
 		if ( !$archive_by_year ) {
 			$orderby = array(
 				'start_date' => 'DESC',
 				'start_time' => 'ASC',
 			);
 		}
-
-		// past events archive [squarecandy_events type=past]
 		$args = array(
 			'post_type' => 'event',
 			'post_status' => 'publish',
@@ -46,7 +44,24 @@ function squarecandy_events_func( $atts = array() ) {
 			),
 		);
 		$past = true;
-	} else {
+	}
+	elseif ( isset($atts['type']) && $atts['type'] == 'all' ) {
+		// show all events, both past and present [squarecandy_events type=all]
+		if ( !$archive_by_year ) {
+			$orderby = array(
+				'start_date' => 'DESC',
+				'start_time' => 'ASC',
+			);
+		}
+		$args = array(
+			'post_type' => 'event',
+			'post_status' => 'publish',
+			'posts_per_page' => -1, // show everything... @TODO consider limiting and paginating this
+			'orderby' => $orderby,
+		);
+		$past = true;
+	}
+	else {
 		// upcoming events (default)
 		$args = array(
 			'post_type' => 'event',
