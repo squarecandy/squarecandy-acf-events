@@ -47,19 +47,23 @@ function squarecandy_events_func( $atts = array() ) {
 	}
 	elseif ( isset($atts['type']) && $atts['type'] == 'all' ) {
 		// show all events, both past and present [squarecandy_events type=all]
-		if ( !$archive_by_year ) {
-			$orderby = array(
-				'start_date' => 'DESC',
-				'start_time' => 'ASC',
-			);
-		}
+		$orderby = array(
+			'start_date' => 'DESC',
+			'start_time' => 'ASC',
+		);
 		$args = array(
 			'post_type' => 'event',
 			'post_status' => 'publish',
 			'posts_per_page' => -1, // show everything... @TODO consider limiting and paginating this
 			'orderby' => $orderby,
+			'meta_query' => array(
+				array(
+					'key' => 'start_date',
+					'compare' => 'EXISTS', // this seems a bit of a hack, but orderby an array of meta keys doesn't seem to work w/o it
+				),
+			),
 		);
-		$past = true;
+		$past = false;
 	}
 	else {
 		// upcoming events (default)

@@ -66,6 +66,10 @@ Combine any of the above as needed...
 
 ## History
 
+### v1.1.2
+
+* "All" type no longer grouped by Year
+
 ### v1.1.1
 
 * Add "all" display type
@@ -89,3 +93,7 @@ Combine any of the above as needed...
 ### v0.1.0
 
 * Initial Plugin built out of several older events projects
+
+## Roadmap
+
+* make options for both past and all to be grouped by year independently
