@@ -1,6 +1,6 @@
 # Square Candy ACF Events
 
-~Current Version:1.1.0~
+~Current Version:1.1.1~
 
 A custom events plugin using Advanced Custom Fields
 
@@ -20,7 +20,7 @@ A custom events plugin using Advanced Custom Fields
 
 **Default:**
 
-Show Upcoming Events in the standard formats
+Show Upcoming Events in the standard format
 
 `[squarecandy_events]`  
 or  
@@ -28,11 +28,19 @@ or
 
 **Archive:**
 
-Show Past Events in the standard formats
+Show Past Events in the standard format
 
 `[squarecandy_events type=past]`  
 or  
 `echo squarecandy_events_func( array('type'=>'past') );`
+
+**All:**
+
+Show All Events (past, present and future) in the standard format
+
+`[squarecandy_events type=all]`  
+or  
+`echo squarecandy_events_func( array('type'=>'all') );`
 
 **Compact:**
 
@@ -54,9 +62,14 @@ or
 
 Combine any of the above as needed...
 
-`[squarecandy_events type=past style=compact cat=my-example-category]` 
+`[squarecandy_events type=past style=compact cat=my-example-category]`
 
 ## History
+
+### v1.1.1
+
+* Add "all" display type
+* Update examples
 
 ### v1.1.0
 
