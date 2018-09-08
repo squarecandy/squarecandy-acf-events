@@ -655,6 +655,50 @@ acf_add_local_field_group(array(
 			),
 		),
 		array(
+			'key' => 'field_showimage834j20f',
+			'label' => 'Show Image',
+			'name' => 'event_show_image',
+			'type' => 'true_false',
+			'message' => 'Show Image in Compact View',
+			'default_value' => 1,
+			'wrapper' => array(
+				'width' => '33',
+			),
+		),
+		/*
+		array(
+			'key' => 'field_placeimage3749275',
+			'label' => 'Image Placement',
+			'name' => 'event_image_placement',
+			'type' => 'select',
+			'choices' => array(
+				'top' => 'top',
+				'left' => 'left',
+				'right' => 'right',
+				'bottom' => 'bottom',
+			),
+			'default_value' => 'bottom',
+			'return_format' => 'value',
+			'wrapper' => array(
+				'width' => '33',
+			),
+		),
+		*/
+		array(
+			'key' => 'field_imagesize8290348',
+			'label' => 'Image Size',
+			'name' => 'event_image_preview_size',
+			'default_value' => 'thumbnail',
+			'type' => 'text',
+			// 'type' => 'select',  // @TODO - make this a select that automatically gets all the sizes, if that's possible (tricky to get sizes after theme load from a plugin)
+			// 'choices' => get_image_sizes(),
+			// 'return_format' => 'value',
+			// 'allow_null' => 0,
+			'wrapper' => array(
+				'width' => '33',
+			),
+		),
+		array(
 			'key' => 'field_eventcat7283947892',
 			'label' => 'Events Categories',
 			'name' => 'enable_categories',

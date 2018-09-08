@@ -69,6 +69,7 @@ Combine any of the above as needed...
 ### v1.1.2
 
 * "All" type no longer grouped by Year
+* Add option for images in preview
 
 ### v1.1.1
 
@@ -97,3 +98,4 @@ Combine any of the above as needed...
 ## Roadmap
 
 * make options for both past and all to be grouped by year independently
+* Support more preview image positions (left, right, top)

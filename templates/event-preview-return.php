@@ -2,10 +2,21 @@
 // Square Candy ACF Events Preview/Listing Post Template
 $event = get_fields();
 
-$output .= '<article id="post-' . get_the_ID() .'" class="events-preview" itemscope="" itemtype="http://schema.org/MusicEvent">
-	<h1 class="event-date-time" itemprop="startDate" content="' . date('Y-m-d',strtotime($event['start_date'])) . '">
-		<a href="' . get_permalink() . '">' . get_squarecandy_acf_events_date_display($event, $compact) . '</a>
-	</h1>';
+$output .= '<article id="post-' . get_the_ID() .'" class="events-preview" itemscope="" itemtype="http://schema.org/MusicEvent">';
+
+/*
+if ( get_field('event_show_image', 'option') && 'bottom' != get_field('event_image_placement', 'option') ) {
+	$output .= '<div class="event-image-' . get_field('event_image_placement', 'option') . ' event-image">';
+	$size = get_field('event_image_preview_size', 'option');
+	$output .= get_the_post_thumbnail(null,$size);
+	$output .= '</div>';
+}
+*/
+
+$output .= '<h1 class="event-date-time" itemprop="startDate" content="' . date('Y-m-d',strtotime($event['start_date'])) . '">';
+$output .= '<a href="' . get_permalink() . '">' . get_squarecandy_acf_events_date_display($event, $compact) . '</a>';
+$output .= '</h1>';
+
 if ( !empty($event['end_date']) ) {
 	$meta_end_date = date( 'Y-m-d', strtotime( $event['end_date'] ) );
 } else {
@@ -31,6 +42,14 @@ if ( !empty($event['short_description']) ) {
 	if ( !$compact || ( $compact && $show_description ) ) {
 		$output .= '<div class="short-description" itemprop="description">' . $event['short_description'] . '</div>';
 	}
+}
+
+if ( get_field('event_show_image', 'option') ) {
+// if ( get_field('event_show_image', 'option') && 'bottom' == get_field('event_image_placement', 'option') ) {
+	$output .= '<div class="event-image-bottom event-image">';
+	$size = get_field('event_image_preview_size', 'option');
+	$output .= get_the_post_thumbnail(null,$size);
+	$output .= '</div>';
 }
 
 $output .= '<div class="more-info-buttons">';
