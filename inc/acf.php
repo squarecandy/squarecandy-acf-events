@@ -4,317 +4,317 @@
 if ( function_exists('acf_add_local_field_group') ):
 
 function squarecandy_events_add_fields() {
-$eventfields = array();
-$eventfields[] = array(
-	'key' => 'field_5616bbe39fbec',
-	'label' => '(Start) Date',
-	'name' => 'start_date',
-	'type' => 'date_picker',
-	'required' => 1,
-	'conditional_logic' => 0,
-	'wrapper' => array(
-		'width' => '40',
-	),
-	'display_format' => 'F j, Y',
-	'return_format' => 'F j, Y',
-	'first_day' => 0,
-);
-$eventfields[] = array(
-	'key' => 'field_5616bcdfb642d',
-	'label' => 'All Day',
-	'name' => 'all_day',
-	'type' => 'true_false',
-	'wrapper' => array(
-		'width' => 10,
-	),
-	'default_value' => 0,
-);
-$eventfields[] = array(
-	'key' => 'field_5616bd4ca2b0f',
-	'label' => 'Show End Date/Time',
-	'name' => 'multi_day',
-	'type' => 'true_false',
-	'wrapper' => array(
-		'width' => '20',
-	),
-	'default_value' => 0,
-);
-$eventfields[] = array(
-	'key' => 'field_5616bc2b9fbed',
-	'label' => '(Start) Time',
-	'name' => 'start_time',
-	'type' => 'time_picker',
-	'required' => 1,
-	'conditional_logic' => array(
-		array(
-			array(
-				'field' => 'field_5616bcdfb642d',
-				'operator' => '!=',
-				'value' => '1',
-			),
-		),
-	),
-	'wrapper' => array(
-		'width' => '30',
-	),
-	'display_format' => 'g:i a',
-	'return_format' => 'g:i a',
-);
-$eventfields[] = array(
-	'key' => 'field_5616bd75112ca',
-	'label' => 'End Date',
-	'name' => 'end_date',
-	'type' => 'date_picker',
-	'conditional_logic' => array(
-		array(
-			array(
-				'field' => 'field_5616bd4ca2b0f',
-				'operator' => '==',
-				'value' => '1',
-			),
-		),
-	),
-	'wrapper' => array(
-		'width' => '70',
-	),
-	'display_format' => 'F j, Y',
-	'return_format' => 'F j, Y',
-	'first_day' => 0,
-);
-$eventfields[] = array(
-	'key' => 'field_5616bd8e112cb',
-	'label' => 'End Time',
-	'name' => 'end_time',
-	'type' => 'time_picker',
-	'required' => 0,
-	'conditional_logic' => array(
-		array(
-			array(
-				'field' => 'field_5616bcdfb642d',
-				'operator' => '!=',
-				'value' => '1',
-			),
-			array(
-				'field' => 'field_5616bd4ca2b0f',
-				'operator' => '==',
-				'value' => '1',
-			),
-		),
-	),
-	'wrapper' => array(
-		'width' => '30',
-	),
-	'display_format' => 'g:i a',
-	'return_format' => 'g:i a',
-);
-$eventfields[] = array(
-	'key' => 'field_5616bedeed0a9',
-	'label' => 'Venue Name',
-	'name' => 'venue',
-	'type' => 'text',
-	'conditional_logic' => 0,
-	'wrapper' => array(
-		'width' => 50,
-	),
-);
-$eventfields[] = array(
-	'key' => 'field_5616beefed0aa',
-	'label' => 'Venue Link',
-	'name' => 'venue_link',
-	'type' => 'url',
-	'wrapper' => array(
-		'width' => 50,
-	),
-);
-$eventfields[] = array(
-	'key' => 'field_address226474957',
-	'label' => 'Address',
-	'name' => 'address',
-	'type' => 'text',
-);
-$eventfields[] = array(
-	'key' => 'field_city585d8171a157e',
-	'label' => 'City',
-	'name' => 'city',
-	'type' => 'text',
-	'wrapper' => array(
-		'width' => 50,
-	),
-);
-$eventfields[] = array(
-	'key' => 'field_state94823hf873',
-	'label' => 'State/Province',
-	'name' => 'state',
-	'type' => 'text',
-	'wrapper' => array(
-		'width' => 25,
-	),
-);
-$eventfields[] = array(
-	'key' => 'field_zipfj8392y38r9',
-	'label' => 'Postal Code',
-	'name' => 'zip',
-	'type' => 'text',
-	'wrapper' => array(
-		'width' => 25,
-	),
-);
-$eventfields[] = array(
-	'key' => 'field_country1749283947',
-	'label' => 'Country',
-	'name' => 'country',
-	'type' => 'text',
-);
-
-$instructions = '';
-if ( !get_field('google_maps_api_key','option') ) {
-	$instructions = 'Looks like you don‘t have a Google Maps API key yet. First,
-		<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
-		target="_blank">get your API key here</a>. Then enter it on the
-		<a href="/wp-admin/edit.php?post_type=event&page=acf-options-event-settings">Events
-		Settings page here</a>.';
-}
-
-$default_zoom = get_field('default_zoom_level', 'option') ? get_field('default_zoom_level', 'option') : 15;
-$eventfields[] = array(
-	'key' => 'field_5616c0e68be8f',
-	'label' => 'Venue Location',
-	'name' => 'venue_location',
-	'type' => 'google_map',
-	'instructions' => $instructions,
-	'center_lat' => '40.6976701',
-	'center_lng' => '-74.25987,10',
-	'zoom' => $default_zoom,
-	'height' => '280',
-);
-$eventfields[] = array(
-	'key' => 'field_mapzoom273489241f6',
-	'label' => 'Map Zoom Level',
-	'name' => 'zoom_level',
-	'type' => 'range',
-	'instructions' => 'select how far zoomed in this map appears (setting reflected on front-end event page only, not in the map box above)',
-	'default_value' => $default_zoom,
-	'min' => 8,
-	'max' => 21,
-	'step' => 1,
-	'prepend' => '-',
-	'append' => '+',
-);
-$eventfields[] = array(
-	'key' => 'field_5616befced0ab',
-	'label' => 'More Info Link',
-	'name' => 'more_info_link',
-	'type' => 'url',
-	'wrapper' => array(
-		'width' => 50,
-	),
-);
-$eventfields[] = array(
-	'key' => 'field_5616bf58ed0ac',
-	'label' => 'Tickets Link',
-	'name' => 'tickets_link',
-	'type' => 'url',
-	'wrapper' => array(
-		'width' => 50,
-	),
-);
-$eventfields[] = array(
-	'key' => 'field_facebooklink7293484',
-	'label' => 'Facebook Event Link',
-	'name' => 'facebook_link',
-	'type' => 'url',
-);
-$eventfields[] = array(
-	'key' => 'field_5616bf8eed0ad',
-	'label' => 'Short Description',
-	'name' => 'short_description',
-	'type' => 'wysiwyg',
-	'instructions' => 'A short text description for the event. Limit 210 characters.	You may repeat this text and elaborate further in the main body field below.',
-	'wrapper' => array(
-		'width' => '',
-		'class' => 'short_wysiwyg',
-		'id' => '',
-	),
-	'tabs' => 'all',
-	'toolbar' => 'basic',
-	'media_upload' => 0,
-	'default_value' => '',
-	'delay' => 0,
-);
-
-if ( get_field('enable_categories', 'option') ) :
-
+	$eventfields = array();
 	$eventfields[] = array(
-		'key' => 'field_5b9318c9d74e7',
-		'label' => 'Category',
-		'name' => 'category',
-		'type' => 'taxonomy',
-		'taxonomy' => 'events-category',
-		'field_type' => 'checkbox',
-		'add_term' => 1,
-		'save_terms' => 1,
-		'load_terms' => 1,
-		'return_format' => 'object',
-		'multiple' => 1,
-		'allow_null' => 1,
+		'key' => 'field_5616bbe39fbec',
+		'label' => '(Start) Date',
+		'name' => 'start_date',
+		'type' => 'date_picker',
+		'required' => 1,
+		'conditional_logic' => 0,
+		'wrapper' => array(
+			'width' => '40',
+		),
+		'display_format' => 'F j, Y',
+		'return_format' => 'F j, Y',
+		'first_day' => 0,
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bcdfb642d',
+		'label' => 'All Day',
+		'name' => 'all_day',
+		'type' => 'true_false',
+		'wrapper' => array(
+			'width' => 10,
+		),
+		'default_value' => 0,
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bd4ca2b0f',
+		'label' => 'Show End Date/Time',
+		'name' => 'multi_day',
+		'type' => 'true_false',
+		'wrapper' => array(
+			'width' => '20',
+		),
+		'default_value' => 0,
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bc2b9fbed',
+		'label' => '(Start) Time',
+		'name' => 'start_time',
+		'type' => 'time_picker',
+		'required' => 1,
+		'conditional_logic' => array(
+			array(
+				array(
+					'field' => 'field_5616bcdfb642d',
+					'operator' => '!=',
+					'value' => '1',
+				),
+			),
+		),
+		'wrapper' => array(
+			'width' => '30',
+		),
+		'display_format' => 'g:i a',
+		'return_format' => 'g:i a',
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bd75112ca',
+		'label' => 'End Date',
+		'name' => 'end_date',
+		'type' => 'date_picker',
+		'conditional_logic' => array(
+			array(
+				array(
+					'field' => 'field_5616bd4ca2b0f',
+					'operator' => '==',
+					'value' => '1',
+				),
+			),
+		),
+		'wrapper' => array(
+			'width' => '70',
+		),
+		'display_format' => 'F j, Y',
+		'return_format' => 'F j, Y',
+		'first_day' => 0,
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bd8e112cb',
+		'label' => 'End Time',
+		'name' => 'end_time',
+		'type' => 'time_picker',
+		'required' => 0,
+		'conditional_logic' => array(
+			array(
+				array(
+					'field' => 'field_5616bcdfb642d',
+					'operator' => '!=',
+					'value' => '1',
+				),
+				array(
+					'field' => 'field_5616bd4ca2b0f',
+					'operator' => '==',
+					'value' => '1',
+				),
+			),
+		),
+		'wrapper' => array(
+			'width' => '30',
+		),
+		'display_format' => 'g:i a',
+		'return_format' => 'g:i a',
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bedeed0a9',
+		'label' => 'Venue Name',
+		'name' => 'venue',
+		'type' => 'text',
+		'conditional_logic' => 0,
+		'wrapper' => array(
+			'width' => 50,
+		),
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616beefed0aa',
+		'label' => 'Venue Link',
+		'name' => 'venue_link',
+		'type' => 'url',
+		'wrapper' => array(
+			'width' => 50,
+		),
+	);
+	$eventfields[] = array(
+		'key' => 'field_address226474957',
+		'label' => 'Address',
+		'name' => 'address',
+		'type' => 'text',
+	);
+	$eventfields[] = array(
+		'key' => 'field_city585d8171a157e',
+		'label' => 'City',
+		'name' => 'city',
+		'type' => 'text',
+		'wrapper' => array(
+			'width' => 50,
+		),
+	);
+	$eventfields[] = array(
+		'key' => 'field_state94823hf873',
+		'label' => 'State/Province',
+		'name' => 'state',
+		'type' => 'text',
+		'wrapper' => array(
+			'width' => 25,
+		),
+	);
+	$eventfields[] = array(
+		'key' => 'field_zipfj8392y38r9',
+		'label' => 'Postal Code',
+		'name' => 'zip',
+		'type' => 'text',
+		'wrapper' => array(
+			'width' => 25,
+		),
+	);
+	$eventfields[] = array(
+		'key' => 'field_country1749283947',
+		'label' => 'Country',
+		'name' => 'country',
+		'type' => 'text',
 	);
 
-	function remove_default_event_category_metabox() {
-		remove_meta_box( 'tagsdiv-events-category', 'event', 'side' );
+	$instructions = '';
+	if ( !get_field('google_maps_api_key','option') ) {
+		$instructions = 'Looks like you don‘t have a Google Maps API key yet. First,
+			<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
+			target="_blank">get your API key here</a>. Then enter it on the
+			<a href="/wp-admin/edit.php?post_type=event&page=acf-options-event-settings">Events
+			Settings page here</a>.';
 	}
-	add_action( 'admin_menu' , 'remove_default_event_category_metabox' );
 
-endif;
-
-// allow linking to "works" if the Square Candy ACF Composer Works plugin is enabled
-if ( is_plugin_active('squarecandy-acf-works/squarecandy-acf-works.php') ) :
+	$default_zoom = get_field('default_zoom_level', 'option') ? get_field('default_zoom_level', 'option') : 15;
 	$eventfields[] = array(
-		'key' => 'field_5841cdf6350d1',
-		'label' => 'Featured Works',
-		'name' => 'featured_works',
-		'type' => 'relationship',
-		'post_type' => array(
-			0 => 'works',
-		),
-		'filters' => array(
-			0 => 'search',
-		),
-		'return_format' => 'object',
+		'key' => 'field_5616c0e68be8f',
+		'label' => 'Venue Location',
+		'name' => 'venue_location',
+		'type' => 'google_map',
+		'instructions' => $instructions,
+		'center_lat' => '40.6976701',
+		'center_lng' => '-74.25987,10',
+		'zoom' => $default_zoom,
+		'height' => '280',
 	);
-endif;
+	$eventfields[] = array(
+		'key' => 'field_mapzoom273489241f6',
+		'label' => 'Map Zoom Level',
+		'name' => 'zoom_level',
+		'type' => 'range',
+		'instructions' => 'select how far zoomed in this map appears (setting reflected on front-end event page only, not in the map box above)',
+		'default_value' => $default_zoom,
+		'min' => 8,
+		'max' => 21,
+		'step' => 1,
+		'prepend' => '-',
+		'append' => '+',
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616befced0ab',
+		'label' => 'More Info Link',
+		'name' => 'more_info_link',
+		'type' => 'url',
+		'wrapper' => array(
+			'width' => 50,
+		),
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bf58ed0ac',
+		'label' => 'Tickets Link',
+		'name' => 'tickets_link',
+		'type' => 'url',
+		'wrapper' => array(
+			'width' => 50,
+		),
+	);
+	$eventfields[] = array(
+		'key' => 'field_facebooklink7293484',
+		'label' => 'Facebook Event Link',
+		'name' => 'facebook_link',
+		'type' => 'url',
+	);
+	$eventfields[] = array(
+		'key' => 'field_5616bf8eed0ad',
+		'label' => 'Short Description',
+		'name' => 'short_description',
+		'type' => 'wysiwyg',
+		'instructions' => 'A short text description for the event. Limit 210 characters.	You may repeat this text and elaborate further in the main body field below.',
+		'wrapper' => array(
+			'width' => '',
+			'class' => 'short_wysiwyg',
+			'id' => '',
+		),
+		'tabs' => 'all',
+		'toolbar' => 'basic',
+		'media_upload' => 0,
+		'default_value' => '',
+		'delay' => 0,
+	);
 
-acf_add_local_field_group(array(
-	'key' => 'group_5616bbdb43b9f',
-	'title' => 'Event Fields',
-	'fields' => $eventfields,
-	'location' => array(
-		array(
+	if ( get_field('enable_categories', 'option') ) :
+
+		$eventfields[] = array(
+			'key' => 'field_5b9318c9d74e7',
+			'label' => 'Category',
+			'name' => 'category',
+			'type' => 'taxonomy',
+			'taxonomy' => 'events-category',
+			'field_type' => 'checkbox',
+			'add_term' => 1,
+			'save_terms' => 1,
+			'load_terms' => 1,
+			'return_format' => 'object',
+			'multiple' => 1,
+			'allow_null' => 1,
+		);
+
+		function remove_default_event_category_metabox() {
+			remove_meta_box( 'tagsdiv-events-category', 'event', 'side' );
+		}
+		add_action( 'admin_menu' , 'remove_default_event_category_metabox' );
+
+	endif;
+
+	// allow linking to "works" if the Square Candy ACF Composer Works plugin is enabled
+	if ( is_plugin_active('squarecandy-acf-works/squarecandy-acf-works.php') ) :
+		$eventfields[] = array(
+			'key' => 'field_5841cdf6350d1',
+			'label' => 'Featured Works',
+			'name' => 'featured_works',
+			'type' => 'relationship',
+			'post_type' => array(
+				0 => 'works',
+			),
+			'filters' => array(
+				0 => 'search',
+			),
+			'return_format' => 'object',
+		);
+	endif;
+
+	acf_add_local_field_group(array(
+		'key' => 'group_5616bbdb43b9f',
+		'title' => 'Event Fields',
+		'fields' => $eventfields,
+		'location' => array(
 			array(
-				'param' => 'post_type',
-				'operator' => '==',
-				'value' => 'event',
+				array(
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'event',
+				),
 			),
 		),
-	),
-	'menu_order' => 0,
-	'position' => 'acf_after_title',
-	'style' => 'default',
-	'label_placement' => 'top',
-	'instruction_placement' => 'label',
-	'hide_on_screen' => array(
-		0 => 'excerpt',
-		1 => 'custom_fields',
-		2 => 'discussion',
-		3 => 'comments',
-		4 => 'format',
-		5 => 'page_attributes',
-		6 => 'categories',
-		7 => 'tags',
-		8 => 'send-trackbacks',
-	),
-	'active' => 1,
-	'description' => '',
-));
+		'menu_order' => 0,
+		'position' => 'acf_after_title',
+		'style' => 'default',
+		'label_placement' => 'top',
+		'instruction_placement' => 'label',
+		'hide_on_screen' => array(
+			0 => 'excerpt',
+			1 => 'custom_fields',
+			2 => 'discussion',
+			3 => 'comments',
+			4 => 'format',
+			5 => 'page_attributes',
+			6 => 'categories',
+			7 => 'tags',
+			8 => 'send-trackbacks',
+		),
+		'active' => 1,
+		'description' => '',
+	));
 
 
 }
