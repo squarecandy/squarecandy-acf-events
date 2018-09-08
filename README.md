@@ -1,6 +1,6 @@
 # Square Candy ACF Events
 
-~Current Version:1.0.1~
+~Current Version:1.1.0~
 
 A custom events plugin using Advanced Custom Fields
 
