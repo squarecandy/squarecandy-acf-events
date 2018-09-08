@@ -23,8 +23,8 @@ function squarecandy_acf_events_activate(){
 }
 
 // Allow updating from the github repository
-add_action( 'init', 'github_plugin_updater_test_init' );
-function github_plugin_updater_test_init() {
+add_action( 'init', 'squarecandy_events_github_plugin_updater_test_init' );
+function squarecandy_events_github_plugin_updater_test_init() {
 
 	include_once 'updater.php';
 
