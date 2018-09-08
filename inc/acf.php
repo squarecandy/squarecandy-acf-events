@@ -85,7 +85,7 @@ $eventfields[] = array(
 	'label' => 'End Time',
 	'name' => 'end_time',
 	'type' => 'time_picker',
-	'required' => 1,
+	'required' => 0,
 	'conditional_logic' => array(
 		array(
 			array(

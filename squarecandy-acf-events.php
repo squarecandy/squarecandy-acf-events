@@ -177,7 +177,12 @@ function get_squarecandy_acf_events_date_display($event, $compact = null) {
 	}
 	else {
 		// multi day
-		if ( $event['all_day'] == 1 && $event['start_date'] != $event['end_date'] ) {
+		if (
+			// all day is checked, start and end date are different, and end date is not empty
+			( $event['all_day'] == 1 && $event['start_date'] != $event['end_date'] && !empty($event['end_date']) ) ||
+			// all day not checked, start and end date are different, and end date is not empty, both start and end times are empty
+			( $event['all_day'] != 1 && $event['start_date'] != $event['end_date'] && !empty($event['end_date']) && empty($event['start_time']) && empty($event['end_time']) )
+		) {
 			// range of dates with no time (all day)
 			$output .= date( $formats['date_format_multi_start'], strtotime($event['start_date']) );
 			$output .= $range;
@@ -192,7 +197,19 @@ function get_squarecandy_acf_events_date_display($event, $compact = null) {
 			$output .= date( $formats['date_format'], strtotime($event['start_date']) );
 			$output .= $sep . '<span class="time">' . date( $formats['time_format'], strtotime($event['start_time']) ) . '</span>';
 		}
-		elseif ( $event['all_day'] != 1 && $event['start_date'] == $event['end_date'] ) {
+		elseif ( $event['all_day'] != 1 && $event['start_date'] != $event['end_date'] && !empty($event['end_date']) && !empty($event['start_time']) && empty($event['end_time']) ) {
+			// fringe case: different start and end date, only start time is set
+			$output .= date( $formats['date_format_multi_start'], strtotime($event['start_date']) );
+			$output .= $range;
+			$output .= date( $formats['date_format_multi_end'], strtotime($event['end_date']) );
+			$output .= $sep . '<span class="time">' . date( $formats['time_format'], strtotime($event['start_time']) ) . '</span>';
+		}
+		elseif (
+			// start and end date are set the same, all day not checked
+			( $event['all_day'] != 1 && $event['start_date'] == $event['end_date'] ) ||
+			// OR start and end time are both set, no end date specified
+			( $event['all_day'] != 1 && !empty($event['start_date']) && empty($event['end_date']) && !empty($event['start_time']) && !empty($event['end_time']) )
+		) {
 			// start and end date the same; range of times
 			$output .= date( $formats['date_format_multi_start'], strtotime($event['start_date']) );
 			$output .= $sep;
@@ -336,6 +353,107 @@ add_filter('acf/settings/google_api_key', function () {
 	return get_field('google_maps_api_key','option');
 });
 
+
+// Add nice Admin Columns Pro setup if the plugin is enabled.
+if ( function_exists( 'ac_register_columns') ) :
+function ac_custom_column_settings_8980a6ec() {
+
+	ac_register_columns( 'event', array(
+		array(
+			'columns' => array(
+				'5b92f1ec692b4' => array(
+					'type' => 'column-featured_image',
+					'label' => '',
+					'width' => '60',
+					'width_unit' => 'px',
+					'image_size' => 'cpac-custom',
+					'image_size_w' => '60',
+					'image_size_h' => '60',
+					'edit' => 'off',
+					'sort' => 'off',
+					'filter' => 'off',
+					'filter_label' => '',
+					'name' => '5b92f1ec692b4'
+				),
+				'title' => array(
+					'type' => 'title',
+					'label' => 'Title',
+					'width' => '',
+					'width_unit' => '%',
+					'edit' => 'off',
+					'sort' => 'on',
+					'name' => 'title'
+				),
+				'5b92f1ec85d6b' => array(
+					'type' => 'column-acf_field',
+					'label' => 'Start Date',
+					'width' => '',
+					'width_unit' => '%',
+					'field' => 'field_5616bbe39fbec',
+					'date_format' => 'm/d/Y',
+					'edit' => 'off',
+					'sort' => 'on',
+					'filter' => 'on',
+					'filter_label' => '',
+					'filter_format' => 'range',
+					'name' => '5b92f1ec85d6b'
+				),
+				'5b92f1ec88345' => array(
+					'type' => 'column-acf_field',
+					'label' => 'End Date',
+					'width' => '',
+					'width_unit' => '%',
+					'field' => 'field_5616bd75112ca',
+					'date_format' => 'm/d/Y',
+					'edit' => 'off',
+					'sort' => 'off',
+					'filter' => 'off',
+					'filter_label' => '',
+					'filter_format' => '',
+					'name' => '5b92f1ec88345'
+				),
+				'5b92f1ec884a6' => array(
+					'type' => 'column-acf_field',
+					'label' => 'Start Time',
+					'width' => '',
+					'width_unit' => '%',
+					'field' => 'field_5616bc2b9fbed',
+					'date_format' => 'acf',
+					'edit' => 'off',
+					'sort' => 'off',
+					'name' => '5b92f1ec884a6'
+				),
+				'5b92f1ec894da' => array(
+					'type' => 'column-acf_field',
+					'label' => 'End Time',
+					'width' => '',
+					'width_unit' => '%',
+					'field' => 'field_5616bd8e112cb',
+					'date_format' => 'acf',
+					'edit' => 'off',
+					'sort' => 'off',
+					'name' => '5b92f1ec894da'
+				),
+				'5b92f1ec8961e' => array(
+					'type' => 'column-acf_field',
+					'label' => 'City',
+					'width' => '',
+					'width_unit' => '%',
+					'field' => 'field_city585d8171a157e',
+					'character_limit' => '20',
+					'edit' => 'off',
+					'sort' => 'on',
+					'filter' => 'on',
+					'filter_label' => '',
+					'name' => '5b92f1ec8961e'
+				)
+			),
+
+		)
+	) );
+}
+add_action( 'ac/ready', 'ac_custom_column_settings_8980a6ec' );
+endif;
 
 
 // for debugging
