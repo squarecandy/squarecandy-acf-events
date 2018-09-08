@@ -57,10 +57,6 @@ function squarecandy_acf_events_enqueue_scripts() {
 		}
 		$data['zoomlevel'] = $event['zoom_level'];
 		wp_localize_script( 'squarecandy-acf-events-maps', 'DATA', $data);
-
-		// wp_localize_script( 'squarecandy-acf-events-maps', 'MAPJSON', $mapjson);
-
-		// wp_localize_script( 'squarecandy-acf-events-maps', 'INFOWINDOW', $infowindow);
 	}
 
 	wp_enqueue_script('squarecandy-acf-events-js', plugins_url('js/squarecandy-acf-events.js', __FILE__), array('jquery'), false, true);
@@ -145,7 +141,6 @@ function get_squarecandy_acf_events_date_display($event, $compact = null) {
 		$formats['date_format_multi_start'] = $formats['date_format_compact_multi_start'];
 		$formats['date_format_multi_end'] = $formats['date_format_compact_multi_end'];
 	}
-	// pre_r($formats);
 	$output = '';
 	if ( $event['multi_day'] != 1 ) {
 		// single date
