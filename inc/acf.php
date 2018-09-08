@@ -241,6 +241,30 @@ $eventfields[] = array(
 	'delay' => 0,
 );
 
+if ( get_field('enable_categories', 'option') ) :
+
+	$eventfields[] = array(
+		'key' => 'field_5b9318c9d74e7',
+		'label' => 'Category',
+		'name' => 'category',
+		'type' => 'taxonomy',
+		'taxonomy' => 'events-category',
+		'field_type' => 'checkbox',
+		'add_term' => 1,
+		'save_terms' => 1,
+		'load_terms' => 1,
+		'return_format' => 'object',
+		'multiple' => 1,
+		'allow_null' => 1,
+	);
+
+	function remove_default_event_category_metabox() {
+		remove_meta_box( 'tagsdiv-events-category', 'event', 'side' );
+	}
+	add_action( 'admin_menu' , 'remove_default_event_category_metabox' );
+
+endif;
+
 // allow linking to "works" if the Square Candy ACF Composer Works plugin is enabled
 if ( post_type_exists('works') ) :
 	$eventfields[] = array(
@@ -345,6 +369,9 @@ acf_add_local_field_group(array(
 					),
 					'allow_null' => 0,
 					'return_format' => 'value',
+					'wrapper' => array(
+						'width' => '33',
+					),
 				),
 				array(
 					'key' => 'field_5a7119ab98e68',
@@ -357,6 +384,9 @@ acf_add_local_field_group(array(
 					),
 					'allow_null' => 0,
 					'return_format' => 'value',
+					'wrapper' => array(
+						'width' => '33',
+					),
 				),
 				array(
 					'key' => 'field_5a7119af98e69',
@@ -369,6 +399,9 @@ acf_add_local_field_group(array(
 					),
 					'allow_null' => 0,
 					'return_format' => 'value',
+					'wrapper' => array(
+						'width' => '33',
+					),
 				),
 				array(
 					'key' => 'field_5a7119b198e6a',
@@ -381,6 +414,9 @@ acf_add_local_field_group(array(
 					),
 					'allow_null' => 0,
 					'return_format' => 'value',
+					'wrapper' => array(
+						'width' => '33',
+					),
 				),
 				array(
 					'key' => 'field_5a711a6b98e6b',
@@ -393,6 +429,9 @@ acf_add_local_field_group(array(
 					),
 					'allow_null' => 0,
 					'return_format' => 'value',
+					'wrapper' => array(
+						'width' => '33',
+					),
 				),
 				array(
 					'key' => 'field_5a711a6d98e6c',
@@ -405,6 +444,9 @@ acf_add_local_field_group(array(
 					),
 					'allow_null' => 0,
 					'return_format' => 'value',
+					'wrapper' => array(
+						'width' => '33',
+					),
 				),
 				array(
 					'key' => 'field_5a711add98e6d',
@@ -422,6 +464,9 @@ acf_add_local_field_group(array(
 					),
 					'allow_null' => 0,
 					'return_format' => 'value',
+					'wrapper' => array(
+						'width' => '25',
+					),
 				),
 				array(
 					'key' => 'field_timedatesep73847927483',
@@ -429,6 +474,9 @@ acf_add_local_field_group(array(
 					'name' => 'datetime_sep',
 					'type' => 'text',
 					'default_value' => ' – ',
+					'wrapper' => array(
+						'width' => '25',
+					),
 				),
 				array(
 					'key' => 'field_timedatesep2_729385610',
@@ -436,6 +484,9 @@ acf_add_local_field_group(array(
 					'name' => 'datetime_sep2',
 					'type' => 'text',
 					'default_value' => ', ',
+					'wrapper' => array(
+						'width' => '25',
+					),
 				),
 				array(
 					'key' => 'field_timedaterange733636483',
@@ -443,6 +494,9 @@ acf_add_local_field_group(array(
 					'name' => 'datetime_range',
 					'type' => 'text',
 					'default_value' => '–',
+					'wrapper' => array(
+						'width' => '25',
+					),
 				),
 			),
 
@@ -454,6 +508,9 @@ acf_add_local_field_group(array(
 			'type' => 'text',
 			'instructions' => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
 			target="_blank">Get Your API Key Here</a>',
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a711b7d7ee7b',
@@ -462,6 +519,9 @@ acf_add_local_field_group(array(
 			'type' => 'true_false',
 			'message' => 'Display Map Link Buttons',
 			'default_value' => 1,
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a71494e83bcb',
@@ -470,6 +530,9 @@ acf_add_local_field_group(array(
 			'type' => 'true_false',
 			'message' => 'Show a Google map with pin on the individual event page',
 			'default_value' => 0,
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a8123e9241f6',
@@ -483,6 +546,9 @@ acf_add_local_field_group(array(
 			'step' => 1,
 			'prepend' => '-',
 			'append' => '+',
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_mapjson738474635',
@@ -507,7 +573,7 @@ acf_add_local_field_group(array(
 			'instructions' => 'If the majority of your events are in one country, enter
 				your home country here to override some location displays. Hides the home
 				country name in most places. Provides <strong>City, State/Province</strong>
-				for the short version of you home country and <strong>City, Country</strong>
+				for the short version of your home country and <strong>City, Country</strong>
 				short version display for others.',
 			'default_value' => 'United States',
 		),
@@ -518,6 +584,9 @@ acf_add_local_field_group(array(
 			'type' => 'true_false',
 			'message' => 'Group Past Events by Year',
 			'default_value' => 1,
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a71e021fe462',
@@ -535,6 +604,9 @@ acf_add_local_field_group(array(
 			),
 			'message' => 'Collapse/Expand Animation for Event Archives by Year',
 			'default_value' => 1,
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a711c6203fae',
@@ -542,6 +614,9 @@ acf_add_local_field_group(array(
 			'name' => 'more_link',
 			'type' => 'link',
 			'return_format' => 'array',
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a7120c836833',
@@ -553,6 +628,9 @@ acf_add_local_field_group(array(
 			'min' => 1,
 			'max' => 99,
 			'step' => 1,
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a71218b78f41',
@@ -561,6 +639,9 @@ acf_add_local_field_group(array(
 			'type' => 'true_false',
 			'message' => 'Show Short Description in Compact View',
 			'default_value' => 1,
+			'wrapper' => array(
+				'width' => '50',
+			),
 		),
 		array(
 			'key' => 'field_5a716c3632b88',
@@ -568,6 +649,17 @@ acf_add_local_field_group(array(
 			'name' => 'show_title',
 			'type' => 'true_false',
 			'message' => 'Show Title Field in Compact View',
+			'default_value' => 1,
+			'wrapper' => array(
+				'width' => '50',
+			),
+		),
+		array(
+			'key' => 'field_eventcat7283947892',
+			'label' => 'Events Categories',
+			'name' => 'enable_categories',
+			'type' => 'true_false',
+			'message' => 'Enable Events Categories System',
 			'default_value' => 1,
 		),
 		array(

@@ -102,6 +102,11 @@ add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_admin_enqueue' );
 // add a new custom post type for events
 include( ACF_EVENTS_DIR_PATH . 'post-types/event.php');
 
+if ( get_field('enable_categories', 'option') ) :
+	// add a events category taxonomy
+	include( ACF_EVENTS_DIR_PATH . 'taxonomies/events-category.php');
+endif;
+
 // add ACF fields for events
 include( ACF_EVENTS_DIR_PATH . 'inc/acf.php');
 

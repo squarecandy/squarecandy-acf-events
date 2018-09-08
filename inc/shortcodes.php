@@ -8,6 +8,9 @@ function squarecandy_events_func( $atts = array() ) {
 	// is this a "compact" display? [squarecandy_events style=compact]
 	$compact = ( isset($atts['style']) && $atts['style'] == 'compact' ) ? true : false;
 
+	// also filter by category? [squarecandy_events cat=my-cat-slug]
+	$cat = ( isset($atts['cat']) && !empty($atts['cat']) ) ?  $atts['cat'] : false;
+
 	$archive_by_year = get_field('archive_by_year','option');
 	$accordion = false;
 	if ( $archive_by_year && get_field('accordion','option') ) $accordion = true;
@@ -71,6 +74,18 @@ function squarecandy_events_func( $atts = array() ) {
 
 	if ($compact) {
 		$args['posts_per_page'] = get_field('number_of_upcoming', 'option');
+	}
+
+	if ($cat) {
+		$args['tax_query'] = array(
+			array(
+				'taxonomy' => 'events-category',
+				'terms' => $cat,
+				'field' => 'slug',
+				'include_children' => true,
+				'operator' => 'IN'
+			)
+		);
 	}
 
 	// pre_r($args);
