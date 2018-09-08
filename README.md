@@ -38,3 +38,24 @@ Show the compact events block. This is good for sidebars, a homepage block, or o
 `[squarecandy_events style=compact]`  
 or  
 `echo squarecandy_events_func( array('style'=>'compact') );`
+
+## History
+
+### v1.1.0
+
+* Add Optional Events Categories
+* Add better support for more unusual combos of start date / end date / start time / end time. (Helps with imported data that might not get the "All Day" or "Show End Date" context right)
+* Clean up options screen
+* Start Tagging Releases
+
+### v1.0.1
+
+* Testing if the upgrade system works in the WordPress UI
+
+### v1.0.0
+
+* Add updating capacity through the WordPress UI via GitHub
+
+### v0.1.0
+
+* Initial Plugin built out of several older events projects
