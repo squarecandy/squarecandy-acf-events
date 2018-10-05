@@ -2,6 +2,7 @@
 /*
 Plugin Name: Square Candy ACF Events
 Plugin URI:  https://github.com/squarecandy/squarecandy-acf-events
+GitHub Plugin URI:  https://github.com/squarecandy/squarecandy-acf-events
 Description: A custom events plugin that using Advanced Custom Fields
 Version:	 1.1.2
 Author:	  Peter Wise
@@ -21,10 +22,6 @@ function squarecandy_acf_events_activate(){
 			<br><br><button onclick="window.history.back()">&laquo; back</button>');
 	}
 }
-
-
-// Allow updating from the github repository
-include_once('squarecandy-updater.php');
 
 
 // Front End Scripts and Styles
