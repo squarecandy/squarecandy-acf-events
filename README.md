@@ -64,6 +64,12 @@ Combine any of the above as needed...
 
 `[squarecandy_events type=past style=compact cat=my-example-category]`
 
+## Filters
+
+Available filters:
+
+* `squarecandy_filter_events_fields` - filter the ACF fields array
+
 ## History
 
 ### v1.1.2

@@ -267,7 +267,7 @@ function squarecandy_events_add_fields() {
 	endif;
 
 	// allow linking to "works" if the Square Candy ACF Composer Works plugin is enabled
-	if ( is_plugin_active('squarecandy-acf-works/squarecandy-acf-works.php') ) :
+	if ( function_exists('is_plugin_active') && is_plugin_active('squarecandy-acf-works/squarecandy-acf-works.php') ) :
 		$eventfields[] = array(
 			'key' => 'field_5841cdf6350d1',
 			'label' => 'Featured Works',
@@ -282,6 +282,8 @@ function squarecandy_events_add_fields() {
 			'return_format' => 'object',
 		);
 	endif;
+
+	$eventfields = apply_filters( 'squarecandy_filter_events_fields', $eventfields );
 
 	acf_add_local_field_group(array(
 		'key' => 'group_5616bbdb43b9f',
