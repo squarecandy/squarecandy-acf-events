@@ -190,8 +190,8 @@ function get_squarecandy_acf_events_date_display($event, $compact = null) {
 			$output .= date( $formats['time_format'], strtotime($event['end_time']) ) . '</span>';
 		}
 		elseif ( $event['all_day'] != 1 && $event['start_date'] != $event['end_date'] ) {
-			$output .= $event['start_date'] . $sep2 . '<span class="time">' . $event['start_time'] . '</span> ';
-			$output .= $range . ' ' . $event['end_date'] . $sep2 . '<span class="time">' . $event['end_time'] . '</span>';
+			$output .= date( $formats['date_format_multi_start'], strtotime($event['start_date']) ) . $sep2 . '<span class="time">' . $event['start_time'] . '</span> ';
+			$output .= $range . ' ' . date( $formats['date_format_multi_end'], strtotime($event['end_date']) ) . $sep2 . '<span class="time">' . $event['end_time'] . '</span>';
 		}
 	}
 	return $output;
