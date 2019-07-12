@@ -438,3 +438,36 @@ if ( ! function_exists( 'pre_r' ) ) :
 		}
 	}
 endif;
+
+/**
+ * 
+ * 
+ * @param int $post_id - The Post ID.
+ */
+function squarecandy_acf_events_acf_save_post( $post_id ) {
+
+	// return early if post being saved is not an event.
+	if ( 'event' != get_post_type( $post_id ) ) {
+		return;
+	} 
+
+	// if the event is not multi day but there is an end date.
+	if ( ! get_field( 'multi_day', $post_id ) && get_field( 'end_date', $post_id ) ) {
+		update_field( 'end_date', '', $post_id );
+	}
+
+	// if all day checkbox is ticked
+	if ( get_field( 'all_day', $post_id ) ) {
+
+		// remove start_time value
+		if ( get_field( 'start_time', $post_id ) ) {
+			update_field( 'start_time', '', $post_id );
+		}
+
+		// remove end_time value
+		if ( get_field( 'end_time', $post_id ) ) {
+			update_field( 'end_time', '', $post_id );
+		}
+	}
+} 
+add_action('acf/save_post', 'squarecandy_acf_events_acf_save_post', 15);
