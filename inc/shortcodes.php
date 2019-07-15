@@ -11,6 +11,9 @@ function squarecandy_events_func( $atts = array() ) {
 	// also filter by category? [squarecandy_events cat=my-cat-slug]
 	$cat = ( isset($atts['cat']) && !empty($atts['cat']) ) ?  $atts['cat'] : false;
 
+	// featured
+	$is_featured = ( isset($atts['type']) && $atts['type'] == 'featured' ) ?  true : false;
+
 	$archive_by_year = get_field('archive_by_year','option');
 	$accordion = false;
 	if ( $archive_by_year && get_field('accordion','option') ) $accordion = true;
@@ -65,7 +68,39 @@ function squarecandy_events_func( $atts = array() ) {
 		);
 		$past = false;
 	}
-	else {
+	elseif ( isset($atts['type']) && $atts['type'] == 'featured' ) {
+		// show upcoming featured events. [squarecandy_events type=featured]
+		$args = array(
+			'post_type' => 'event',
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'orderby' => $orderby,
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'relation' => 'OR',
+					array(
+						'key' => 'start_date',
+						'type' => 'DATE',
+						'value' => $today,
+						'compare' => '>='
+					),
+					array(
+						'key' => 'end_date',
+						'type' => 'DATE',
+						'value' => $today,
+						'compare' => '>='
+					)
+				),
+				array(
+					'key'     => 'featured',
+					'value'   => 1,
+					'compare' => '='
+				)
+			),
+		);
+		$past = false;
+	} else {
 		// upcoming events (default)
 		$args = array(
 			'post_type' => 'event',
@@ -73,18 +108,33 @@ function squarecandy_events_func( $atts = array() ) {
 			'posts_per_page' => -1,
 			'orderby' => $orderby,
 			'meta_query' => array(
-				'relation' => 'OR',
+				'relation' => 'AND',
 				array(
-					'key' => 'start_date',
-					'type' => 'DATE',
-					'value' => $today,
-					'compare' => '>='
+					'relation' => 'OR',
+					array(
+						'key' => 'start_date',
+						'type' => 'DATE',
+						'value' => $today,
+						'compare' => '>='
+					),
+					array(
+						'key' => 'end_date',
+						'type' => 'DATE',
+						'value' => $today,
+						'compare' => '>='
+					)
 				),
 				array(
-					'key' => 'end_date',
-					'type' => 'DATE',
-					'value' => $today,
-					'compare' => '>='
+					'relation' => 'OR',
+					array(
+						'key'     => 'featured',
+						'value'   => 0,
+						'compare' => '='
+					),
+					array(
+						'key'     => 'featured',
+						'compare' => 'NOT EXISTS'
+					)
 				)
 			),
 		);
@@ -172,8 +222,9 @@ function squarecandy_events_func( $atts = array() ) {
 		$output .= '</section>';
 
 	else:
-		$output .= get_field('no_events_text','option');
-
+		if ( ! $is_featured ) {
+			$output .= get_field('no_events_text','option');
+		}
 	endif;
 
 	wp_reset_query();   // Restore global post data stomped by the_post().
