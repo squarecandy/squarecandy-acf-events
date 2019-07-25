@@ -102,41 +102,48 @@ function squarecandy_events_func( $atts = array() ) {
 		$past = false;
 	} else {
 		// upcoming events (default)
+		$meta_query = array(
+			'relation' => 'AND',
+			array(
+				'relation' => 'OR',
+				array(
+					'key' => 'start_date',
+					'type' => 'DATE',
+					'value' => $today,
+					'compare' => '>='
+				),
+				array(
+					'key' => 'end_date',
+					'type' => 'DATE',
+					'value' => $today,
+					'compare' => '>='
+				)
+			),
+		);
+
+		if ( isset($atts['exclude_featured']) && $atts['exclude_featured'] == 'true' ) {
+			$exclude_featured = array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'featured',
+					'value'   => 0,
+					'compare' => '='
+				),
+				array(
+					'key'     => 'featured',
+					'compare' => 'NOT EXISTS'
+				)
+			);
+
+			array_push( $meta_query, $exclude_featured );
+		}
+
 		$args = array(
 			'post_type' => 'event',
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
 			'orderby' => $orderby,
-			'meta_query' => array(
-				'relation' => 'AND',
-				array(
-					'relation' => 'OR',
-					array(
-						'key' => 'start_date',
-						'type' => 'DATE',
-						'value' => $today,
-						'compare' => '>='
-					),
-					array(
-						'key' => 'end_date',
-						'type' => 'DATE',
-						'value' => $today,
-						'compare' => '>='
-					)
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'key'     => 'featured',
-						'value'   => 0,
-						'compare' => '='
-					),
-					array(
-						'key'     => 'featured',
-						'compare' => 'NOT EXISTS'
-					)
-				)
-			),
+			'meta_query' => $meta_query,
 		);
 		$past = false;
 	}
