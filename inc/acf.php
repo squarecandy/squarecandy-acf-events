@@ -20,9 +20,9 @@ function squarecandy_events_add_fields() {
 		),
 		'message' => '',
 		'default_value' => 0,
-		'ui' => 0,
-		'ui_on_text' => '',
-		'ui_off_text' => '',
+		'ui' => 1,
+		'ui_on_text' => 'Yes',
+		'ui_off_text' => 'No',
 	);
 	$eventfields['start_date'] = array(
 		'key' => 'field_5616bbe39fbec',
