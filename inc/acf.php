@@ -5,7 +5,7 @@ if ( function_exists('acf_add_local_field_group') ):
 
 function squarecandy_events_add_fields() {
 	$eventfields = array();
-	$eventfields[] = array(
+	$eventfields['featured'] = array(
 		'key' => 'field_5d2c47ed9268c',
 		'label' => 'Feature Event',
 		'name' => 'featured',
@@ -24,7 +24,7 @@ function squarecandy_events_add_fields() {
 		'ui_on_text' => '',
 		'ui_off_text' => '',
 	);
-	$eventfields[] = array(
+	$eventfields['start_date'] = array(
 		'key' => 'field_5616bbe39fbec',
 		'label' => '(Start) Date',
 		'name' => 'start_date',
@@ -38,7 +38,7 @@ function squarecandy_events_add_fields() {
 		'return_format' => 'F j, Y',
 		'first_day' => 0,
 	);
-	$eventfields[] = array(
+	$eventfields['all_day'] = array(
 		'key' => 'field_5616bcdfb642d',
 		'label' => 'All Day',
 		'name' => 'all_day',
@@ -48,7 +48,7 @@ function squarecandy_events_add_fields() {
 		),
 		'default_value' => 0,
 	);
-	$eventfields[] = array(
+	$eventfields['multi_day'] = array(
 		'key' => 'field_5616bd4ca2b0f',
 		'label' => 'Show End Date/Time',
 		'name' => 'multi_day',
@@ -58,7 +58,7 @@ function squarecandy_events_add_fields() {
 		),
 		'default_value' => 0,
 	);
-	$eventfields[] = array(
+	$eventfields['start_time'] = array(
 		'key' => 'field_5616bc2b9fbed',
 		'label' => '(Start) Time',
 		'name' => 'start_time',
@@ -79,7 +79,7 @@ function squarecandy_events_add_fields() {
 		'display_format' => 'g:i a',
 		'return_format' => 'g:i a',
 	);
-	$eventfields[] = array(
+	$eventfields['end_date'] = array(
 		'key' => 'field_5616bd75112ca',
 		'label' => 'End Date',
 		'name' => 'end_date',
@@ -100,7 +100,7 @@ function squarecandy_events_add_fields() {
 		'return_format' => 'F j, Y',
 		'first_day' => 0,
 	);
-	$eventfields[] = array(
+	$eventfields['end_time'] = array(
 		'key' => 'field_5616bd8e112cb',
 		'label' => 'End Time',
 		'name' => 'end_time',
@@ -126,7 +126,7 @@ function squarecandy_events_add_fields() {
 		'display_format' => 'g:i a',
 		'return_format' => 'g:i a',
 	);
-	$eventfields[] = array(
+	$eventfields['venue'] = array(
 		'key' => 'field_5616bedeed0a9',
 		'label' => 'Venue Name',
 		'name' => 'venue',
@@ -136,7 +136,7 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
-	$eventfields[] = array(
+	$eventfields['venue_link'] = array(
 		'key' => 'field_5616beefed0aa',
 		'label' => 'Venue Link',
 		'name' => 'venue_link',
@@ -145,13 +145,13 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
-	$eventfields[] = array(
+	$eventfields['address'] = array(
 		'key' => 'field_address226474957',
 		'label' => 'Address',
 		'name' => 'address',
 		'type' => 'text',
 	);
-	$eventfields[] = array(
+	$eventfields['city'] = array(
 		'key' => 'field_city585d8171a157e',
 		'label' => 'City',
 		'name' => 'city',
@@ -160,7 +160,7 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
-	$eventfields[] = array(
+	$eventfields['state'] = array(
 		'key' => 'field_state94823hf873',
 		'label' => 'State/Province',
 		'name' => 'state',
@@ -169,7 +169,7 @@ function squarecandy_events_add_fields() {
 			'width' => 25,
 		),
 	);
-	$eventfields[] = array(
+	$eventfields['zip'] = array(
 		'key' => 'field_zipfj8392y38r9',
 		'label' => 'Postal Code',
 		'name' => 'zip',
@@ -178,7 +178,7 @@ function squarecandy_events_add_fields() {
 			'width' => 25,
 		),
 	);
-	$eventfields[] = array(
+	$eventfields['country'] = array(
 		'key' => 'field_country1749283947',
 		'label' => 'Country',
 		'name' => 'country',
@@ -195,7 +195,7 @@ function squarecandy_events_add_fields() {
 	}
 
 	$default_zoom = get_field('default_zoom_level', 'option') ? get_field('default_zoom_level', 'option') : 15;
-	$eventfields[] = array(
+	$eventfields['venue_location'] = array(
 		'key' => 'field_5616c0e68be8f',
 		'label' => 'Venue Location',
 		'name' => 'venue_location',
@@ -206,7 +206,7 @@ function squarecandy_events_add_fields() {
 		'zoom' => $default_zoom,
 		'height' => '280',
 	);
-	$eventfields[] = array(
+	$eventfields['zoom_level'] = array(
 		'key' => 'field_mapzoom273489241f6',
 		'label' => 'Map Zoom Level',
 		'name' => 'zoom_level',
@@ -219,7 +219,7 @@ function squarecandy_events_add_fields() {
 		'prepend' => '-',
 		'append' => '+',
 	);
-	$eventfields[] = array(
+	$eventfields['more_info_link'] = array(
 		'key' => 'field_5616befced0ab',
 		'label' => 'More Info Link',
 		'name' => 'more_info_link',
@@ -228,7 +228,7 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
-	$eventfields[] = array(
+	$eventfields['tickets_link'] = array(
 		'key' => 'field_5616bf58ed0ac',
 		'label' => 'Tickets Link',
 		'name' => 'tickets_link',
@@ -237,13 +237,13 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
-	$eventfields[] = array(
+	$eventfields['facebook_link'] = array(
 		'key' => 'field_facebooklink7293484',
 		'label' => 'Facebook Event Link',
 		'name' => 'facebook_link',
 		'type' => 'url',
 	);
-	$eventfields[] = array(
+	$eventfields['short_description'] = array(
 		'key' => 'field_5616bf8eed0ad',
 		'label' => 'Short Description',
 		'name' => 'short_description',
@@ -263,7 +263,7 @@ function squarecandy_events_add_fields() {
 
 	if ( get_field('enable_categories', 'option') ) :
 
-		$eventfields[] = array(
+		$eventfields['category'] = array(
 			'key' => 'field_5b9318c9d74e7',
 			'label' => 'Category',
 			'name' => 'category',
@@ -287,7 +287,7 @@ function squarecandy_events_add_fields() {
 
 	// allow linking to "works" if the Square Candy ACF Composer Works plugin is enabled
 	if ( function_exists('is_plugin_active') && is_plugin_active('squarecandy-acf-works/squarecandy-acf-works.php') ) :
-		$eventfields[] = array(
+		$eventfields['featured_works'] = array(
 			'key' => 'field_5841cdf6350d1',
 			'label' => 'Featured Works',
 			'name' => 'featured_works',
@@ -319,7 +319,7 @@ function squarecandy_events_add_fields() {
 		),
 		'menu_order' => 0,
 		'position' => 'acf_after_title',
-		'style' => 'default',
+		'style' => 'seamless',
 		'label_placement' => 'top',
 		'instruction_placement' => 'label',
 		'hide_on_screen' => array(
