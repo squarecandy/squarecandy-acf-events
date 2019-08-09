@@ -5,6 +5,7 @@ if ( function_exists('acf_add_local_field_group') ):
 
 function squarecandy_events_add_fields() {
 	$eventfields = array();
+<<<<<<< HEAD
 	$eventfields['featured'] = array(
 		'key' => 'field_5d2c47ed9268c',
 		'label' => 'Feature Event',
@@ -24,6 +25,29 @@ function squarecandy_events_add_fields() {
 		'ui_on_text' => 'Yes',
 		'ui_off_text' => 'No',
 	);
+=======
+	if ( apply_filters( 'squarecandy_events_enable_featured_events', false ) ) {
+		$eventfields['featured'] = array(
+			'key' => 'field_5d2c47ed9268c',
+			'label' => 'Feature Event',
+			'name' => 'featured',
+			'type' => 'true_false',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '100',
+				'class' => '',
+				'id' => '',
+			),
+			'message' => '',
+			'default_value' => 0,
+			'ui' => 0,
+			'ui_on_text' => '',
+			'ui_off_text' => '',
+		);
+	}
+>>>>>>> af6a5d8a182ed52461169f07011c75fd392f1ce5
 	$eventfields['start_date'] = array(
 		'key' => 'field_5616bbe39fbec',
 		'label' => '(Start) Date',
