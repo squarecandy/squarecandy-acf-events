@@ -738,7 +738,7 @@ acf_add_local_field_group(array(
 			'label' => 'No Events Text',
 			'name' => 'no_events_text',
 			'type' => 'wysiwyg',
-			'default_value' => '<h2>There are currently upcoming no events.</h2>
+			'default_value' => '<h2>There are currently no upcoming events.</h2>
 <p>Please join the email list and we will keep you posted when new events get added.</p>',
 			'tabs' => 'all',
 			'toolbar' => 'basic',
