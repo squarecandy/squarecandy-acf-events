@@ -194,31 +194,39 @@ function squarecandy_events_add_fields() {
 			Settings page here</a>.';
 	}
 
-	$default_zoom = get_field('default_zoom_level', 'option') ? get_field('default_zoom_level', 'option') : 15;
-	$eventfields['venue_location'] = array(
-		'key' => 'field_5616c0e68be8f',
-		'label' => 'Venue Location',
-		'name' => 'venue_location',
-		'type' => 'google_map',
-		'instructions' => $instructions,
-		'center_lat' => '40.6976701',
-		'center_lng' => '-74.25987,10',
-		'zoom' => $default_zoom,
-		'height' => '280',
-	);
-	$eventfields['zoom_level'] = array(
-		'key' => 'field_mapzoom273489241f6',
-		'label' => 'Map Zoom Level',
-		'name' => 'zoom_level',
-		'type' => 'range',
-		'instructions' => 'select how far zoomed in this map appears (setting reflected on front-end event page only, not in the map box above)',
-		'default_value' => $default_zoom,
-		'min' => 8,
-		'max' => 21,
-		'step' => 1,
-		'prepend' => '-',
-		'append' => '+',
-	);
+	// only show map fields if an api key has been entered
+	if ( get_field('google_maps_api_key', 'option') ) :
+
+		$default_zoom = get_field('default_zoom_level', 'option') ? get_field('default_zoom_level', 'option') : 15;
+
+		$eventfields['venue_location'] = array(
+			'key' => 'field_5616c0e68be8f',
+			'label' => 'Venue Location',
+			'name' => 'venue_location',
+			'type' => 'google_map',
+			'instructions' => $instructions,
+			'center_lat' => '40.6976701',
+			'center_lng' => '-74.25987,10',
+			'zoom' => $default_zoom,
+			'height' => '280',
+		);
+
+		$eventfields['zoom_level'] = array(
+			'key' => 'field_mapzoom273489241f6',
+			'label' => 'Map Zoom Level',
+			'name' => 'zoom_level',
+			'type' => 'range',
+			'instructions' => 'select how far zoomed in this map appears (setting reflected on front-end event page only, not in the map box above)',
+			'default_value' => $default_zoom,
+			'min' => 8,
+			'max' => 21,
+			'step' => 1,
+			'prepend' => '-',
+			'append' => '+',
+		);
+
+	endif;
+
 	$eventfields['more_info_link'] = array(
 		'key' => 'field_5616befced0ab',
 		'label' => 'More Info Link',
