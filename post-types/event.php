@@ -1,6 +1,9 @@
 <?php
 
 function event_init() {
+	
+	$supports = array( 'title', 'editor', 'author', 'thumbnail' );
+	$supports = apply_filters( 'squarecandy_filter_events_supports', $supports );
 	register_post_type( 'event', array(
 		'labels'            => array(
 			'name'                => __( 'Events', 'squarecandy-votebuilder-events' ),
@@ -21,7 +24,7 @@ function event_init() {
 		'hierarchical'      => false,
 		'show_ui'           => true,
 		'show_in_nav_menus' => true,
-		'supports'          => array( 'title', 'editor', 'author', 'thumbnail' ),
+		'supports'          => $supports,
 		'has_archive'       => true,
 		'rewrite'           => true,
 		'query_var'         => true,
