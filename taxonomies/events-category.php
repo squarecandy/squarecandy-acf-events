@@ -46,6 +46,7 @@ function events_category_init() {
 		'show_in_rest'      => true,
 		'rest_base'         => 'events-category',
 		'rest_controller_class' => 'WP_REST_Terms_Controller',
+		'meta_box_cb'       => false,
 	) );
 
 }
