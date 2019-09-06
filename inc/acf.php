@@ -299,13 +299,14 @@ function squarecandy_events_add_fields() {
 			'key' => 'field_5841cdf6350d1',
 			'label' => 'Featured Works',
 			'name' => 'featured_works',
-			'type' => 'relationship',
+			'type' => 'post_object',
 			'post_type' => array(
 				0 => 'works',
 			),
-			'filters' => array(
-				0 => 'search',
-			),
+			'allow_null' => 1,
+			'multiple' => 1,
+			'acf_relationship_create' => 1,
+			'ui' => 1,
 			'return_format' => 'object',
 		);
 	endif;
