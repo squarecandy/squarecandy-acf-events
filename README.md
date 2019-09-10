@@ -1,7 +1,5 @@
 # Square Candy ACF Events
 
-~Current Version:1.1.2~
-
 A custom events plugin using Advanced Custom Fields
 
 * Requires Advanced Custom Fields Pro 5.x
@@ -69,6 +67,7 @@ Combine any of the above as needed...
 Available filters:
 
 * `squarecandy_filter_events_fields` - filter the ACF fields array
+* `squarecandy_filter_events_supports` - filter the array of components the post type supports ( 'title', 'editor', 'author', 'thumbnail' )
 
 ## History
 
