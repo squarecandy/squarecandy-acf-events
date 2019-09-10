@@ -69,7 +69,21 @@ Available filters:
 * `squarecandy_filter_events_fields` - filter the ACF fields array
 * `squarecandy_filter_events_supports` - filter the array of components the post type supports ( 'title', 'editor', 'author', 'thumbnail' )
 
+## Standards
+
+Developers, please run `phpcs -s --standard=phpcs.xml .` from the root of this plugin to ensure coding standards before making any new pull requests. You must install [`phpcs`](https://github.com/squizlabs/PHP_CodeSniffer) and the [`WordPress Coding Standards`](https://github.com/WordPress/WordPress-Coding-Standards) first.
+
 ## History
+
+## v1.2.0
+
+* better ACF field filtering
+* link works reference field if squarecandy-acf-works is enabled
+* add filtering for post type supports parameter
+* hide map fields if no Google API key is entered
+* add featured events filter options
+* fix bug where end date data persists if end date/time checkbox is off
+* start code cleanup
 
 ### v1.1.2
 
