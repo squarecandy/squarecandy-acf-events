@@ -1,18 +1,17 @@
 <?php
-// [squarecandy_events]
+// function to generate the shortcode [squarecandy_events]
 function squarecandy_events_func( $atts = array() ) {
 
 	$today = date( 'Ymd', time() );
-	// pre_r($today);
 
 	// is this a "compact" display? [squarecandy_events style=compact]
-	$compact = ( isset( $atts['style'] ) && $atts['style'] == 'compact' ) ? true : false;
+	$compact = ( isset( $atts['style'] ) && 'compact' === $atts['style'] ) ? true : false;
 
 	// also filter by category? [squarecandy_events cat=my-cat-slug]
 	$cat = ( isset( $atts['cat'] ) && ! empty( $atts['cat'] ) ) ? $atts['cat'] : false;
 
 	// featured
-	$is_featured = ( isset( $atts['type'] ) && $atts['type'] == 'featured' ) ? true : false;
+	$is_featured = ( isset( $atts['type'] ) && 'featured' === $atts['type'] ) ? true : false;
 
 	$archive_by_year = get_field( 'archive_by_year', 'option' );
 	$accordion       = false;
@@ -25,7 +24,7 @@ function squarecandy_events_func( $atts = array() ) {
 		'start_time' => 'ASC',
 	);
 
-	if ( isset( $atts['type'] ) && $atts['type'] == 'past' ) {
+	if ( isset( $atts['type'] ) && 'past' === $atts['type'] ) {
 		// past events archive [squarecandy_events type=past]
 		if ( ! $archive_by_year ) {
 			$orderby = array(
@@ -49,7 +48,7 @@ function squarecandy_events_func( $atts = array() ) {
 			),
 		);
 		$past = true;
-	} elseif ( isset( $atts['type'] ) && $atts['type'] == 'all' ) {
+	} elseif ( isset( $atts['type'] ) && 'all' === $atts['type'] ) {
 		// show all events, both past and present [squarecandy_events type=all]
 		$orderby = array(
 			'start_date' => 'DESC',
@@ -68,7 +67,7 @@ function squarecandy_events_func( $atts = array() ) {
 			),
 		);
 		$past    = false;
-	} elseif ( isset( $atts['type'] ) && $atts['type'] == 'featured' ) {
+	} elseif ( isset( $atts['type'] ) && 'featured' === $atts['type'] ) {
 		// show upcoming featured events. [squarecandy_events type=featured]
 		$args = array(
 			'post_type'      => 'event',
@@ -101,7 +100,7 @@ function squarecandy_events_func( $atts = array() ) {
 		);
 		$past = false;
 	} else {
-		// upcoming events (default)
+		// upcoming events - this is the default display
 		$meta_query = array(
 			'relation' => 'AND',
 			array(
@@ -121,7 +120,7 @@ function squarecandy_events_func( $atts = array() ) {
 			),
 		);
 
-		if ( isset( $atts['exclude_featured'] ) && $atts['exclude_featured'] == 'true' ) {
+		if ( isset( $atts['exclude_featured'] ) && $atts['exclude_featured'] ) {
 			$exclude_featured = array(
 				'relation' => 'OR',
 				array(
@@ -134,7 +133,6 @@ function squarecandy_events_func( $atts = array() ) {
 					'compare' => 'NOT EXISTS',
 				),
 			);
-
 			array_push( $meta_query, $exclude_featured );
 		}
 
@@ -163,8 +161,6 @@ function squarecandy_events_func( $atts = array() ) {
 			),
 		);
 	}
-
-	// pre_r($args);
 
 	// query
 	$the_query2 = new WP_Query( $args );
@@ -217,7 +213,6 @@ function squarecandy_events_func( $atts = array() ) {
 					while ( $the_query3->have_posts() ) :
 						$the_query3->the_post();
 						include ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php';
-						// $output .= get_the_title();
 					endwhile;
 				endif;
 				$output .= '</div>';
@@ -230,7 +225,8 @@ function squarecandy_events_func( $atts = array() ) {
 		}
 
 		// for the "compact" view, show the link to the full events page if there are more events.
-		if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link = get_field( 'more_link', 'option' ) ) {
+		$more_link = get_field( 'more_link', 'option' );
+		if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link ) {
 			$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
 		}
 		$output .= '</section>';
@@ -241,7 +237,7 @@ function squarecandy_events_func( $atts = array() ) {
 		}
 	endif;
 
-	wp_reset_query();   // Restore global post data stomped by the_post().
+	wp_reset_postdata();   // Restore global post data stomped by the_post().
 
 	return $output;
 }
