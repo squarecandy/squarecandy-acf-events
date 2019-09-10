@@ -11,14 +11,14 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 
 			<header class="page-header">
-				<h1 class="page-title"><?php _e('Upcoming Events', 'squarecandy-acf-events'); ?></h1>
+				<h1 class="page-title"><?php _e( 'Upcoming Events', 'squarecandy-acf-events' ); ?></h1>
 			</header><!-- .page-header -->
 
-			<?php echo do_shortcode('[squarecandy_events]'); ?>
+			<?php echo do_shortcode( '[squarecandy_events]' ); ?>
 
-			<h1 class="past-events-title"><?php _e('Past Events', 'squarecandy-acf-events'); ?></h1>
+			<h1 class="past-events-title"><?php _e( 'Past Events', 'squarecandy-acf-events' ); ?></h1>
 
-			<?php echo do_shortcode('[squarecandy_events type=past]'); ?>
+			<?php echo do_shortcode( '[squarecandy_events type=past]' ); ?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->

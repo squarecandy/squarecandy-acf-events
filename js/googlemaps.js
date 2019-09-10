@@ -1,19 +1,19 @@
-jQuery(document).ready(function($){
+jQuery( document ).ready(
+	function($){
 
-	$('#map').css('height','60vh');
+		$( '#map' ).css( 'height','60vh' );
 
-	if (DATA.mapjson && DATA.mapjson.length > 2) {
-		var styles = JSON.parse(DATA.mapjson);
-	}
-	else {
-		// edit style settings at https://mapstyle.withgoogle.com/
-		var styles = [
+		if (DATA.mapjson && DATA.mapjson.length > 2) {
+			var styles = JSON.parse( DATA.mapjson );
+		} else {
+			// edit style settings at https://mapstyle.withgoogle.com/
+			var styles = [
 			{
 				"elementType": "labels.icon",
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
 			{
@@ -21,7 +21,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
 			{
@@ -29,7 +29,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
 			{
@@ -38,7 +38,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
 			{
@@ -46,7 +46,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
 			{
@@ -55,7 +55,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
 			{
@@ -64,7 +64,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
 			{
@@ -73,7 +73,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "simplified"
-					}
+				}
 				]
 			},
 			{
@@ -82,7 +82,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "simplified"
-					}
+				}
 				]
 			},
 			{
@@ -91,7 +91,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "on"
-					}
+				}
 				]
 			},
 			{
@@ -100,7 +100,7 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "simplified"
-					}
+				}
 				]
 			},
 			{
@@ -109,43 +109,51 @@ jQuery(document).ready(function($){
 				"stylers": [
 					{
 						"visibility": "off"
-					}
+				}
 				]
 			},
-		];
+			];
+		}
+
+		var myLatLng = new google.maps.LatLng( DATA.location.lat,DATA.location.lng );
+
+		var options = {
+			mapTypeControlOptions: {
+				mapTypeIds: ['Styled']
+			},
+			center: myLatLng,
+			zoom: parseInt( DATA.zoomlevel ),
+			mapTypeId: 'Styled',
+			scrollwheel: false,
+			draggable: ! ("ontouchend" in document),
+		};
+
+		var div           = document.getElementById( 'map' );
+		var map           = new google.maps.Map( div, options );
+		var styledMapType = new google.maps.StyledMapType( styles );
+		map.mapTypes.set( 'Styled', styledMapType );
+
+		var marker = new google.maps.Marker(
+			{
+				position: myLatLng,
+				map: map,
+				title: DATA.location.address
+			}
+		);
+
+		var infowindow = new google.maps.InfoWindow(
+			{
+				content: DATA.infowindow,
+				maxWidth: 300
+			}
+		);
+		marker.addListener(
+			'click',
+			function() {
+				infowindow.open( map, marker );
+			}
+		);
+		infowindow.open( map, marker );
+
 	}
-
-	var myLatLng = new google.maps.LatLng(DATA.location.lat,DATA.location.lng);
-
-	var options = {
-		mapTypeControlOptions: {
-			mapTypeIds: ['Styled']
-		},
-		center: myLatLng,
-		zoom: parseInt(DATA.zoomlevel),
-		mapTypeId: 'Styled',
-		scrollwheel: false,
-		draggable: !("ontouchend" in document),
-	};
-
-	var div = document.getElementById('map');
-	var map = new google.maps.Map(div, options);
-	var styledMapType = new google.maps.StyledMapType(styles);
-	map.mapTypes.set('Styled', styledMapType);
-
-	var marker = new google.maps.Marker({
-		position: myLatLng,
-		map: map,
-		title: DATA.location.address
-	});
-
-	var infowindow = new google.maps.InfoWindow({
-		content: DATA.infowindow,
-		maxWidth: 300
-	});
-	marker.addListener('click', function() {
-		infowindow.open(map, marker);
-	});
-	infowindow.open(map, marker);
-
-});
+);
