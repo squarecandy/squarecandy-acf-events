@@ -47,8 +47,10 @@ if ( ! empty( $event['short_description'] ) ) {
 if ( get_field( 'event_show_image', 'option' ) ) {
 	// if ( get_field('event_show_image', 'option') && 'bottom' == get_field('event_image_placement', 'option') ) {
 	$output .= '<div class="event-image-bottom event-image">';
+	$output .= '<a href="' . get_permalink() . '">';
 	$size    = get_field( 'event_image_preview_size', 'option' );
 	$output .= get_the_post_thumbnail( null, $size );
+	$output .= '</a>';
 	$output .= '</div>';
 }
 
