@@ -19,6 +19,9 @@ function squarecandy_events_func( $atts = array() ) {
 	// filter for featured posts only
 	$only_featured = ! empty( $atts['only_featured'] ) ? true : false;
 
+	// order featured posts at top
+	$featured_at_top = ! empty( $atts['featured_at_top'] ) ? true : false;
+
 	// filter out featured posts
 	$exclude_featured = ! empty( $atts['exclude_featured'] ) ? true : false;
 
@@ -32,6 +35,10 @@ function squarecandy_events_func( $atts = array() ) {
 		'start_date' => 'ASC',
 		'start_time' => 'ASC',
 	);
+
+	if ( $featured_at_top ) {
+		$orderby = array( 'featured' => 'DESC' ) + $orderby;
+	}
 
 	if ( isset( $atts['type'] ) && 'past' === $atts['type'] ) {
 		// past events archive [squarecandy_events type=past]
@@ -156,6 +163,23 @@ function squarecandy_events_func( $atts = array() ) {
 		}
 
 		// only include featured events
+		if ( $featured_at_top ) {
+			$featured_at_top_meta = array(
+				'relation' => 'OR',
+				'featured' => array(
+					'key'     => 'featured',
+					'type'    => 'NUMERIC',
+					'compare' => 'EXISTS',
+				),
+				'featured2' => array(
+					'key'     => 'featured',
+					'compare' => 'NOT EXISTS',
+				),
+			);
+			array_push( $meta_query, $featured_at_top_meta );
+		}
+
+		// featured event at top of list
 		if ( $only_featured ) {
 			$only_featured_meta = array(
 				'key'     => 'featured',
@@ -197,7 +221,7 @@ function squarecandy_events_func( $atts = array() ) {
 	}
 
 	if ( $posts_per_page ) {
-		$args['posts_per_page'] = $ppp;
+		$args['posts_per_page'] = $posts_per_page;
 	}
 
 	// query
