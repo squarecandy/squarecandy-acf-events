@@ -28,11 +28,16 @@ get_header(); ?>
 					</span>
 				<?php } ?>
 
-				<?php if ( ! empty( $event['more_info_link'] ) ) { ?>
+				<?php
+				if ( ! empty( $event['more_info_link'] ) ) :
+					$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', 'More Info' );
+					?>
 					<a class="button button-bold" href="<?php echo $event['more_info_link']; ?>">
-						<i class="fa fa-info-circle"></i> More Info
+						<i class="fa fa-info-circle"></i> <?php _e( $moreinfo_external_link_text, 'squarecandy-acf-events' ); ?>
 					</a>
-				<?php } ?>
+					<?php
+				endif;
+				?>
 
 				<?php if ( ! empty( $event['facebook_link'] ) ) { ?>
 					<a class="button button-bold button-facebook" href="<?php echo $event['facebook_link']; ?>">

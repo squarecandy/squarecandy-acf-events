@@ -25,6 +25,9 @@ function squarecandy_events_func( $atts = array() ) {
 	// filter out featured posts
 	$exclude_featured = ! empty( $atts['exclude_featured'] ) ? true : false;
 
+	// force more info button to link to post
+	$moreinfo_post_link = ! empty( $atts['moreinfo_post_link'] ) ? true : false;
+
 	$archive_by_year = get_field( 'archive_by_year', 'option' );
 	$accordion       = false;
 	if ( $archive_by_year && get_field( 'accordion', 'option' ) ) {

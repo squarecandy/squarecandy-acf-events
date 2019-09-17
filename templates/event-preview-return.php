@@ -61,17 +61,19 @@ if ( ! empty( $event['tickets_link'] ) ) {
 		</span> ';
 }
 
-if ( ! empty( $event['more_info_link'] ) && ! $compact ) {
+if ( $compact || $moreinfo_post_link ) {
+	$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', 'More Info' );
+	$output .= '<a class="button button-bold" href="' . get_permalink() . '">
+			<i class="fa fa-info-circle"></i> ' . __( $moreinfo_post_link_text, 'squarecandy-acf-events' ) . '
+		</a> ';
+}
+elseif ( ! empty( $event['more_info_link'] ) && ! $compact ) {
+	$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', 'More Info' );
 	$output .= '<a class="button button-bold" href="' . $event['more_info_link'] . '">
-			<i class="fa fa-info-circle"></i> ' . __( 'More Info', 'squarecandy-acf-events' ) . '
+			<i class="fa fa-info-circle"></i> ' . __( $moreinfo_external_link_text, 'squarecandy-acf-events' ) . '
 		</a> ';
 }
 
-if ( $compact ) {
-	$output .= '<a class="button button-bold" href="' . get_permalink() . '">
-			<i class="fa fa-info-circle"></i> ' . __( 'More Info', 'squarecandy-acf-events' ) . '
-		</a> ';
-}
 
 if ( ! empty( $event['facebook_link'] ) ) {
 	$output .= '<a class="button button-bold button-facebook" href="' . $event['facebook_link'] . '">
