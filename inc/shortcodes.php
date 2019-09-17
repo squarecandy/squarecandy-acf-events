@@ -2,7 +2,7 @@
 // function to generate the shortcode [squarecandy_events]
 function squarecandy_events_func( $atts = array() ) {
 
-	$today = date( 'Ymd', time() );
+	$today = date( 'Ymd', current_time('timestamp') );
 
 	// is this a "compact" display? [squarecandy_events style=compact]
 	$compact = ( isset( $atts['style'] ) && 'compact' === $atts['style'] ) ? true : false;
@@ -35,15 +35,27 @@ function squarecandy_events_func( $atts = array() ) {
 		$args = array(
 			'post_type'      => 'event',
 			'post_status'    => 'publish',
-			'posts_per_page' => -1, // show everything... @TODO consider limiting and paginating this
+			'posts_per_page' => 2500, // @TODO consider limiting and paginating this
 			'orderby'        => $orderby,
+			'meta_key' => 'start_date',
 			'meta_query'     => array(
 				'relation' => 'AND',
-				array(
+				'start_date' => array(
 					'key'     => 'start_date',
 					'type'    => 'DATE',
 					'value'   => $today,
 					'compare' => '<=',
+				),
+				array(
+					'relation' => 'OR',
+					'start_time' => array(
+						'key'     => 'start_time',
+						'compare' => 'EXISTS',
+					),
+					'start_time2' => array(
+						'key'     => 'start_time',
+						'compare' => 'NOT EXISTS',
+					),
 				),
 			),
 		);
@@ -54,17 +66,31 @@ function squarecandy_events_func( $atts = array() ) {
 			'start_date' => 'DESC',
 			'start_time' => 'ASC',
 		);
+
 		$args    = array(
 			'post_type'      => 'event',
 			'post_status'    => 'publish',
-			'posts_per_page' => -1, // show everything... @TODO consider limiting and paginating this
+			'posts_per_page' => 2500, //  @TODO consider limiting and paginating this
 			'orderby'        => $orderby,
-			'meta_query'     => array(
-				array(
+			'meta_key' => 'start_date',
+			'meta_query'     => array( array(
+				'relation' => 'OR',
+				'start_date' => array(
 					'key'     => 'start_date',
-					'compare' => 'EXISTS', // this seems a bit of a hack, but orderby an array of meta keys doesn't seem to work w/o it
+					'type'    => 'DATE',
+					'compare' => 'EXISTS',
 				),
-			),
+				'start_time' => array(
+					'key'     => 'start_time',
+					'type'    => 'TIME',
+					'compare' => 'EXISTS',
+				),
+				'start_time2' => array(
+					'key'     => 'start_time',
+					'type'    => 'TIME',
+					'compare' => 'NOT EXISTS',
+				),
+			), ),
 		);
 		$past    = false;
 	} elseif ( isset( $atts['type'] ) && 'featured' === $atts['type'] ) {
@@ -72,26 +98,44 @@ function squarecandy_events_func( $atts = array() ) {
 		$args = array(
 			'post_type'      => 'event',
 			'post_status'    => 'publish',
-			'posts_per_page' => -1,
+			'posts_per_page' => 2500,
 			'orderby'        => $orderby,
+			'meta_key' => 'start_date',
 			'meta_query'     => array(
 				'relation' => 'AND',
+				// future events only
 				array(
 					'relation' => 'OR',
-					array(
+					'start_date2' => array(
 						'key'     => 'start_date',
 						'type'    => 'DATE',
 						'value'   => $today,
 						'compare' => '>=',
 					),
-					array(
+					'end_date2' => array(
 						'key'     => 'end_date',
 						'type'    => 'DATE',
 						'value'   => $today,
 						'compare' => '>=',
 					),
 				),
+				// the values below are only for compatibility with orderby an array of keys
 				array(
+					'relation' => 'OR',
+					'start_date' => array(
+						'key'     => 'start_date',
+						'type'    => 'DATE',
+						'compare' => 'EXISTS',
+					),
+					'start_time' => array(
+						'key'     => 'start_time',
+						'value'   => 'this-is-a-sorting-hack',
+						'type'    => 'TIME',
+						'compare' => '!=',
+					),
+				),
+				// only include featured events
+				'featured' => array(
 					'key'     => 'featured',
 					'value'   => 1,
 					'compare' => '=',
@@ -103,19 +147,35 @@ function squarecandy_events_func( $atts = array() ) {
 		// upcoming events - this is the default display
 		$meta_query = array(
 			'relation' => 'AND',
+			// this is the real query that retuns the desired sub-set of items
 			array(
 				'relation' => 'OR',
-				array(
+				'start_date2' => array(
 					'key'     => 'start_date',
 					'type'    => 'DATE',
 					'value'   => $today,
 					'compare' => '>=',
 				),
-				array(
+				'end_date2' => array(
 					'key'     => 'end_date',
 					'type'    => 'DATE',
 					'value'   => $today,
 					'compare' => '>=',
+				),
+			),
+			// the values below are only for compatibility with orderby an array of keys
+			array(
+				'relation' => 'OR',
+				'start_date' => array(
+					'key'     => 'start_date',
+					'type'    => 'DATE',
+					'compare' => 'EXISTS',
+				),
+				'start_time' => array(
+					'key'     => 'start_time',
+					'value'   => 'this-is-a-sorting-hack',
+					'type'    => 'TIME',
+					'compare' => '!=',
 				),
 			),
 		);
@@ -139,8 +199,9 @@ function squarecandy_events_func( $atts = array() ) {
 		$args = array(
 			'post_type'      => 'event',
 			'post_status'    => 'publish',
-			'posts_per_page' => -1,
+			'posts_per_page' => 2500,
 			'orderby'        => $orderby,
+			'meta_key' => 'start_date',
 			'meta_query'     => $meta_query,
 		);
 		$past = false;
