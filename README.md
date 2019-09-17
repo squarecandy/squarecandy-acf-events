@@ -62,6 +62,17 @@ Combine any of the above as needed...
 
 `[squarecandy_events type=past style=compact cat=my-example-category]`
 
+**Advanced:**
+
+More options are now available:
+
+* `not_in=123,125,127` // filter out specific events by ID
+* `posts_per_page=3` // override total posts returned
+* `only_featured=true` // filter for featured posts only
+* `featured_at_top=true` // order featured posts at top
+* `exclude_featured=true` // filter out featured posts
+* `more_info_post_link=true` // force more info button to link to the single post instead of to an external website
+
 ## Filters
 
 Available filters:
@@ -74,6 +85,11 @@ Available filters:
 Developers, please run `phpcs -s --standard=phpcs.xml .` from the root of this plugin to ensure coding standards before making any new pull requests. You must install [`phpcs`](https://github.com/squizlabs/PHP_CodeSniffer) and the [`WordPress Coding Standards`](https://github.com/WordPress/WordPress-Coding-Standards) first.
 
 ## History
+
+## v1.2.1
+
+* add even more shortcode query options
+* fix query ordering issues
 
 ## v1.2.0
 
