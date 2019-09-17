@@ -5,13 +5,22 @@ function squarecandy_events_func( $atts = array() ) {
 	$today = date( 'Ymd', current_time('timestamp') );
 
 	// is this a "compact" display? [squarecandy_events style=compact]
-	$compact = ( isset( $atts['style'] ) && 'compact' === $atts['style'] ) ? true : false;
+	$compact = isset( $atts['style'] ) && 'compact' === $atts['style'] ? true : false;
 
 	// also filter by category? [squarecandy_events cat=my-cat-slug]
-	$cat = ( isset( $atts['cat'] ) && ! empty( $atts['cat'] ) ) ? $atts['cat'] : false;
+	$cat = ! empty( $atts['cat'] ) ? $atts['cat'] : false;
 
-	// featured
-	$is_featured = ( isset( $atts['type'] ) && 'featured' === $atts['type'] ) ? true : false;
+	// filter out specific events by ID
+	$not_in = ! empty( $atts['not_in'] ) ? $atts['not_in'] : false;
+
+	// override total posts returned
+	$posts_per_page = ! empty( $atts['posts_per_page'] ) ? $atts['posts_per_page'] : false;
+
+	// filter for featured posts only
+	$only_featured = ! empty( $atts['only_featured'] ) ? true : false;
+
+	// filter out featured posts
+	$exclude_featured = ! empty( $atts['exclude_featured'] ) ? true : false;
 
 	$archive_by_year = get_field( 'archive_by_year', 'option' );
 	$accordion       = false;
@@ -93,56 +102,6 @@ function squarecandy_events_func( $atts = array() ) {
 			), ),
 		);
 		$past    = false;
-	} elseif ( isset( $atts['type'] ) && 'featured' === $atts['type'] ) {
-		// show upcoming featured events. [squarecandy_events type=featured]
-		$args = array(
-			'post_type'      => 'event',
-			'post_status'    => 'publish',
-			'posts_per_page' => 2500,
-			'orderby'        => $orderby,
-			'meta_key' => 'start_date',
-			'meta_query'     => array(
-				'relation' => 'AND',
-				// future events only
-				array(
-					'relation' => 'OR',
-					'start_date2' => array(
-						'key'     => 'start_date',
-						'type'    => 'DATE',
-						'value'   => $today,
-						'compare' => '>=',
-					),
-					'end_date2' => array(
-						'key'     => 'end_date',
-						'type'    => 'DATE',
-						'value'   => $today,
-						'compare' => '>=',
-					),
-				),
-				// the values below are only for compatibility with orderby an array of keys
-				array(
-					'relation' => 'OR',
-					'start_date' => array(
-						'key'     => 'start_date',
-						'type'    => 'DATE',
-						'compare' => 'EXISTS',
-					),
-					'start_time' => array(
-						'key'     => 'start_time',
-						'value'   => 'this-is-a-sorting-hack',
-						'type'    => 'TIME',
-						'compare' => '!=',
-					),
-				),
-				// only include featured events
-				'featured' => array(
-					'key'     => 'featured',
-					'value'   => 1,
-					'compare' => '=',
-				),
-			),
-		);
-		$past = false;
 	} else {
 		// upcoming events - this is the default display
 		$meta_query = array(
@@ -180,8 +139,8 @@ function squarecandy_events_func( $atts = array() ) {
 			),
 		);
 
-		if ( isset( $atts['exclude_featured'] ) && $atts['exclude_featured'] ) {
-			$exclude_featured = array(
+		if ( $exclude_featured ) {
+			$exclude_featured_meta = array(
 				'relation' => 'OR',
 				array(
 					'key'     => 'featured',
@@ -193,7 +152,17 @@ function squarecandy_events_func( $atts = array() ) {
 					'compare' => 'NOT EXISTS',
 				),
 			);
-			array_push( $meta_query, $exclude_featured );
+			array_push( $meta_query, $exclude_featured_meta );
+		}
+
+		// only include featured events
+		if ( $only_featured ) {
+			$only_featured_meta = array(
+				'key'     => 'featured',
+				'value'   => 1,
+				'compare' => '=',
+			);
+			array_push( $meta_query, $only_featured_meta );
 		}
 
 		$args = array(
@@ -221,6 +190,14 @@ function squarecandy_events_func( $atts = array() ) {
 				'operator'         => 'IN',
 			),
 		);
+	}
+
+	if ( $not_in ) {
+		$args['post__not_in'] = explode(',', $not_in);
+	}
+
+	if ( $posts_per_page ) {
+		$args['posts_per_page'] = $ppp;
 	}
 
 	// query
