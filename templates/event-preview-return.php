@@ -57,7 +57,7 @@ if ( get_field( 'event_show_image', 'option' ) ) {
 $output .= '<div class="more-info-buttons">';
 if ( ! empty( $event['tickets_link'] ) ) {
 	$output .= '<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-			<a class="button button-bold" itemprop="url" href="' . $event['tickets_link'] . '">
+			<a class="button button-bold button-tickets" itemprop="url" href="' . $event['tickets_link'] . '">
 				<i class="fa fa-ticket"></i> ' . __( 'Tickets', 'squarecandy-acf-events' ) . '
 			</a>
 		</span> ';
@@ -65,13 +65,13 @@ if ( ! empty( $event['tickets_link'] ) ) {
 
 if ( $compact || $moreinfo_post_link ) {
 	$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', 'More Info' );
-	$output .= '<a class="button button-bold" href="' . get_permalink() . '">
+	$output .= '<a class="button button-bold button-more-info" href="' . get_permalink() . '">
 			<i class="fa fa-info-circle"></i> ' . __( $moreinfo_post_link_text, 'squarecandy-acf-events' ) . '
 		</a> ';
 }
 elseif ( ! empty( $event['more_info_link'] ) && ! $compact ) {
 	$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', 'More Info' );
-	$output .= '<a class="button button-bold" href="' . $event['more_info_link'] . '">
+	$output .= '<a class="button button-bold button-more-info" href="' . $event['more_info_link'] . '">
 			<i class="fa fa-info-circle"></i> ' . __( $moreinfo_external_link_text, 'squarecandy-acf-events' ) . '
 		</a> ';
 }

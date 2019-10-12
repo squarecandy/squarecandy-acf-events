@@ -22,7 +22,7 @@ get_header(); ?>
 
 				<?php if ( ! empty( $event['tickets_link'] ) ) { ?>
 					<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-						<a class="button button-bold" itemprop="url" href="<?php echo $event['tickets_link']; ?>">
+						<a class="button button-bold button-tickets" itemprop="url" href="<?php echo $event['tickets_link']; ?>">
 							<i class="fa fa-ticket"></i> Tickets
 						</a>
 					</span>
@@ -32,7 +32,7 @@ get_header(); ?>
 				if ( ! empty( $event['more_info_link'] ) ) :
 					$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', 'More Info' );
 					?>
-					<a class="button button-bold" href="<?php echo $event['more_info_link']; ?>">
+					<a class="button button-bold button-more-info" href="<?php echo $event['more_info_link']; ?>">
 						<i class="fa fa-info-circle"></i> <?php _e( $moreinfo_external_link_text, 'squarecandy-acf-events' ); ?>
 					</a>
 					<?php
