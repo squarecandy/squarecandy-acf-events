@@ -185,19 +185,19 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'type'  => 'text',
 		);
 		if ( is_plugin_active( 'acf-country/acf-country.php' ) ) {
-			$eventfields['country']    = array(
-				'key'   => 'field_country1749283947',
-				'label' => 'Country',
-				'name'  => 'country',
-				'type'  => 'country',
+			$eventfields['country'] = array(
+				'key'           => 'field_country1749283947',
+				'label'         => 'Country',
+				'name'          => 'country',
+				'type'          => 'country',
 				'default_value' => array(
 					0 => 'United States',
 				),
-				'allow_null' => 1,
-				'multiple' => 0,
-				'ui' => 1,
+				'allow_null'    => 1,
+				'multiple'      => 0,
+				'ui'            => 1,
 				'return_format' => 'name',
-				'placeholder' => 'Select a country',
+				'placeholder'   => 'Select a country',
 			);
 		}
 
@@ -719,35 +719,12 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 						'width' => '33',
 					),
 				),
-				/*
-				array(
-					'key' => 'field_placeimage3749275',
-					'label' => 'Image Placement',
-					'name' => 'event_image_placement',
-					'type' => 'select',
-					'choices' => array(
-						'top' => 'top',
-						'left' => 'left',
-						'right' => 'right',
-						'bottom' => 'bottom',
-					),
-					'default_value' => 'bottom',
-					'return_format' => 'value',
-					'wrapper' => array(
-						'width' => '33',
-					),
-				),
-				*/
 				array(
 					'key'           => 'field_imagesize8290348',
 					'label'         => 'Image Size',
 					'name'          => 'event_image_preview_size',
 					'default_value' => 'thumbnail',
-					'type'          => 'text',
-					// 'type' => 'select',  // @TODO - make this a select that automatically gets all the sizes, if that's possible (tricky to get sizes after theme load from a plugin)
-					// 'choices' => get_image_sizes(),
-					// 'return_format' => 'value',
-					// 'allow_null' => 0,
+					'type'          => 'text', // @TODO - make this a select that automatically gets all the sizes, if that's possible (tricky to get sizes after theme load from a plugin)
 					'wrapper'       => array(
 						'width' => '33',
 					),
