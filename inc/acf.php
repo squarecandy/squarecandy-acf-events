@@ -184,6 +184,22 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'name'  => 'country',
 			'type'  => 'text',
 		);
+		if ( is_plugin_active( 'acf-country/acf-country.php' ) ) {
+			$eventfields['country']    = array(
+				'key'   => 'field_country1749283947',
+				'label' => 'Country',
+				'name'  => 'country',
+				'type'  => 'country',
+				'default_value' => array(
+					0 => 'United States',
+				),
+				'allow_null' => 1,
+				'multiple' => 0,
+				'ui' => 1,
+				'return_format' => 'name',
+				'placeholder' => 'Select a country',
+			);
+		}
 
 		$instructions = '';
 		if ( ! get_field( 'google_maps_api_key', 'option' ) ) {
