@@ -1,9 +1,11 @@
+/* stylelint-disable selector-class-pattern */
+
 .ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_second,
 .ui-timepicker-div.ui-timepicker-oneLine dl dt.ui_tpicker_second_label {
 	display: none;
 }
 
 .short_wysiwyg .acf-editor-wrap iframe {
-	min-height: 180px;
 	height: 180px !important;
+	min-height: 180px;
 }
