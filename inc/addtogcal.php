@@ -2,34 +2,34 @@
 if ( ! function_exists( 'squarecandy_add_to_gcal' ) ) :
 
 	function squarecandy_add_to_gcal(
-	$name,
-	$startdate,
-	$enddate = false,
-	$description = false,
-	$location = false,
-	$allday = false,
-	$linktext = 'Add to gCal',
-	$classes = array( 'gcal-button, button' )
+		$name,
+		$startdate,
+		$enddate = false,
+		$description = false,
+		$location = false,
+		$allday = false,
+		$linktext = 'Add to gCal',
+		$classes = array( 'gcal-button, button' )
 	) {
 
 		// calculate the start and end dates, convert to ISO format
 		if ( $allday ) {
-			$startdate = date( 'Ymd', strtotime( $startdate ) );
+			$startdate = date_i18n( 'Ymd', strtotime( $startdate ) );
 		} else {
-			$startdate = date( 'Ymd\THis', strtotime( $startdate ) );
+			$startdate = date_i18n( 'Ymd\THis', strtotime( $startdate ) );
 		}
 
 		if ( $enddate && ! empty( $enddate ) && strlen( $enddate ) > 2 ) {
 			if ( $allday ) {
-				$enddate = date( 'Ymd', strtotime( $enddate . ' + 1 day' ) );
+				$enddate = date_i18n( 'Ymd', strtotime( $enddate . ' + 1 day' ) );
 			} else {
-				$enddate = date( 'Ymd\THis', strtotime( $enddate ) );
+				$enddate = date_i18n( 'Ymd\THis', strtotime( $enddate ) );
 			}
 		} else {
 			if ( $allday ) {
-					$enddate = date( 'Ymd', strtotime( $startdate . ' + 1 day' ) );
+					$enddate = date_i18n( 'Ymd', strtotime( $startdate . ' + 1 day' ) );
 			} else {
-					$enddate = date( 'Ymd\THis', strtotime( $startdate . ' + 2 hours' ) );
+					$enddate = date_i18n( 'Ymd\THis', strtotime( $startdate . ' + 2 hours' ) );
 			}
 		}
 

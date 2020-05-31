@@ -13,14 +13,14 @@ if ( get_field('event_show_image', 'option') && 'bottom' != get_field('event_ima
 }
 */
 
-$output .= '<h1 class="event-date-time" itemprop="startDate" content="' . date( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
+$output .= '<h1 class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
 $output .= '<a href="' . get_permalink() . '">' . get_squarecandy_acf_events_date_display( $event, $compact ) . '</a>';
 $output .= '</h1>';
 
 if ( ! empty( $event['end_date'] ) ) {
-	$meta_end_date = date( 'Y-m-d', strtotime( $event['end_date'] ) );
+	$meta_end_date = date_i18n( 'Y-m-d', strtotime( $event['end_date'] ) );
 } else {
-	$meta_end_date = date( 'Y-m-d', strtotime( $event['start_date'] ) );
+	$meta_end_date = date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) );
 }
 
 $output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
@@ -64,15 +64,16 @@ if ( ! empty( $event['tickets_link'] ) ) {
 }
 
 if ( $compact || $moreinfo_post_link ) {
-	$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', 'More Info' );
-	$output .= '<a class="button button-bold button-more-info" href="' . get_permalink() . '">
-			<i class="fa fa-info-circle"></i> ' . __( $moreinfo_post_link_text, 'squarecandy-acf-events' ) . '
+	$moreinfo_post_link_text = __( 'More Info', 'squarecandy-acf-events' );
+	$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', $moreinfo_post_link_text );
+	$output                 .= '<a class="button button-bold button-more-info" href="' . get_permalink() . '">
+			<i class="fa fa-info-circle"></i> ' . $moreinfo_post_link_text . '
 		</a> ';
-}
-elseif ( ! empty( $event['more_info_link'] ) && ! $compact ) {
-	$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', 'More Info' );
-	$output .= '<a class="button button-bold button-more-info" href="' . $event['more_info_link'] . '">
-			<i class="fa fa-info-circle"></i> ' . __( $moreinfo_external_link_text, 'squarecandy-acf-events' ) . '
+} elseif ( ! empty( $event['more_info_link'] ) && ! $compact ) {
+	$moreinfo_external_link_text = __( 'More Info', 'squarecandy-acf-events' );
+	$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', $moreinfo_external_link_text );
+	$output                     .= '<a class="button button-bold button-more-info" href="' . $event['more_info_link'] . '">
+			<i class="fa fa-info-circle"></i> ' . $moreinfo_external_link_text . '
 		</a> ';
 }
 
@@ -85,31 +86,33 @@ if ( ! empty( $event['facebook_link'] ) ) {
 }
 
 if ( get_field( 'add_to_gcal', 'option' ) ) :
-	$startdate = $event['start_date'];
-	if ( isset( $event['start_time'] ) ) {
-		$startdate .= ' ' . $event['start_time'];
+
+	$start_date = $event['start_date'];
+	$end_date   = $event['end_date'] ?? false;
+	$multi_day  = $event['muilti_day'] ?? false;
+
+	if ( ! empty( $event['start_time'] ) ) {
+		$start_date .= ' ' . $event['start_time'];
 	}
 
-	if ( $event['multi_day'] == 1 ) {
-		$enddate = $event['end_date'];
-		if ( isset( $event['end_time'] ) ) {
-			$enddate .= ' ' . $event['end_time'];
-		}
-	} else {
-		$enddate = false;
+	if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
+		$end_date .= ' ' . $event['end_time'];
 	}
-	$event_address = isset( $event['venue_location']['address'] ) ? $event['venue_location']['address'] : null;
-	$output       .= squarecandy_add_to_gcal(
+
+	$event_address = $event['venue_location']['address'] ?? null;
+
+	$output .= squarecandy_add_to_gcal(
 		get_the_title(),
-		$startdate,
-		$enddate,
-		$event['short_description'],
+		$start_date,
+		$end_date,
+		$event['short_description'] ?? false,
 		$event_address,
-		$event['all_day'],
-		$linktext  = '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>',
-		$classes   = array( 'gcal-button', 'button', 'button-bold' )
+		$event['all_day'] ?? false,
+		$linktext = '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>',
+		$classes  = array( 'gcal-button', 'button', 'button-bold' )
 	);
-	endif;
+
+endif;
 
 $output .= '</div>
 </article>';

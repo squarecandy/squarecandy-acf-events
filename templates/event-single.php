@@ -11,7 +11,7 @@ get_header(); ?>
 			?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'events-full' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
-				<h2 class="event-date-time" itemprop="startDate" content="<?php echo date( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
+				<h2 class="event-date-time" itemprop="startDate" content="<?php echo date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
 					<?php squarecandy_acf_events_date_display( $event ); ?>
 				</h2>
 
@@ -30,10 +30,10 @@ get_header(); ?>
 
 				<?php
 				if ( ! empty( $event['more_info_link'] ) ) :
-					$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', 'More Info' );
+					$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', __( 'More Info', 'squarecandy-acf-events' ) );
 					?>
 					<a class="button button-bold button-more-info" href="<?php echo $event['more_info_link']; ?>">
-						<i class="fa fa-info-circle"></i> <?php _e( $moreinfo_external_link_text, 'squarecandy-acf-events' ); ?>
+						<i class="fa fa-info-circle"></i> <?php echo $moreinfo_external_link_text; ?>
 					</a>
 					<?php
 				endif;
@@ -47,37 +47,32 @@ get_header(); ?>
 
 				<?php
 				if ( get_field( 'add_to_gcal', 'option' ) ) :
-					$startdate = $event['start_date'];
-					if ( isset( $event['start_time'] ) ) {
-						$startdate .= ' ' . $event['start_time'];
+					$start_date = $event['start_date'];
+					$end_date   = $event['end_date'] ?? false;
+					$multi_day  = $event['muilti_day'] ?? false;
+
+					if ( ! empty( $event['start_time'] ) ) {
+						$start_date .= ' ' . $event['start_time'];
 					}
 
-					if ( $event['multi_day'] == 1 ) {
-						$enddate = $event['end_date'];
-						if ( isset( $event['end_time'] ) ) {
-							$enddate .= ' ' . $event['end_time'];
-						}
-					} else {
-						$enddate = false;
+					if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
+						$end_date .= ' ' . $event['end_time'];
 					}
 
-					if ( $event['multi_day'] == 1 ) {
-						$enddate = $event['end_date'] . ' ' . $event['end_time'];
-					} else {
-						$enddate = false;
-					}
-					$event_address = isset( $event['venue_location']['address'] ) ? $event['venue_location']['address'] : null;
+					$event_address = $event['venue_location']['address'] ?? null;
+
 					echo squarecandy_add_to_gcal(
 						get_the_title(),
-						$startdate,
-						$enddate,
-						$event['short_description'],
+						$start_date,
+						$end_date,
+						$event['short_description'] ?? '',
 						$event_address,
-						$event['all_day'],
-						$linktext  = '<i class="fa fa-google"></i> add to gCal',
-						$classes   = array( 'gcal-button', 'button', 'button-bold' )
+						$event['all_day'] ?? false,
+						$linktext = '<i class="fa fa-google"></i> add to gCal',
+						$classes  = array( 'gcal-button', 'button', 'button-bold' )
 					);
-					endif;
+
+				endif;
 				?>
 
 				</div>
@@ -86,7 +81,7 @@ get_header(); ?>
 
 				<?php
 					$test_empty_content = get_the_content();
-					$test_empty_content = strip_tags( $test_empty_content );
+					$test_empty_content = wp_strip_all_tags( $test_empty_content );
 					$test_empty_content = str_replace( '&nbsp;', '', $test_empty_content );
 					$test_empty_content = trim( $test_empty_content );
 				?>
