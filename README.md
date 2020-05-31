@@ -80,11 +80,16 @@ Available filters:
 * `squarecandy_filter_events_fields` - filter the ACF fields array
 * `squarecandy_filter_events_supports` - filter the array of components the post type supports ( 'title', 'editor', 'author', 'thumbnail' )
 
-## Standards
+## [Developer Guide](https://developers.squarecandy.net)
 
-Developers, please run `phpcs -s --standard=phpcs.xml .` from the root of this plugin to ensure coding standards before making any new pull requests. You must install [`phpcs`](https://github.com/squizlabs/PHP_CodeSniffer) and the [`WordPress Coding Standards`](https://github.com/WordPress/WordPress-Coding-Standards) first.
+For more detailed information about coding standards, development philosophy, how to run linting, how to release a new version, and more, visit the [Square Candy Developer Guide](https://developers.squarecandy.net).
 
 ## Roadmap
 
-* make options for both past and all to be grouped by year independently
+* make options for both "past" and "all" to be grouped by year independently
 * Support more preview image positions (left, right, top)
+* throw error if end date is before start date
+* create hidden takedown/archive date for smoother queries
+* Either make an optional checkbox for loading archive years via AJAX - OR - just force this behavior if the past events query returns more than 250 items or something like that.
+* add cancelled feature and corresponding schema https://schema.org/EventCancelled
+* add online location feature https://schema.org/VirtualLocation https://schema.org/BroadcastEvent
