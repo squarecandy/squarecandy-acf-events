@@ -1,29 +1,32 @@
 jQuery( document ).ready( function( $ ) {
-	// accordions - event archive, etc
+	// accordions for the event archive grouped by year
 	$( '.accordion-content' ).hide();
 	$( '.accordion-header' ).on( 'click', function() {
-		const accordionheader = $( this );
-		if ( accordionheader.hasClass( 'accordion-open' ) ) {
+		const accordionHeader = $( this );
+
+		if ( accordionHeader.hasClass( 'accordion-open' ) ) {
+			// if you clicked on the one that's already open, just close it.
 			$( '.accordion-open' ).removeClass( 'accordion-open' );
-			accordionheader.next().slideUp( 500 );
+			accordionHeader.next().slideUp( 500 );
 		} else {
-			const openoffset = $( '.accordion-open' )
-				.next()
-				.outerHeight();
-			const destination = accordionheader.offset().top;
-			$( 'html,body' )
-				.not( ':animated' )
-				.animate( { scrollTop: destination - 110 - openoffset }, 500 );
+			// otherwise, we have to open the clicked one and close any other that is open.
+
 			$( '.accordion-open' )
-				.not( accordionheader )
+				.not( accordionHeader )
 				.removeClass( 'accordion-open' );
-			accordionheader
+			accordionHeader
 				.addClass( 'accordion-open' )
 				.next()
-				.slideDown( 500 );
+				.slideDown( 400, function() {
+					const padding = 80; // some extra to account for spacing and fixed menus
+					const destination = accordionHeader.offset().top - padding;
+					$( 'html,body' )
+						.not( ':animated' )
+						.animate( { scrollTop: destination }, 500 );
+				} );
 			$( '.accordion-content' )
-				.not( accordionheader.next() )
-				.slideUp( 500 );
+				.not( accordionHeader.next() )
+				.slideUp( 350 );
 		}
 		return false;
 	} );
