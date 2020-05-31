@@ -1,0 +1,8 @@
+{
+	"name": "squarecandy/squarecandy-acf-newplugin",
+	"description": "A new plugin that does something custom.",
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
+		"wp-coding-standards/wpcs": "*"
+	}
+}

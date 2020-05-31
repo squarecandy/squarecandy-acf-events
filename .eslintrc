@@ -1,0 +1,24 @@
+{
+	"root": true,
+	"extends": [
+		"plugin:@wordpress/eslint-plugin/recommended"
+	],
+	"env": {
+		"jquery": true
+	},
+	"rules": {
+		"max-len": ["error", { "code": 140 }],
+		"prettier/prettier": ["error", {
+			"useTabs": true,
+			"tabWidth": 4,
+			"printWidth": 140,
+			"singleQuote": true,
+			"trailingComma": "es5",
+			"bracketSpacing": true,
+			"parenSpacing": true,
+			"jsxBracketSameLine": false,
+			"semi": true,
+			"arrowParens": "always"
+		}]
+	}
+}

@@ -1,0 +1,58 @@
+{
+	"name": "squarespace-event-import",
+	"version": "1.1.0",
+	"description": "Import Events Data from a Squarespace site into Square Candy’s Events plugin",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/squarecandy/squarespace-event-import.git"
+	},
+	"author": "Square Candy Design / Peter Wise",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/squarecandy/squarespace-event-import"
+	},
+	"homepage": "https://github.com/squarecandy/squarespace-event-import",
+	"scripts": {
+		"release": "standard-version",
+		"preinstall": "composer install"
+	},
+	"standard-version": {
+		"skip": {
+			"tag": true
+		}
+	},
+	"devDependencies": {
+		"@types/eslint": "6.8.0",
+		"@wordpress/eslint-plugin": "^5.1.0",
+		"@wordpress/scripts": "^9.1.0",
+		"autoprefixer": "^9.7.4",
+		"cssnano": "^4.1.10",
+		"grunt": "^1.0.4",
+		"grunt-contrib-watch": "^1.1.0",
+		"grunt-eslint": "^22.0.0",
+		"grunt-phpcs": "^0.4.0",
+		"grunt-postcss": "^0.9.0",
+		"grunt-sass": "^3.1.0",
+		"grunt-string-replace": "^1.3.1",
+		"grunt-stylelint": "^0.15.0",
+		"grunt-terser": "^1.0.0",
+		"node-sass": "^4.13.1",
+		"php-codesniffer": "^1.0.2",
+		"pixrem": "^5.0.0",
+		"prettier": "npm:wp-prettier@1.19.1",
+		"standard-version": "^8.0.0",
+		"string-replace": "^0.2.0",
+		"stylelint": "^13.3.3",
+		"stylelint-config-rational-order": "^0.1.2",
+		"stylelint-config-recommended-scss": "^4.2.0",
+		"stylelint-config-sass-guidelines": "^7.0.0",
+		"stylelint-config-scss": "^1.0.0-security",
+		"stylelint-config-wordpress": "^16.0.0",
+		"stylelint-order": "^4.0.0",
+		"stylelint-scss": "^3.17.2",
+		"terser": "^4.6.13"
+	},
+	"dependencies": {
+		"grunt-run": "^0.8.1"
+	}
+}
