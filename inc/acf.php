@@ -1,5 +1,5 @@
 <?php
-// Add ACF Fields for Event
+// Add ACF Fields and Functions for Event
 
 if ( function_exists( 'acf_add_local_field_group' ) ) :
 
@@ -303,7 +303,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			);
 
 			function remove_default_event_category_metabox() {
-					remove_meta_box( 'tagsdiv-events-category', 'event', 'side' );
+				remove_meta_box( 'tagsdiv-events-category', 'event', 'side' );
 			}
 			add_action( 'admin_menu', 'remove_default_event_category_metabox' );
 
@@ -560,8 +560,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'label'        => 'Google Maps API Key',
 					'name'         => 'google_maps_api_key',
 					'type'         => 'text',
-					'instructions' => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
-			target="_blank">Get Your API Key Here</a>',
+					'instructions' => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Get Your API Key Here</a>',
 					'wrapper'      => array(
 						'width' => '50',
 					),
@@ -724,7 +723,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'label'         => 'Image Size',
 					'name'          => 'event_image_preview_size',
 					'default_value' => 'thumbnail',
-					'type'          => 'text', // @TODO - make this a select that automatically gets all the sizes, if that's possible (tricky to get sizes after theme load from a plugin)
+					'type'          => 'text', // @TODO - make the image size option a select that automatically gets all the sizes
 					'wrapper'       => array(
 						'width' => '33',
 					),
@@ -742,8 +741,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'label'         => 'No Events Text',
 					'name'          => 'no_events_text',
 					'type'          => 'wysiwyg',
-					'default_value' => '<h2>There are currently no upcoming events.</h2>
-<p>Please join the email list and we will keep you posted when new events get added.</p>',
+					'default_value' => '<h2>There are currently no upcoming events.</h2><p>Please join the email list and we will keep you posted when new events get added.</p>',
 					'tabs'          => 'all',
 					'toolbar'       => 'basic',
 					'media_upload'  => 0,

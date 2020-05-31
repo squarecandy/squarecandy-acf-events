@@ -60,6 +60,7 @@ add_action( 'wp_enqueue_scripts', 'squarecandy_acf_events_enqueue_scripts' );
 // Admin Scripts and Styles
 function squarecandy_acf_events_admin_enqueue() {
 	wp_enqueue_style( 'squarecandy-acf-events-admin-css', ACF_EVENTS_URL . 'dist/css/admin.min.css', false, 'version-1.0.0' );
+	wp_enqueue_script( 'squarecandy-acf-events-admin-js', ACF_EVENTS_URL . 'dist/js/admin.min.js', array( 'jquery' ), 'version-1.0.0', true );
 }
 add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_admin_enqueue' );
 
