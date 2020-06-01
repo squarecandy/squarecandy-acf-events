@@ -493,6 +493,29 @@ if ( function_exists( 'ac_register_columns' ) ) :
 	add_action( 'ac/ready', 'ac_custom_column_settings_8980a6ec' );
 endif;
 
+// functions to cleanup date/time data on save, etc
+require ACF_EVENTS_DIR_PATH . 'inc/data-cleanup.php';
+
+// run the bulk update if it has not been done yet.
+if ( ! get_transient( 'squarecandy_event_cleanup_complete' ) ) {
+	// Bulk Update Script
+	function squarecandy_acf_events_bulk_update_enqueue() {
+		wp_enqueue_script( 'squarecandy-acf-events-bluk-update-js', ACF_EVENTS_URL . 'dist/js/bulk-update.min.js', array( 'jquery' ), 'version-1.0.0', true );
+		$nonce = wp_create_nonce( 'squarecandy_event_bulk_update' );
+		wp_localize_script(
+			'squarecandy-acf-events-bluk-update-js',
+			'sqcdy_event_bulk_update_ajax_obj',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => $nonce,
+			)
+		);
+	}
+	add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_bulk_update_enqueue' );
+	require ACF_EVENTS_DIR_PATH . 'inc/bulk-update.php';
+}
+
+
 
 // for debugging
 if ( ! function_exists( 'pre_r' ) ) :
@@ -505,35 +528,4 @@ if ( ! function_exists( 'pre_r' ) ) :
 	}
 endif;
 
-/**
- *
- *
- * @param int $post_id - The Post ID.
- */
-function squarecandy_acf_events_acf_save_post( $post_id ) {
 
-	// return early if post being saved is not an event.
-	if ( 'event' !== get_post_type( $post_id ) ) {
-		return;
-	}
-
-	// if the event is not multi day but there is an end date.
-	if ( ! get_field( 'multi_day', $post_id ) && get_field( 'end_date', $post_id ) ) {
-		update_field( 'end_date', '', $post_id );
-	}
-
-	// if all day checkbox is ticked
-	if ( get_field( 'all_day', $post_id ) ) {
-
-		// remove start_time value
-		if ( get_field( 'start_time', $post_id ) ) {
-			update_field( 'start_time', '', $post_id );
-		}
-
-		// remove end_time value
-		if ( get_field( 'end_time', $post_id ) ) {
-			update_field( 'end_time', '', $post_id );
-		}
-	}
-}
-add_action( 'acf/save_post', 'squarecandy_acf_events_acf_save_post', 15 );

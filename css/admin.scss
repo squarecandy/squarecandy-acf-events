@@ -9,3 +9,22 @@
 	height: 180px !important;
 	min-height: 180px;
 }
+
+.squarecandy-events-bulk-update-progress {
+	width: 100%;
+	height: 6px;
+	margin-bottom: 5px;
+	background: #bbb;
+
+	.progress-bar {
+		width: 0;
+		height: 100%;
+		background: #5b5;
+	}
+}
+
+.squarecandy-events-bulk-update-progress-text {
+	margin-bottom: 10px;
+	color: #888;
+	font-size: 12px;
+}
