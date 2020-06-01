@@ -11,9 +11,11 @@ function squarecandy_events_func( $atts = array() ) {
 	$cat = ! empty( $atts['cat'] ) ? $atts['cat'] : false;
 
 	// filter out specific events by ID
+	// @TODO - remove this - see https://10up.github.io/Engineering-Best-Practices/php/#performance
 	$not_in = ! empty( $atts['not_in'] ) ? $atts['not_in'] : false;
 
 	// override total posts returned
+	// @TODO - remove this. too much power for users - see https://10up.github.io/Engineering-Best-Practices/php/#performance
 	$posts_per_page = ! empty( $atts['posts_per_page'] ) ? $atts['posts_per_page'] : false;
 
 	// filter for featured posts only
@@ -89,7 +91,7 @@ function squarecandy_events_func( $atts = array() ) {
 		$args = array(
 			'post_type'      => 'event',
 			'post_status'    => 'publish',
-			'posts_per_page' => 2500, //  @TODO consider limiting and paginating this
+			'posts_per_page' => 2500, // @TODO consider limiting and paginating this
 			'orderby'        => $orderby,
 			'meta_key'       => 'start_date',
 			'meta_query'     => array(
