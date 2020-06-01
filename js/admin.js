@@ -1,4 +1,5 @@
 jQuery( document ).ready( function( $ ) {
+	// validate that the end date is same or after the start date
 	$( 'body.post-type-event #publish' ).on( 'click', function( e ) {
 		const startDate = $( 'div[data-name="start_date"] input[type=hidden]' ).val();
 		const endDate = $( 'div[data-name="end_date"] input[type=hidden]' ).val();
@@ -6,7 +7,10 @@ jQuery( document ).ready( function( $ ) {
 
 		if ( multiDay && endDate < startDate ) {
 			const errorDatesBackwards = 'The end date cannot be before the start date';
-			$( 'div[data-name="end_date"] .acf-input' ).after( '<div class="error">' + errorDatesBackwards + '</div>' );
+			$( '#squarecandy-error-dates-backwards' ).remove();
+			$( 'div[data-name="end_date"] .acf-input' ).after(
+				'<div class="error" id="squarecandy-error-dates-backwards">' + errorDatesBackwards + '</div>'
+			);
 			e.preventDefault();
 		}
 	} );
