@@ -390,9 +390,8 @@ add_filter(
 
 
 // Add nice Admin Columns Pro setup if the plugin is enabled.
-if ( function_exists( 'ac_register_columns' ) ) :
-	function ac_custom_column_settings_8980a6ec() {
-
+function ac_custom_column_settings_8980a6ec() {
+	if ( function_exists( 'ac_register_columns' ) ) :
 		ac_register_columns(
 			'event',
 			array(
@@ -489,9 +488,10 @@ if ( function_exists( 'ac_register_columns' ) ) :
 				),
 			)
 		);
-	}
-	add_action( 'ac/ready', 'ac_custom_column_settings_8980a6ec' );
-endif;
+	endif;
+}
+add_action( 'ac/ready', 'ac_custom_column_settings_8980a6ec' );
+
 
 // functions to cleanup date/time data on save, etc
 require ACF_EVENTS_DIR_PATH . 'inc/data-cleanup.php';
