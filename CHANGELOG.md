@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 * add custom end date validation ([52de70c](https://github.com/squarecandy/squarespace-event-import/commit/52de70c18821d608b65a87795e1765519fd10a60))
 * introduce a new archive_date hidden field ([20b17dd](https://github.com/squarecandy/squarespace-event-import/commit/20b17dd8190eeb3523b2a2d8b89efc1098631906))
+* Revamp CI system and run all new linting in line with WordPress Standards
 
 
 ### Bug Fixes
@@ -18,11 +19,6 @@ All notable changes to this project will be documented in this file. See [standa
 * admin columns pro settings not loading ([c3509fe](https://github.com/squarecandy/squarespace-event-import/commit/c3509fec96f03afb96aea43de4296fce72b5b865))
 * end date validation error appears repeatedly ([7731299](https://github.com/squarecandy/squarespace-event-import/commit/7731299e6776b374e276d3ea98da117f34eec4b8))
 * style fix for event preview ([c48dd0a](https://github.com/squarecandy/squarespace-event-import/commit/c48dd0a9eb3c5a9b2fb16243905d6641b4fc3a65))
-
-# Changelog
-
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
-
 
 
 ## v1.2.1
