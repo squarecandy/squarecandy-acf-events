@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.2.0](https://github.com/squarecandy/squarespace-event-import/compare/v1.2.1...v1.2.0) (2020-08-31)
+## [1.3.0](https://github.com/squarecandy/squarespace-event-import/compare/v1.2.1...v1.3.0) (2020-08-31)
 
 
 ### Features
@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file. See [standa
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
 
 
 ## v1.2.1
