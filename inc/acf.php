@@ -184,7 +184,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'name'  => 'country',
 			'type'  => 'text',
 		);
-		if ( is_plugin_active_squarecandy( 'acf-country/acf-country.php' ) ) {
+		if ( class_exists( 'AcfCountry' ) ) {
 			$eventfields['country'] = array(
 				'key'           => 'field_country1749283947',
 				'label'         => 'Country',

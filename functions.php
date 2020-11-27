@@ -64,12 +64,6 @@ function squarecandy_acf_events_admin_enqueue() {
 }
 add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_admin_enqueue' );
 
-if ( ! function_exists( 'is_plugin_active_squarecandy' ) ) :
-	function is_plugin_active_squarecandy( $plugin ) {
-		return in_array( $plugin, (array) get_option( 'active_plugins', array() ), true );
-	}
-endif;
-
 // add a new custom post type for events
 require ACF_EVENTS_DIR_PATH . 'post-types/event.php';
 
