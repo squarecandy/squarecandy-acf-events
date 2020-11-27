@@ -96,23 +96,13 @@ get_header(); ?>
 					$t = count( $event['featured_works'] );
 					?>
 					<div class="featuredwork">
-						<span>Featured Work
-						<?php
-						if ( $t > 1 ) {
-							echo 's';}
-						?>
-						</span>
+						<span>Featured Work<?php echo $t > 1 ? 's' : ''; ?></span>
 						<?php
 						$works = array();
 						foreach ( $event['featured_works'] as $work ) {
-							$works[] = '<span itemscope itemprop="workPerformed" itemtype="http://schema.org/CreativeWork">
-									<a itemprop="url" href="' . get_the_permalink( $work->ID ) . '">
-										<span itemprop="name">' . $work->post_title . '</span>
-									</a>
-								</span>';
+							$works[] = '<span itemscope itemprop="workPerformed" itemtype="http://schema.org/CreativeWork"><a itemprop="url" href="' . get_the_permalink( $work->ID ) . '"><span itemprop="name">' . $work->post_title . '</span></a></span>';
 						}
-							echo implode( ', ', $works );
-							$i++;
+						echo implode( ', ', $works );
 						?>
 					</div>
 				<?php endif; ?>
