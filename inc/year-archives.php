@@ -54,16 +54,21 @@ function update_squarecandy_archive_year_list() {
 add_action( 'save_post_event', 'update_squarecandy_archive_year_list' );
 
 function squarecandy_archive_year_nav() {
+	$archiveyear = (int) get_query_var( 'archive_year' );
 	?>
 	<nav class="event-nav-by-year">
 		<ul>
-			<li class="upcoming"><a href="/events/">Upcoming Events</a></li>
+			<li class="upcoming">
+				<a <?php echo $archiveyear ? '' : 'class="active"'; ?> href="/events/">Upcoming Events</a>
+			</li>
 			<?php
 			$years = get_option( 'squarecandy_events_years' );
 			foreach ( $years as $year ) {
 				?>
 				<li class="past past-<?php echo $year; ?>">
-					<a href="/events/<?php echo $year; ?>/"><?php echo $year; ?></a>
+					<a <?php echo $archiveyear === (int) $year ? 'class="active"' : ''; ?> href="/events/<?php echo $year; ?>/">
+						<?php echo $year; ?>
+					</a>
 				</li>
 				<?php
 			}
