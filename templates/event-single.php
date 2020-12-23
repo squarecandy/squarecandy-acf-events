@@ -118,6 +118,12 @@ get_header(); ?>
 				<?php endif; ?>
 			</article><!-- #post-## -->
 		<?php endwhile; // End of the loop. ?>
+
+		<?php
+		if ( function_exists( 'squarecandy_archive_year_nav' ) ) {
+			squarecandy_archive_year_nav();
+		}
+		?>
 		</main><!-- #main -->
 	</div><!-- #primary -->
 <?php

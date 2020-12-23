@@ -6,19 +6,30 @@
  *
  * @package Square_Candy
  */
-get_header(); ?>
+get_header();
+if ( get_query_var( 'archive_year' ) ) {
+	$year       = (int) get_query_var( 'archive_year' );
+	$page_title = $year . ' ' . __( 'Events Archive', 'squarecandy-acf-events' );
+	$shortcode  = '[squarecandy_events type=past archive_year=' . $year . ']';
+} else {
+	$page_title = __( 'Upcoming Events', 'squarecandy-acf-events' );
+	$shortcode  = '[squarecandy_events]';
+}
+?>
 	<div id="primary" class="content-area content-area-events">
 		<main id="main" class="site-main" role="main">
 
 			<header class="page-header">
-				<h1 class="page-title"><?php _e( 'Upcoming Events', 'squarecandy-acf-events' ); ?></h1>
+				<h1 class="page-title"><?php echo $page_title; ?></h1>
 			</header><!-- .page-header -->
 
-			<?php echo do_shortcode( '[squarecandy_events]' ); ?>
+			<?php
+			if ( function_exists( 'squarecandy_archive_year_nav' ) ) {
+				squarecandy_archive_year_nav();
+			}
+			?>
 
-			<h1 class="past-events-title"><?php _e( 'Past Events', 'squarecandy-acf-events' ); ?></h1>
-
-			<?php echo do_shortcode( '[squarecandy_events type=past]' ); ?>
+			<?php echo do_shortcode( $shortcode ); ?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->

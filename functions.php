@@ -81,6 +81,12 @@ require ACF_EVENTS_DIR_PATH . 'inc/addtogcal.php';
 // Add Shortcodes to display upcoming/past/compact/etc
 require ACF_EVENTS_DIR_PATH . 'inc/shortcodes.php';
 
+// Add Year Archive pages
+if ( get_field( 'yearly_archive', 'option' ) ) {
+	require ACF_EVENTS_DIR_PATH . 'inc/year-archives.php';
+}
+
+
 // provide custom theming for individual event pages
 // https://code.tutsplus.com/articles/plugin-templating-within-wordpress--wp-31088
 

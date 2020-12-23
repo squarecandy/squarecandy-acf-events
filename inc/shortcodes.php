@@ -31,9 +31,19 @@ function squarecandy_events_func( $atts = array() ) {
 	$moreinfo_post_link = ! empty( $atts['moreinfo_post_link'] ) ? true : false;
 
 	$archive_by_year = get_field( 'archive_by_year', 'option' );
+
 	$accordion       = false;
 	if ( $archive_by_year && get_field( 'accordion', 'option' ) ) {
 		$accordion = true;
+	}
+
+	$archive_year = ! empty( $atts['archive_year'] ) ? (int) $atts['archive_year'] : false;
+
+	// check if the archive year value makes sense. 1970-2050 could be too restrictive eventually.
+	// check for years between 1000-3999 just to be extra generous.
+	// this will still filter out nonsense values like 123 or 12345
+	if ( $archive_year > 4000 || $archive_year < 1000 ) {
+		$archive_year = false;
 	}
 
 	$orderby = array(
@@ -47,38 +57,53 @@ function squarecandy_events_func( $atts = array() ) {
 
 	if ( isset( $atts['type'] ) && 'past' === $atts['type'] ) {
 		// past events archive [squarecandy_events type=past]
-		if ( ! $archive_by_year ) {
+		if ( ! $archive_by_year && ! $archive_year ) {
 			$orderby = array(
 				'start_date' => 'DESC',
 				'start_time' => 'ASC',
 			);
 		}
+
+		$meta_query = array(
+			'relation'   => 'AND',
+			'archive_date' => array(
+				'key'     => 'archive_date',
+				'type'    => 'DATE',
+				'value'   => $today,
+				'compare' => '<',
+			),
+			// the values below are only for compatibility with orderby an array of keys
+			array(
+				'relation'   => 'OR',
+				'start_date' => array(
+					'key'     => 'start_date',
+					'type'    => 'DATE',
+					'compare' => 'EXISTS',
+				),
+				'start_time' => array(
+					'key'     => 'start_time',
+					'value'   => 'this-is-a-sorting-hack',
+					'type'    => 'TIME',
+					'compare' => '!=',
+				),
+			),
+		);
+
+		if ( $archive_year ) {
+			$meta_query['archive_year'] = array(
+				'key'     => 'start_date',
+				'value'   => array( $archive_year . '0101', $archive_year . '1231' ),
+				'compare' => 'BETWEEN',
+				'type'    => 'NUMERIC',
+			);
+		}
+
 		$args = array(
 			'post_type'      => 'event',
 			'post_status'    => 'publish',
 			'posts_per_page' => 2500, // @TODO consider limiting and paginating this
 			'orderby'        => $orderby,
-			'meta_key'       => 'start_date',
-			'meta_query'     => array(
-				'relation'   => 'AND',
-				'start_date' => array(
-					'key'     => 'start_date',
-					'type'    => 'DATE',
-					'value'   => $today,
-					'compare' => '<=',
-				),
-				array(
-					'relation'    => 'OR',
-					'start_time'  => array(
-						'key'     => 'start_time',
-						'compare' => 'EXISTS',
-					),
-					'start_time2' => array(
-						'key'     => 'start_time',
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			),
+			'meta_query'     => $meta_query,
 		);
 		$past = true;
 	} elseif ( isset( $atts['type'] ) && 'all' === $atts['type'] ) {
@@ -93,24 +118,20 @@ function squarecandy_events_func( $atts = array() ) {
 			'post_status'    => 'publish',
 			'posts_per_page' => 2500, // @TODO consider limiting and paginating this
 			'orderby'        => $orderby,
-			'meta_key'       => 'start_date',
 			'meta_query'     => array(
+				// the values below are only for compatibility with orderby an array of keys
 				array(
-					'relation'    => 'OR',
-					'start_date'  => array(
+					'relation'   => 'OR',
+					'start_date' => array(
 						'key'     => 'start_date',
 						'type'    => 'DATE',
 						'compare' => 'EXISTS',
 					),
-					'start_time'  => array(
+					'start_time' => array(
 						'key'     => 'start_time',
+						'value'   => 'this-is-a-sorting-hack',
 						'type'    => 'TIME',
-						'compare' => 'EXISTS',
-					),
-					'start_time2' => array(
-						'key'     => 'start_time',
-						'type'    => 'TIME',
-						'compare' => 'NOT EXISTS',
+						'compare' => '!=',
 					),
 				),
 			),
@@ -122,15 +143,8 @@ function squarecandy_events_func( $atts = array() ) {
 			'relation' => 'AND',
 			// this is the real query that retuns the desired sub-set of items
 			array(
-				'relation'    => 'OR',
-				'start_date2' => array(
-					'key'     => 'start_date',
-					'type'    => 'DATE',
-					'value'   => $today,
-					'compare' => '>=',
-				),
-				'end_date2'   => array(
-					'key'     => 'end_date',
+				'archive_date' => array(
+					'key'     => 'archive_date',
 					'type'    => 'DATE',
 					'value'   => $today,
 					'compare' => '>=',
