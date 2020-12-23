@@ -662,12 +662,12 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					),
 				),
 				array(
-					'key'           => 'field_archiveyears829304',
-					'label'         => 'Full Yearly Archive',
-					'instructions'  => 'Use the full WP archive with default urls for upcoming events (<code>/events/</code>) and past year archives (<code>/events/1984/</code>, <code>/events/1985/</code>, etc). You do not need to use a page with shortcodes if you use this option.',
-					'name'          => 'yearly_archive',
-					'type'          => 'true_false',
-					'message'       => 'Use full yearly archive system',
+					'key'          => 'field_archiveyears829304',
+					'label'        => 'Full Yearly Archive',
+					'instructions' => 'Use the full WP archive with default urls for upcoming events (<code>/events/</code>) and past year archives (<code>/events/1984/</code>, <code>/events/1985/</code>, etc). You do not need to use a page with shortcodes if you use this option.',
+					'name'         => 'yearly_archive',
+					'type'         => 'true_false',
+					'message'      => 'Use full yearly archive system',
 				),
 				array(
 					'key'           => 'field_5a711c6203fae',
