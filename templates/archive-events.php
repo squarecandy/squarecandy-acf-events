@@ -23,13 +23,13 @@ if ( get_query_var( 'archive_year' ) ) {
 				<h1 class="page-title"><?php echo $page_title; ?></h1>
 			</header><!-- .page-header -->
 
+			<?php echo do_shortcode( $shortcode ); ?>
+
 			<?php
 			if ( function_exists( 'squarecandy_archive_year_nav' ) ) {
 				squarecandy_archive_year_nav();
 			}
 			?>
-
-			<?php echo do_shortcode( $shortcode ); ?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
