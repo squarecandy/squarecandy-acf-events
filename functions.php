@@ -54,6 +54,13 @@ function squarecandy_acf_events_enqueue_scripts() {
 	}
 
 	wp_enqueue_script( 'squarecandy-acf-events-js', ACF_EVENTS_URL . 'dist/js/main.min.js', array( 'jquery' ), 'version-1.3.0', true );
+	wp_localize_script(
+		'squarecandy-acf-events-js',
+		'eventsdata',
+		array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'squarecandy_acf_events_enqueue_scripts' );
 
@@ -86,6 +93,9 @@ if ( get_field( 'yearly_archive', 'option' ) ) {
 	require ACF_EVENTS_DIR_PATH . 'inc/year-archives.php';
 }
 
+if ( get_field( 'events_ajax_load_more', 'option' ) ) {
+	require ACF_EVENTS_DIR_PATH . 'inc/ajax-load-more.php';
+}
 
 // provide custom theming for individual event pages
 // https://code.tutsplus.com/articles/plugin-templating-within-wordpress--wp-31088

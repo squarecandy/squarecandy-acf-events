@@ -16,7 +16,12 @@ function squarecandy_events_func( $atts = array() ) {
 
 	// override total posts returned
 	// @TODO - remove this. too much power for users - see https://10up.github.io/Engineering-Best-Practices/php/#performance
-	$posts_per_page = ! empty( $atts['posts_per_page'] ) ? $atts['posts_per_page'] : false;
+	// $posts_per_page = ! empty( $atts['posts_per_page'] ) ? $atts['posts_per_page'] : false;
+
+	$posts_per_page = 2500;
+	if ( get_field( 'events_ajax_load_more', 'option' ) ) {
+		$posts_per_page = get_field( 'events_posts_per_page', 'option' ) ?? 20;
+	}
 
 	// filter for featured posts only
 	$only_featured = ! empty( $atts['only_featured'] ) ? true : false;
@@ -32,7 +37,7 @@ function squarecandy_events_func( $atts = array() ) {
 
 	$archive_by_year = get_field( 'archive_by_year', 'option' );
 
-	$accordion       = false;
+	$accordion = false;
 	if ( $archive_by_year && get_field( 'accordion', 'option' ) ) {
 		$accordion = true;
 	}
@@ -46,32 +51,16 @@ function squarecandy_events_func( $atts = array() ) {
 		$archive_year = false;
 	}
 
-	$orderby = array(
-		'start_date' => 'ASC',
-		'start_time' => 'ASC',
-	);
-
-	if ( $featured_at_top ) {
-		$orderby = array( 'featured' => 'DESC' ) + $orderby;
-	}
-
-	if ( isset( $atts['type'] ) && 'past' === $atts['type'] ) {
-		// past events archive [squarecandy_events type=past]
-		if ( ! $archive_by_year && ! $archive_year ) {
-			$orderby = array(
-				'start_date' => 'DESC',
-				'start_time' => 'ASC',
-			);
-		}
-
-		$meta_query = array(
-			'relation'   => 'AND',
-			'archive_date' => array(
-				'key'     => 'archive_date',
-				'type'    => 'DATE',
-				'value'   => $today,
-				'compare' => '<',
-			),
+	// Start the default $args array.
+	$args = array(
+		'post_type'      => 'event',
+		'post_status'    => 'publish',
+		'posts_per_page' => $posts_per_page,
+		'orderby'        => array(
+			'start_date' => 'ASC',
+			'start_time' => 'ASC',
+		),
+		'meta_query'     => array(
 			// the values below are only for compatibility with orderby an array of keys
 			array(
 				'relation'   => 'OR',
@@ -87,10 +76,36 @@ function squarecandy_events_func( $atts = array() ) {
 					'compare' => '!=',
 				),
 			),
+		),
+	);
+
+	if ( ! empty( $atts['page'] ) && (int) $atts['page'] > 1 ) {
+		$args['paged'] = (int) $atts['page'];
+	}
+
+	if ( $featured_at_top ) {
+		$args['orderby'] = array( 'featured' => 'DESC' ) + $args['orderby'];
+	}
+
+	if ( isset( $atts['type'] ) && 'past' === $atts['type'] ) {
+		// past events archive [squarecandy_events type=past]
+		if ( ! $archive_by_year && ! $archive_year ) {
+			$args['orderby'] = array(
+				'start_date' => 'DESC',
+				'start_time' => 'ASC',
+			);
+		}
+
+		$args['meta_query']['relation']     = 'AND';
+		$args['meta_query']['archive_date'] = array(
+			'key'     => 'archive_date',
+			'type'    => 'DATE',
+			'value'   => $today,
+			'compare' => '<',
 		);
 
 		if ( $archive_year ) {
-			$meta_query['archive_year'] = array(
+			$args['meta_query']['archive_year'] = array(
 				'key'     => 'start_date',
 				'value'   => array( $archive_year . '0101', $archive_year . '1231' ),
 				'compare' => 'BETWEEN',
@@ -98,77 +113,27 @@ function squarecandy_events_func( $atts = array() ) {
 			);
 		}
 
-		$args = array(
-			'post_type'      => 'event',
-			'post_status'    => 'publish',
-			'posts_per_page' => 2500, // @TODO consider limiting and paginating this
-			'orderby'        => $orderby,
-			'meta_query'     => $meta_query,
-		);
 		$past = true;
+
 	} elseif ( isset( $atts['type'] ) && 'all' === $atts['type'] ) {
 		// show all events, both past and present [squarecandy_events type=all]
-		$orderby = array(
+		$args['orderby'] = array(
 			'start_date' => 'DESC',
 			'start_time' => 'ASC',
 		);
-
-		$args = array(
-			'post_type'      => 'event',
-			'post_status'    => 'publish',
-			'posts_per_page' => 2500, // @TODO consider limiting and paginating this
-			'orderby'        => $orderby,
-			'meta_query'     => array(
-				// the values below are only for compatibility with orderby an array of keys
-				array(
-					'relation'   => 'OR',
-					'start_date' => array(
-						'key'     => 'start_date',
-						'type'    => 'DATE',
-						'compare' => 'EXISTS',
-					),
-					'start_time' => array(
-						'key'     => 'start_time',
-						'value'   => 'this-is-a-sorting-hack',
-						'type'    => 'TIME',
-						'compare' => '!=',
-					),
-				),
-			),
-		);
-		$past = false;
+		$past            = false;
 	} else {
 		// upcoming events - this is the default display
-		$meta_query = array(
-			'relation' => 'AND',
-			// this is the real query that retuns the desired sub-set of items
-			array(
-				'archive_date' => array(
-					'key'     => 'archive_date',
-					'type'    => 'DATE',
-					'value'   => $today,
-					'compare' => '>=',
-				),
-			),
-			// the values below are only for compatibility with orderby an array of keys
-			array(
-				'relation'   => 'OR',
-				'start_date' => array(
-					'key'     => 'start_date',
-					'type'    => 'DATE',
-					'compare' => 'EXISTS',
-				),
-				'start_time' => array(
-					'key'     => 'start_time',
-					'value'   => 'this-is-a-sorting-hack',
-					'type'    => 'TIME',
-					'compare' => '!=',
-				),
-			),
+		$args['meta_query']['relation']     = 'AND';
+		$args['meta_query']['archive_date'] = array(
+			'key'     => 'archive_date',
+			'type'    => 'DATE',
+			'value'   => $today,
+			'compare' => '>=',
 		);
 
 		if ( $exclude_featured ) {
-			$exclude_featured_meta = array(
+			$args['meta_query']['exclude_featured_meta'] = array(
 				'relation' => 'OR',
 				array(
 					'key'     => 'featured',
@@ -180,12 +145,11 @@ function squarecandy_events_func( $atts = array() ) {
 					'compare' => 'NOT EXISTS',
 				),
 			);
-			array_push( $meta_query, $exclude_featured_meta );
 		}
 
 		// only include featured events
 		if ( $featured_at_top ) {
-			$featured_at_top_meta = array(
+			$args['meta_query']['featured_at_top_meta'] = array(
 				'relation'  => 'OR',
 				'featured'  => array(
 					'key'     => 'featured',
@@ -197,27 +161,17 @@ function squarecandy_events_func( $atts = array() ) {
 					'compare' => 'NOT EXISTS',
 				),
 			);
-			array_push( $meta_query, $featured_at_top_meta );
 		}
 
 		// featured event at top of list
 		if ( $only_featured ) {
-			$only_featured_meta = array(
+			$args['meta_query']['only_featured_meta'] = array(
 				'key'     => 'featured',
 				'value'   => 1,
 				'compare' => '=',
 			);
-			array_push( $meta_query, $only_featured_meta );
 		}
 
-		$args = array(
-			'post_type'      => 'event',
-			'post_status'    => 'publish',
-			'posts_per_page' => 2500,
-			'orderby'        => $orderby,
-			'meta_key'       => 'start_date',
-			'meta_query'     => $meta_query,
-		);
 		$past = false;
 	}
 
@@ -241,35 +195,35 @@ function squarecandy_events_func( $atts = array() ) {
 		$args['post__not_in'] = explode( ',', $not_in );
 	}
 
-	if ( $posts_per_page ) {
-		$args['posts_per_page'] = $posts_per_page;
-	}
-
 	// query
 	$the_query2 = new WP_Query( $args );
 
 	$output = '';
 
+	// is this an ajax call?
+	$ajax = ! empty( $atts['ajax'] ) ? true : false;
+
 	if ( $the_query2->have_posts() ) :
 
-		$output .= '<section class="event-listing';
-		if ( $compact ) {
-			$output .= ' event-listing-compact';
-		}
-		if ( $past ) {
-			$output .= ' event-listing-past';
-		}
-		if ( $past && $accordion ) {
-			$output .= ' event-listing-past-accordion';
-		}
-		if ( $past && $archive_by_year ) {
-			$output .= ' event-listing-past-by-year';
-		}
-		$output .= '">';
+		if ( ! $ajax ) :
+			$output .= '<section class="event-listing';
+			if ( $compact ) {
+				$output .= ' event-listing-compact';
+			}
+			if ( $past ) {
+				$output .= ' event-listing-past';
+			}
+			if ( $past && $accordion ) {
+				$output .= ' event-listing-past-accordion';
+			}
+			if ( $past && $archive_by_year ) {
+				$output .= ' event-listing-past-by-year';
+			}
+			$output .= '">';
+		endif;
 
 		// if this is a past event type and is grouped by year
-		if ( $past && $archive_by_year ) {
-			// @TODO make grouping by year optional
+		if ( $past && $archive_by_year && ! $ajax ) {
 			$pastevents = array();
 			while ( $the_query2->have_posts() ) :
 				$the_query2->the_post();
@@ -307,20 +261,37 @@ function squarecandy_events_func( $atts = array() ) {
 			endwhile;
 		}
 
-		// for the "compact" view, show the link to the full events page if there are more events.
-		$more_link = get_field( 'more_link', 'option' );
-		if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link ) {
-			$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
-		}
-		$output .= '</section>';
+		if ( ! $ajax ) :
+			// for the "compact" view, show the link to the full events page if there are more events.
+			$more_link = get_field( 'more_link', 'option' );
+			if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link ) {
+				$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
+			}
+
+			// if ajax load more pagination is being used, display the load more button
+			if ( get_field( 'events_ajax_load_more', 'option' ) && $the_query2->max_num_pages > 1 ) :
+				$type = $atts['type'] ?? 'upcoming';
+
+				$output .= '<div class="more-container" data-current-page="1" ';
+				$output .= 'data-max-num-pages="' . $the_query2->max_num_pages . '" ';
+				$output .= 'data-posts-per-page="' . $posts_per_page . '" ';
+				$output .= 'data-type="' . $type . '" ';
+				if ( $archive_year ) {
+					$output .= 'data-archive-year="' . $archive_year . '" ';
+				}
+				$output .= '><button class="load-more load-more-events" style="">Load More Events</button></div>';
+			endif;
+
+			$output .= '</section>';
+		endif;
 
 	else :
-		if ( ! $is_featured ) {
+		if ( ! $is_featured && ! $ajax ) {
 			$output .= get_field( 'no_events_text', 'option' );
 		}
 	endif;
 
-	wp_reset_postdata();   // Restore global post data stomped by the_post().
+	wp_reset_postdata(); // Restore global post data stomped by the_post().
 
 	return $output;
 }

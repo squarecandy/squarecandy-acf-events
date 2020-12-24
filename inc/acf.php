@@ -667,7 +667,40 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'instructions' => 'Use the full WP archive with default urls for upcoming events (<code>/events/</code>) and past year archives (<code>/events/1984/</code>, <code>/events/1985/</code>, etc). You do not need to use a page with shortcodes if you use this option.',
 					'name'         => 'yearly_archive',
 					'type'         => 'true_false',
+					'ui'           => 0,
 					'message'      => 'Use full yearly archive system',
+				),
+				array(
+					'key'     => 'field_loadmore83942',
+					'label'   => 'Load More',
+					'name'    => 'events_ajax_load_more',
+					'type'    => 'true_false',
+					'message' => 'use AJAX load more buttons in archives',
+					'ui'      => 0,
+					'wrapper' => array(
+						'width' => '52',
+					),
+				),
+				array(
+					'key'               => 'field_eventspostsperpage789',
+					'label'             => 'Load More Posts Per Page',
+					'name'              => 'events_posts_per_page',
+					'type'              => 'number',
+					'min'               => 3,
+					'max'               => 99,
+					'default_value'     => 20,
+					'wrapper'           => array(
+						'width' => '48',
+					),
+					'conditional_logic' => array(
+						array(
+							array(
+								'field'    => 'field_loadmore83942',
+								'operator' => '==',
+								'value'    => '1',
+							),
+						),
+					),
 				),
 				array(
 					'key'           => 'field_5a711c6203fae',
