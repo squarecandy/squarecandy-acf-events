@@ -32,6 +32,8 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// AJAX Load More
+
+	/* global eventsdata */
 	// load more items via ajax
 	$( 'section.event-listing' ).on( 'click', '.load-more-events', function() {
 		const button = $( this );
@@ -40,8 +42,6 @@ jQuery( document ).ready( function( $ ) {
 		const maxNumPages = container.data( 'max-num-pages' );
 		const eventType = container.data( 'type' );
 		const archiveYear = container.data( 'archive-year' );
-
-		console.log( 'clicked load more events' );
 
 		$.ajax( {
 			url: eventsdata.ajaxurl,
