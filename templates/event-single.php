@@ -107,6 +107,8 @@ get_header(); ?>
 					</div>
 				<?php endif; ?>
 
+				<?php do_action( 'squarecandy_acf_event_after_featured_works' ); ?>
+
 				<?php
 				if ( get_field( 'show_map_on_detail_page', 'option' ) &&
 					! empty( $event['venue_location'] ) &&
