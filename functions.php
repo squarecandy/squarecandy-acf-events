@@ -59,6 +59,7 @@ function squarecandy_acf_events_enqueue_scripts() {
 		'eventsdata',
 		array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'events-ajax-nonce' ),
 		)
 	);
 }

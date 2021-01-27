@@ -51,6 +51,7 @@ jQuery( document ).ready( function( $ ) {
 				page: currentPage,
 				eventType,
 				archiveYear,
+				nonce: eventsdata.nonce,
 			},
 			beforeSend() {
 				button.text( 'Loading...' ); // change the button text, you can also add a preloader image
