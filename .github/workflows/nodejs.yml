@@ -19,8 +19,11 @@ jobs:
         node-version: [12.x]
 
     steps:
+    - name: Make sure we are using composer v1
+      run: |
+        sudo composer self-update --1
+        sudo chown $USER $HOME/.composer
     - uses: actions/checkout@v2
-    - uses: php-actions/composer@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
