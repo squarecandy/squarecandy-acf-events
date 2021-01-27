@@ -2,7 +2,7 @@
 // function to generate the shortcode [squarecandy_events]
 function squarecandy_events_func( $atts = array() ) {
 
-	$today = date_i18n( 'Ymd', strtotime( 'now' ) );
+	$today = date_i18n( 'Y-m-d', strtotime( 'now' ) );
 
 	// is this a "compact" display? [squarecandy_events style=compact]
 	$compact = isset( $atts['style'] ) && 'compact' === $atts['style'] ? true : false;
@@ -56,44 +56,20 @@ function squarecandy_events_func( $atts = array() ) {
 		'post_type'      => 'event',
 		'post_status'    => 'publish',
 		'posts_per_page' => $posts_per_page,
-		'orderby'        => array(
-			'start_date' => 'ASC',
-			'start_time' => 'ASC',
-		),
-		'meta_query'     => array(
-			// the values below are only for compatibility with orderby an array of keys
-			array(
-				'relation'   => 'OR',
-				'start_date' => array(
-					'key'     => 'start_date',
-					'type'    => 'DATE',
-					'compare' => 'EXISTS',
-				),
-				'start_time' => array(
-					'key'     => 'start_time',
-					'value'   => 'this-is-a-sorting-hack',
-					'type'    => 'TIME',
-					'compare' => '!=',
-				),
-			),
-		),
+		'meta_key'       => 'sort_date',
+		'orderby'        => 'meta_value',
+		'order'          => 'ASC',
 	);
 
 	if ( ! empty( $atts['page'] ) && (int) $atts['page'] > 1 ) {
 		$args['paged'] = (int) $atts['page'];
 	}
 
-	if ( $featured_at_top ) {
-		$args['orderby'] = array( 'featured' => 'DESC' ) + $args['orderby'];
-	}
-
 	if ( isset( $atts['type'] ) && 'past' === $atts['type'] ) {
 		// past events archive [squarecandy_events type=past]
 		if ( ! $archive_by_year && ! $archive_year ) {
-			$args['orderby'] = array(
-				'start_date' => 'DESC',
-				'start_time' => 'ASC',
-			);
+			$args['meta_key'] = 'magic_sort_date';
+			$args['order'] = 'DESC';
 		}
 
 		$args['meta_query']['relation']     = 'AND';
@@ -111,16 +87,16 @@ function squarecandy_events_func( $atts = array() ) {
 				'compare' => 'BETWEEN',
 				'type'    => 'NUMERIC',
 			);
+			$args['meta_key'] = 'sort_date';
+			$args['order'] = 'ASC';
 		}
 
 		$past = true;
 
 	} elseif ( isset( $atts['type'] ) && 'all' === $atts['type'] ) {
 		// show all events, both past and present [squarecandy_events type=all]
-		$args['orderby'] = array(
-			'start_date' => 'DESC',
-			'start_time' => 'ASC',
-		);
+		$args['meta_key'] = 'magic_sort_date';
+		$args['order'] = 'DESC';
 		$past            = false;
 	} else {
 		// upcoming events - this is the default display
@@ -147,9 +123,15 @@ function squarecandy_events_func( $atts = array() ) {
 			);
 		}
 
-		// only include featured events
+		// featured event at top of list
 		if ( $featured_at_top ) {
-			$args['meta_query']['featured_at_top_meta'] = array(
+
+			$args['orderby'] = array(
+				'featured' => 'DESC',
+				$args['meta_key'] => $args['order'],
+			);
+
+			$args['meta_query'] = array(
 				'relation'  => 'OR',
 				'featured'  => array(
 					'key'     => 'featured',
@@ -160,12 +142,20 @@ function squarecandy_events_func( $atts = array() ) {
 					'key'     => 'featured',
 					'compare' => 'NOT EXISTS',
 				),
+				$args['meta_key'] => array(
+					'key' => $args['meta_key'],
+					'compare' => 'EXISTS',
+				),
 			);
+
+			unset( $args['meta_key'] );
+			unset( $args['order'] );
 		}
 
-		// featured event at top of list
+		// only include featured events
 		if ( $only_featured ) {
-			$args['meta_query']['only_featured_meta'] = array(
+			$args['meta_query']['relation'] = 'AND';
+			$args['meta_query'] = array(
 				'key'     => 'featured',
 				'value'   => 1,
 				'compare' => '=',
@@ -199,6 +189,8 @@ function squarecandy_events_func( $atts = array() ) {
 	$the_query2 = new WP_Query( $args );
 
 	$output = '';
+
+	// $output .= '<pre>' . var_export( $args, true ) . '</pre><pre>' . $the_query2->request . '</pre>';
 
 	// is this an ajax call?
 	$ajax = ! empty( $atts['ajax'] ) ? true : false;
