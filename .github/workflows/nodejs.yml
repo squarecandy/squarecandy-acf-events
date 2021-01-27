@@ -24,6 +24,9 @@ jobs:
         sudo composer self-update --1
         sudo chown $USER $HOME/.composer
     - uses: actions/checkout@v2
+    - uses: nanasess/setup-php@master
+      with:
+        php-version: '7.4'
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
