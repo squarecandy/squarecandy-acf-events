@@ -69,7 +69,7 @@ function squarecandy_events_func( $atts = array() ) {
 		// past events archive [squarecandy_events type=past]
 		if ( ! $archive_by_year && ! $archive_year ) {
 			$args['meta_key'] = 'magic_sort_date';
-			$args['order'] = 'DESC';
+			$args['order']    = 'DESC';
 		}
 
 		$args['meta_query']['relation']     = 'AND';
@@ -87,8 +87,8 @@ function squarecandy_events_func( $atts = array() ) {
 				'compare' => 'BETWEEN',
 				'type'    => 'NUMERIC',
 			);
-			$args['meta_key'] = 'sort_date';
-			$args['order'] = 'ASC';
+			$args['meta_key']                   = 'sort_date';
+			$args['order']                      = 'ASC';
 		}
 
 		$past = true;
@@ -96,8 +96,8 @@ function squarecandy_events_func( $atts = array() ) {
 	} elseif ( isset( $atts['type'] ) && 'all' === $atts['type'] ) {
 		// show all events, both past and present [squarecandy_events type=all]
 		$args['meta_key'] = 'magic_sort_date';
-		$args['order'] = 'DESC';
-		$past            = false;
+		$args['order']    = 'DESC';
+		$past             = false;
 	} else {
 		// upcoming events - this is the default display
 		$args['meta_query']['relation']     = 'AND';
@@ -127,23 +127,23 @@ function squarecandy_events_func( $atts = array() ) {
 		if ( $featured_at_top ) {
 
 			$args['orderby'] = array(
-				'featured' => 'DESC',
+				'featured'        => 'DESC',
 				$args['meta_key'] => $args['order'],
 			);
 
 			$args['meta_query'] = array(
-				'relation'  => 'OR',
-				'featured'  => array(
+				'relation'        => 'OR',
+				'featured'        => array(
 					'key'     => 'featured',
 					'type'    => 'NUMERIC',
 					'compare' => 'EXISTS',
 				),
-				'featured2' => array(
+				'featured2'       => array(
 					'key'     => 'featured',
 					'compare' => 'NOT EXISTS',
 				),
 				$args['meta_key'] => array(
-					'key' => $args['meta_key'],
+					'key'     => $args['meta_key'],
 					'compare' => 'EXISTS',
 				),
 			);
@@ -155,7 +155,7 @@ function squarecandy_events_func( $atts = array() ) {
 		// only include featured events
 		if ( $only_featured ) {
 			$args['meta_query']['relation'] = 'AND';
-			$args['meta_query'] = array(
+			$args['meta_query']             = array(
 				'key'     => 'featured',
 				'value'   => 1,
 				'compare' => '=',
@@ -189,8 +189,6 @@ function squarecandy_events_func( $atts = array() ) {
 	$the_query2 = new WP_Query( $args );
 
 	$output = '';
-
-	// $output .= '<pre>' . var_export( $args, true ) . '</pre><pre>' . $the_query2->request . '</pre>';
 
 	// is this an ajax call?
 	$ajax = ! empty( $atts['ajax'] ) ? true : false;

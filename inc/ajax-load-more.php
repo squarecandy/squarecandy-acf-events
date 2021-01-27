@@ -4,7 +4,7 @@ function squarecandy_events_load_more_ajax_handler() {
 
 	$page = (int) esc_attr( $_POST['page'] ) + 1; // we need the next page to be loaded
 
-	$attr = array();
+	$attr   = array();
 	$attr[] = 'page=' . $page;
 	$attr[] = 'type=' . esc_attr( $_POST['eventType'] );
 	if ( ! empty( $_POST['archiveYear'] ) ) {

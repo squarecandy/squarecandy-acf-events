@@ -18,9 +18,9 @@ function quarecandy_events_year_archive_query_vars( $vars ) {
 }
 
 function squarecandy_events_override_type_args( $args, $post_type ) {
-	if ( $post_type == "event" ) {
+	if ( 'event' === $post_type ) {
 		$args['rewrite'] = array(
-			'slug' => 'events',
+			'slug'       => 'events',
 			'with_front' => false,
 		);
 	}
@@ -42,7 +42,7 @@ add_action( 'init', 'get_squarecandy_events_year_nav' );
 
 function update_squarecandy_archive_year_list() {
 	global $wpdb;
-	$sql = "SELECT DISTINCT YEAR(meta_value) FROM $wpdb->postmeta WHERE meta_key = 'start_date' AND DATE(meta_value) < DATE(NOW()) ORDER BY meta_value DESC";
+	$sql              = "SELECT DISTINCT YEAR(meta_value) FROM $wpdb->postmeta WHERE meta_key = 'start_date' AND DATE(meta_value) < DATE(NOW()) ORDER BY meta_value DESC";
 	$all_unique_years = $wpdb->get_results( $sql, ARRAY_N ); // phpcs:ignore
 	$all_unique_years = array_merge( array(), ...array_values( $all_unique_years ) ); // flatten the array
 	$all_unique_years = array_filter( $all_unique_years );
