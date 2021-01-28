@@ -14,7 +14,7 @@ jQuery( document ).ready( function( $ ) {
 				data = JSON.parse( data );
 				if ( data.status === 'success' ) {
 					$( '.squarecandy-events-bulk-update-progress .progress-bar' ).css( 'width', data.percent_completed + '%' );
-					$( '.squarecandy-events-bulk-update-progress-text' ).html( data.progress_message + data.page );
+					$( '.squarecandy-events-bulk-update-progress-text' ).html( data.progress_message );
 					bulkUpdatePaged( data.page + 1 );
 				}
 
