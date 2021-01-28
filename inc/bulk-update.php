@@ -23,7 +23,7 @@ function squarecandy_cleanup_all_events() {
 	}
 
 	if ( 0 === $events->post_count || 0 === $events->found_posts || $page === (int) $events->max_num_pages ) {
-		set_transient( 'squarecandy_event_cleanup_complete4', true );
+		set_transient( 'squarecandy_event_cleanup_complete5', true );
 		$return = array( 'status' => 'complete' );
 	} else {
 		$total_completed   = ( ( $page - 1 ) * 50 ) + $events->post_count;

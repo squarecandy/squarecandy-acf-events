@@ -30,7 +30,7 @@ add_filter( 'register_post_type_args', 'squarecandy_events_override_type_args', 
 
 function get_squarecandy_events_year_nav() {
 	// don't do anything unless the list needs updating once per year
-	if ( wp_date( 'Y' ) === get_transient( 'squarecandy_event_cleanup_complete4' ) ) {
+	if ( wp_date( 'Y' ) === get_transient( 'squarecandy_events_year_archive_update' ) ) {
 		return false;
 	}
 
@@ -48,7 +48,7 @@ function update_squarecandy_archive_year_list() {
 	$all_unique_years = array_filter( $all_unique_years );
 
 	update_option( 'squarecandy_events_years', $all_unique_years );
-	set_transient( 'squarecandy_event_cleanup_complete4', wp_date( 'Y' ) );
+	set_transient( 'squarecandy_events_year_archive_update', wp_date( 'Y' ) );
 
 }
 add_action( 'save_post_event', 'update_squarecandy_archive_year_list' );
