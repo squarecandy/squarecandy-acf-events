@@ -286,7 +286,7 @@ function squarecandy_events_func( $atts = array() ) {
 		endif;
 
 	else :
-		if ( ! $is_featured && ! $ajax ) {
+		if ( ! $ajax ) {
 			$output .= get_field( 'no_events_text', 'option' );
 		}
 	endif;
