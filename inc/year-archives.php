@@ -53,8 +53,10 @@ function update_squarecandy_archive_year_list() {
 }
 add_action( 'save_post_event', 'update_squarecandy_archive_year_list' );
 
-function squarecandy_archive_year_nav() {
-	$archiveyear = (int) get_query_var( 'archive_year' );
+function squarecandy_archive_year_nav( $archiveyear = '' ) {
+	if ( get_query_var( 'archive_year' ) ) {
+		$archiveyear = (int) get_query_var( 'archive_year' );
+	}
 	?>
 	<nav class="event-nav-by-year">
 		<ul>
@@ -66,7 +68,7 @@ function squarecandy_archive_year_nav() {
 			foreach ( $years as $year ) {
 				?>
 				<li class="past past-<?php echo $year; ?>">
-					<a <?php echo $archiveyear === (int) $year ? 'class="active"' : ''; ?> href="/events/<?php echo $year; ?>/">
+					<a <?php echo (int) $archiveyear === (int) $year ? 'class="active"' : ''; ?> href="/events/<?php echo $year; ?>/">
 						<?php echo $year; ?>
 					</a>
 				</li>

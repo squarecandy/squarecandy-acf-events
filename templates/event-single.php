@@ -123,7 +123,7 @@ get_header(); ?>
 
 		<?php
 		if ( function_exists( 'squarecandy_archive_year_nav' ) ) {
-			squarecandy_archive_year_nav();
+			squarecandy_archive_year_nav( wp_date( 'Y', strtotime( $event['start_date'] ) ) );
 		}
 		?>
 		</main><!-- #main -->
