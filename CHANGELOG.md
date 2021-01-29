@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/squarecandy/squarespace-event-import/compare/v1.3.0...v1.4.0) (2021-01-29)
+
+
+### Features
+
+* add yearly archive option ([8eca4ee](https://github.com/squarecandy/squarespace-event-import/commit/8eca4ee3ffaf2bb131b8977a60fa8846cf929953))
+* option for ajax load more ([9fb2d78](https://github.com/squarecandy/squarespace-event-import/commit/9fb2d7854382644493401cf2fba6afbddbb25a50))
+
+
+### Bug Fixes
+
+* add active class to year nav ([d50caac](https://github.com/squarecandy/squarespace-event-import/commit/d50caac18c051199cbce78d1603511586d138312))
+* add hook to single display ([1492c4e](https://github.com/squarecandy/squarespace-event-import/commit/1492c4e084cdd41765ba3a1616f8fd903d3a1c39))
+* add nonce check to ajax ([d2f5559](https://github.com/squarecandy/squarespace-event-import/commit/d2f555958ed0b6bab6d2eab37302dfa85cdf9591))
+* cleanup non-existing variable ([1138743](https://github.com/squarecandy/squarespace-event-import/commit/1138743d4918d2791cb52d92d98b17a0120fd6f2))
+* create simpler sorting with hidden meta data ([6b5a4ab](https://github.com/squarecandy/squarespace-event-import/commit/6b5a4abebc0adee47a4be127b4d4e928c3055efb))
+* force the database update again, with js cachebuster ([24eba8f](https://github.com/squarecandy/squarespace-event-import/commit/24eba8f3a842c570540896a0ea8f79921cdcabd4))
+* put the year nav menu at bottom of archive ([0e3b46b](https://github.com/squarecandy/squarespace-event-import/commit/0e3b46b42ca1420eb766127644b3e1b0e29de8c7))
+* remove debug data from bulk update progress bar ([7359311](https://github.com/squarecandy/squarespace-event-import/commit/735931134fb3919c4f3c34819e6ea8cf8ee780c0))
+* separate transients for year list and bulk update ([214de85](https://github.com/squarecandy/squarespace-event-import/commit/214de854ee71cdb88e934f016e8d37178ac8d035))
+* single view, highlight year in year nav ([0e71cdb](https://github.com/squarecandy/squarespace-event-import/commit/0e71cdb5d24853010d4f6ba91b1320ca16977dca))
+* spacing in "Featured Works" ([68c239d](https://github.com/squarecandy/squarespace-event-import/commit/68c239d8f76dcdad44ca3fec0c6da954272fd126))
+* use class_exists instead of custom is_plugin_active ([c5d5920](https://github.com/squarecandy/squarespace-event-import/commit/c5d59207175105bfbf858d17f8849de4bdb56be6))
+
 ## [1.3.0](https://github.com/squarecandy/squarespace-event-import/compare/v1.2.1...v1.3.0) (2020-08-31)
 
 
