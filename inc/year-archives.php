@@ -18,9 +18,9 @@ function quarecandy_events_year_archive_query_vars( $vars ) {
 }
 
 function squarecandy_events_override_type_args( $args, $post_type ) {
-	if ( $post_type == "event" ) {
+	if ( 'event' === $post_type ) {
 		$args['rewrite'] = array(
-			'slug' => 'events',
+			'slug'       => 'events',
 			'with_front' => false,
 		);
 	}
@@ -30,7 +30,7 @@ add_filter( 'register_post_type_args', 'squarecandy_events_override_type_args', 
 
 function get_squarecandy_events_year_nav() {
 	// don't do anything unless the list needs updating once per year
-	if ( wp_date( 'Y' ) === get_transient( 'squarecandy_event_cleanup_complete' ) ) {
+	if ( wp_date( 'Y' ) === get_transient( 'squarecandy_events_year_archive_update' ) ) {
 		return false;
 	}
 
@@ -42,19 +42,21 @@ add_action( 'init', 'get_squarecandy_events_year_nav' );
 
 function update_squarecandy_archive_year_list() {
 	global $wpdb;
-	$sql = "SELECT DISTINCT YEAR(meta_value) FROM $wpdb->postmeta WHERE meta_key = 'start_date' AND DATE(meta_value) < DATE(NOW()) ORDER BY meta_value DESC";
+	$sql              = "SELECT DISTINCT YEAR(meta_value) FROM $wpdb->postmeta WHERE meta_key = 'start_date' AND DATE(meta_value) < DATE(NOW()) ORDER BY meta_value DESC";
 	$all_unique_years = $wpdb->get_results( $sql, ARRAY_N ); // phpcs:ignore
 	$all_unique_years = array_merge( array(), ...array_values( $all_unique_years ) ); // flatten the array
 	$all_unique_years = array_filter( $all_unique_years );
 
 	update_option( 'squarecandy_events_years', $all_unique_years );
-	set_transient( 'squarecandy_event_cleanup_complete', wp_date( 'Y' ) );
+	set_transient( 'squarecandy_events_year_archive_update', wp_date( 'Y' ) );
 
 }
 add_action( 'save_post_event', 'update_squarecandy_archive_year_list' );
 
-function squarecandy_archive_year_nav() {
-	$archiveyear = (int) get_query_var( 'archive_year' );
+function squarecandy_archive_year_nav( $archiveyear = '' ) {
+	if ( get_query_var( 'archive_year' ) ) {
+		$archiveyear = (int) get_query_var( 'archive_year' );
+	}
 	?>
 	<nav class="event-nav-by-year">
 		<ul>
@@ -66,7 +68,7 @@ function squarecandy_archive_year_nav() {
 			foreach ( $years as $year ) {
 				?>
 				<li class="past past-<?php echo $year; ?>">
-					<a <?php echo $archiveyear === (int) $year ? 'class="active"' : ''; ?> href="/events/<?php echo $year; ?>/">
+					<a <?php echo (int) $archiveyear === (int) $year ? 'class="active"' : ''; ?> href="/events/<?php echo $year; ?>/">
 						<?php echo $year; ?>
 					</a>
 				</li>

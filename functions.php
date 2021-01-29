@@ -53,12 +53,13 @@ function squarecandy_acf_events_enqueue_scripts() {
 		wp_localize_script( 'squarecandy-acf-events-maps', 'DATA', $data );
 	}
 
-	wp_enqueue_script( 'squarecandy-acf-events-js', ACF_EVENTS_URL . 'dist/js/main.min.js', array( 'jquery' ), 'version-1.3.0', true );
+	wp_enqueue_script( 'squarecandy-acf-events-js', ACF_EVENTS_URL . 'dist/js/main.min.js', array( 'jquery' ), 'version-1.3.1', true );
 	wp_localize_script(
 		'squarecandy-acf-events-js',
 		'eventsdata',
 		array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'events-ajax-nonce' ),
 		)
 	);
 }
@@ -512,7 +513,7 @@ add_action( 'ac/ready', 'ac_custom_column_settings_8980a6ec' );
 require ACF_EVENTS_DIR_PATH . 'inc/data-cleanup.php';
 
 // run the bulk update if it has not been done yet.
-if ( ! get_transient( 'squarecandy_event_cleanup_complete' ) ) {
+if ( ! get_transient( 'squarecandy_event_cleanup_complete5' ) ) {
 	// Bulk Update Script
 	function squarecandy_acf_events_bulk_update_enqueue() {
 		wp_enqueue_script( 'squarecandy-acf-events-bluk-update-js', ACF_EVENTS_URL . 'dist/js/bulk-update.min.js', array( 'jquery' ), 'version-1.3.0', true );

@@ -57,6 +57,61 @@ function squarecandy_calculate_event_archive_date( $event ) {
 }
 
 /**
+ * Calculate the sort date based on start date and time
+ *
+ * @param array|int $event An event post ID, or an event array that includes start_date, start_time and all_day
+ * @return string $date The sort datetime in YYYY-MM-DD HH:MM:SS
+ */
+function squarecandy_calculate_event_sort_date( $event ) {
+	// if it's a post ID, grab the fields
+	if ( is_int( $event ) ) {
+		$event = get_fields( $event );
+	}
+	// bailout if we don't have the data we need
+	if ( ! is_array( $event ) || ! isset( $event['start_date'] ) ) {
+		return false;
+	}
+
+	// get the values
+	$start_date = $event['start_date'];
+	$start_time = $event['start_time'] ?? '00:00:00';
+	$sort_date  = $start_date . ' ' . $start_time;
+
+	$sort_date = date_i18n( 'Y-m-d H:i:s', strtotime( $sort_date ) );
+
+	return $sort_date;
+}
+
+/**
+ * Calculate the magic sort date based on start date and time
+ * Produces a single meta field that can be used for sorting by date decending, time ascending
+ *
+ * @param array|int $event An event post ID, or an event array that includes start_date, start_time and all_day
+ * @return string $date The sort datetime in YYYY-MM-DD HH:MM:SS
+ */
+function squarecandy_calculate_event_magic_sort_date( $event ) {
+	// if it's a post ID, grab the fields
+	if ( is_int( $event ) ) {
+		$event = get_fields( $event );
+	}
+	// bailout if we don't have the data we need
+	if ( ! is_array( $event ) || ! isset( $event['start_date'] ) ) {
+		return false;
+	}
+
+	// get the values
+	$start_date = $event['start_date'];
+	$start_time = $event['start_time'] ?? '00:00:01';
+
+	$seconds_calc    = new DateTime( "1970-01-01 $start_time", new DateTimeZone( 'UTC' ) );
+	$seconds         = (int) $seconds_calc->getTimestamp();
+	$seconds         = $seconds < 1 ? 1 : $seconds;
+	$magic_sort_date = date_i18n( 'Y-m-d H:i:s', strtotime( "$start_date +1 day -$seconds seconds" ) );
+	return $magic_sort_date;
+}
+
+
+/**
  * Cleanup Date Fields on Save
  *
  * @param int $post_id - The Post ID.
@@ -92,6 +147,12 @@ function squarecandy_cleanup_event_data( $post_id ) {
 	// set the archive date (will make queries much simpler)
 	$archive_date = squarecandy_calculate_event_archive_date( $post_id );
 	update_post_meta( $post_id, 'archive_date', $archive_date );
+
+	$sort_date = squarecandy_calculate_event_sort_date( $post_id );
+	update_post_meta( $post_id, 'sort_date', $sort_date );
+
+	$magic_sort_date = squarecandy_calculate_event_magic_sort_date( $post_id );
+	update_post_meta( $post_id, 'magic_sort_date', $magic_sort_date );
 
 	// if the event is not multi day but there is an end date.
 	if ( ! get_field( 'multi_day', $post_id ) && get_field( 'end_date', $post_id ) ) {

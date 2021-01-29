@@ -4,15 +4,6 @@ $event = get_fields();
 
 $output .= '<article id="post-' . get_the_ID() . '" class="events-preview" itemscope="" itemtype="http://schema.org/MusicEvent">';
 
-/*
-if ( get_field('event_show_image', 'option') && 'bottom' != get_field('event_image_placement', 'option') ) {
-	$output .= '<div class="event-image-' . get_field('event_image_placement', 'option') . ' event-image">';
-	$size = get_field('event_image_preview_size', 'option');
-	$output .= get_the_post_thumbnail(null,$size);
-	$output .= '</div>';
-}
-*/
-
 $output .= '<h1 class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
 $output .= '<a href="' . get_permalink() . '">' . get_squarecandy_acf_events_date_display( $event, $compact ) . '</a>';
 $output .= '</h1>';
@@ -45,7 +36,7 @@ if ( ! empty( $event['short_description'] ) ) {
 }
 
 if ( get_field( 'event_show_image', 'option' ) ) {
-	// if ( get_field('event_show_image', 'option') && 'bottom' == get_field('event_image_placement', 'option') ) {
+	// @TODO - add bottom/left/top/right options and css
 	$output .= '<div class="event-image-bottom event-image">';
 	$output .= '<a href="' . get_permalink() . '">';
 	$size    = get_field( 'event_image_preview_size', 'option' );
@@ -108,8 +99,8 @@ if ( get_field( 'add_to_gcal', 'option' ) ) :
 		$event['short_description'] ?? false,
 		$event_address,
 		$event['all_day'] ?? false,
-		$linktext = '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>',
-		$classes  = array( 'gcal-button', 'button', 'button-bold' )
+		'<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>',
+		array( 'gcal-button', 'button', 'button-bold' )
 	);
 
 endif;
