@@ -11,12 +11,14 @@ if ( get_query_var( 'archive_year' ) ) {
 	$archive_year = (int) get_query_var( 'archive_year' );
 	$page_title   = $archive_year . ' ' . __( 'Events Archive', 'squarecandy-acf-events' );
 	$shortcode    = '[squarecandy_events type=past archive_year=' . $archive_year . ']';
+	$classes      = 'events-archive-year events-archive-' . $archive_year;
 } else {
 	$page_title = __( 'Upcoming Events', 'squarecandy-acf-events' );
 	$shortcode  = '[squarecandy_events]';
+	$classes    = 'event-archive-upcoming';
 }
 ?>
-	<div id="primary" class="content-area content-area-events">
+	<div id="primary" class="content-area content-area-events <?php echo $classes; ?>">
 		<main id="main" class="site-main" role="main">
 
 			<header class="page-header">
