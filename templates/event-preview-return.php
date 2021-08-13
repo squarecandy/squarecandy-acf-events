@@ -20,6 +20,8 @@ if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
 }
 $output .= '<meta itemprop="url" content="' . get_permalink() . '">';
 
+$output = apply_filters( 'squarecandy_events_preview_before_address', $output, get_the_ID() );
+
 if ( ! empty( $event['venue'] ) || ! empty( $event['address'] ) || ! empty( $event['city'] ) ) :
 	if ( $compact ) {
 		$output .= get_squarecandy_acf_events_address_display( $event, 'citystate', true );
