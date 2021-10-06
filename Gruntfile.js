@@ -100,7 +100,6 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-stylelint' );
 	grunt.loadNpmTasks( 'grunt-eslint' );
 	grunt.loadNpmTasks( 'grunt-postcss' );
-	grunt.loadNpmTasks( 'grunt-string-replace' );
 	grunt.loadNpmTasks( 'grunt-run' );
 	grunt.registerTask( 'init', [ 'string-replace', 'sass', 'postcss', 'terser' ] );
 	grunt.registerTask( 'default', [ 'sass', 'postcss', 'terser', 'watch' ] );
