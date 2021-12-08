@@ -72,23 +72,38 @@ function squarecandy_events_func( $atts = array() ) {
 			$args['order']    = 'DESC';
 		}
 
-		$args['meta_query']['relation']     = 'AND';
-		$args['meta_query']['archive_date'] = array(
-			'key'     => 'archive_date',
-			'type'    => 'DATE',
-			'value'   => $today,
-			'compare' => '<',
-		);
+		// to speed things up, don't query two meta_keys on archive_year searches
+		if ( ! $archive_year ) {
+			$args['meta_query']['relation']     = 'AND';
+			$args['meta_query']['archive_date'] = array(
+				'key'     => 'archive_date',
+				'type'    => 'DATE',
+				'value'   => $today,
+				'compare' => '<',
+			);
+		}
 
 		if ( $archive_year ) {
-			$args['meta_query']['archive_year'] = array(
-				'key'     => 'start_date',
-				'value'   => array( $archive_year . '0101', $archive_year . '1231' ),
-				'compare' => 'BETWEEN',
-				'type'    => 'NUMERIC',
-			);
-			$args['meta_key']                   = 'sort_date';
-			$args['order']                      = 'ASC';
+			// for the current year, use now as the later date barrier on start_date
+			// this may give slightly different results to archive_date, but maybe worth it to speed things up
+			if ( $archive_year === (int) date("Y") ) {
+				$cutoff = date_i18n( 'Ymd', strtotime( 'now' ) );
+				$args['meta_query']['archive_year'] = array(
+					'key'     => 'start_date',
+					'value'   => array( $archive_year . '0101', $cutoff ),
+					'compare' => 'BETWEEN',
+					'type'    => 'NUMERIC',
+				);
+			} else {
+				$args['meta_query']['archive_year'] = array(
+					'key'     => 'start_date',
+					'value'   => array( $archive_year . '0101', $archive_year . '1231' ),
+					'compare' => 'BETWEEN',
+					'type'    => 'NUMERIC',
+				);
+			}
+			$args['meta_key'] = 'sort_date';
+			$args['order']    = 'ASC';
 		}
 
 		$past = true;
