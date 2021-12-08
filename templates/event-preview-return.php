@@ -15,10 +15,15 @@ if ( ! empty( $event['end_date'] ) ) {
 }
 
 $output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
+
+$output = apply_filters( 'squarecandy_events_preview_before_title', $output, get_the_ID() );
+
 if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
 	$output .= '<h2 class="entry-title" itemprop="name"><a href="' . get_permalink() . '">' . get_the_title() . '</a></h2>';
 }
 $output .= '<meta itemprop="url" content="' . get_permalink() . '">';
+
+$output = apply_filters( 'squarecandy_events_preview_before_address', $output, get_the_ID() );
 
 if ( ! empty( $event['venue'] ) || ! empty( $event['address'] ) || ! empty( $event['city'] ) ) :
 	if ( $compact ) {
