@@ -54,10 +54,10 @@ function squarecandy_events_func( $atts = array() ) {
 	// force more info button to link to post
 	$moreinfo_post_link = ! empty( $atts['moreinfo_post_link'] ) ? true : false;
 
-	$archive_by_year = get_field( 'archive_by_year', 'option' );
+	$archive_by_year = get_option( 'options_archive_by_year' );
 
 	$accordion = false;
-	if ( $archive_by_year && get_field( 'accordion', 'option' ) ) {
+	if ( $archive_by_year && get_option( 'options_accordion' ) ) {
 		$accordion = true;
 	}
 
@@ -200,7 +200,7 @@ function squarecandy_events_func( $atts = array() ) {
 	}
 
 	if ( $compact ) {
-		$args['posts_per_page'] = get_field( 'number_of_upcoming', 'option' );
+		$args['posts_per_page'] = get_option( 'options_number_of_upcoming' );
 	}
 
 	if ( $cat ) {
@@ -287,13 +287,13 @@ function squarecandy_events_func( $atts = array() ) {
 
 		if ( ! $ajax ) :
 			// for the "compact" view, show the link to the full events page if there are more events.
-			$more_link = get_field( 'more_link', 'option' );
+			$more_link = get_option( 'options_more_link' );
 			if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && $more_link ) {
 				$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
 			}
 
 			// if ajax load more pagination is being used, display the load more button
-			if ( get_field( 'events_ajax_load_more', 'option' ) && $the_query2->max_num_pages > 1 ) :
+			if ( get_option( 'options_events_ajax_load_more' ) && $the_query2->max_num_pages > 1 ) :
 				$type = $atts['type'] ?? 'upcoming';
 
 				$output .= '<div class="more-container" data-current-page="1" ';
@@ -311,7 +311,7 @@ function squarecandy_events_func( $atts = array() ) {
 
 	else :
 		if ( ! $ajax ) {
-			$output .= '<section class="event-listing no-events">' . get_field( 'no_events_text', 'option' ) . '</section>';
+			$output .= '<section class="event-listing no-events">' . get_option( 'options_no_events_text' ) . '</section>';
 		}
 	endif;
 
