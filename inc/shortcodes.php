@@ -1,5 +1,22 @@
 <?php
-// function to generate the shortcode [squarecandy_events]
+/** function to generate the shortcode [squarecandy_events]
+ *
+ * @param array  $atts {
+ *      Shortcode attributes. Optional.
+ *
+ *      $style Display style. values: 'compact'
+ *      $cat Filter by category.
+ *      $not_in Filter by id.
+ *      $posts_per_page
+ *      $only_featured
+ *      $featured_at_top
+ *      $exclude_featured
+ *      $moreinfo_post_link
+ *      $archive_year
+ *      $page
+ *      $type values: 'past', 'all', 'upcoming'
+ * }
+ */
 function squarecandy_events_func( $atts = array() ) {
 
 	$today = date_i18n( 'Y-m-d', strtotime( 'now' ) );
@@ -17,7 +34,7 @@ function squarecandy_events_func( $atts = array() ) {
 	// override total posts returned if too large
 	// see https://10up.github.io/Engineering-Best-Practices/php/#performance
 	$max_posts_per_page = 2500;
-	$posts_per_page = ! empty( $atts['posts_per_page'] ) && $atts['posts_per_page'] <= $max_posts_per_page ? $atts['posts_per_page'] : $max_posts_per_page;
+	$posts_per_page     = ! empty( $atts['posts_per_page'] ) && $atts['posts_per_page'] <= $max_posts_per_page ? $atts['posts_per_page'] : $max_posts_per_page;
 
 	// set total posts for ajax load more if not passed in
 	$default_ajax_posts_per_page = 20;
@@ -88,8 +105,8 @@ function squarecandy_events_func( $atts = array() ) {
 		if ( $archive_year ) {
 			// for the current year, use now as the later date barrier on start_date
 			// this may give slightly different results to archive_date, but maybe worth it to speed things up
-			if ( $archive_year === (int) date("Y") ) {
-				$cutoff = date_i18n( 'Ymd', strtotime( 'now' ) );
+			if ( (int) gmdate( 'Y' ) === $archive_year ) {
+				$cutoff                             = date_i18n( 'Ymd', strtotime( 'now' ) );
 				$args['meta_query']['archive_year'] = array(
 					'key'     => 'start_date',
 					'value'   => array( $archive_year . '0101', $cutoff ),
