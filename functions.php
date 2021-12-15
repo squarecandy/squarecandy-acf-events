@@ -26,25 +26,25 @@ function squarecandy_acf_events_enqueue_scripts() {
 
 	if (
 		// if maps option is on
-		get_field( 'show_map_on_detail_page', 'option' ) &&
+		get_option( 'options_show_map_on_detail_page' ) &&
 		// and there's a google maps API key entered
-		get_field( 'google_maps_api_key', 'option' ) &&
+		get_option( 'options_google_maps_api_key' ) &&
 		// and it's a single page view
 		is_single() &&
 		// and it's an event
 		'event' === get_post_type( get_the_ID() )
 	) {
-		$google_maps_api_key = get_field( 'google_maps_api_key', 'option' );
+		$google_maps_api_key = get_option( 'options_google_maps_api_key' );
 		wp_enqueue_script( 'squarecandy-acf-events-gmapapi', 'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key, array(), 'version-1.4.0', true );
 		wp_enqueue_script( 'squarecandy-acf-events-maps', ACF_EVENTS_URL . 'dist/js/googlemaps.min.js', array( 'jquery' ), 'version-1.4.0', true );
 		// gather data to localize in the google maps script
 		$data['location']   = get_field( 'venue_location' );
-		$data['mapjson']    = get_field( 'google_maps_json', 'option' );
+		$data['mapjson']    = get_option( 'options_google_maps_json' );
 		$event              = get_fields();
 		$data['infowindow'] = get_squarecandy_acf_events_address_display( $event, 'infowindow', false );
 		if ( ! isset( $event['zoom_level'] ) ) {
-			if ( get_field( 'default_zoom_level', 'option' ) ) {
-				$event['zoom_level'] = get_field( 'default_zoom_level', 'option' );
+			if ( get_option( 'options_default_zoom_level' ) ) {
+				$event['zoom_level'] = get_option( 'options_default_zoom_level' );
 			} else {
 				$event['zoom_level'] = 15;
 			}
@@ -75,7 +75,7 @@ add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_admin_enqueue' );
 // add a new custom post type for events
 require ACF_EVENTS_DIR_PATH . 'post-types/event.php';
 
-if ( get_field( 'enable_categories', 'option' ) ) :
+if ( get_option( 'options_enable_categories' ) ) :
 	// add a events category taxonomy
 	include ACF_EVENTS_DIR_PATH . 'taxonomies/events-category.php';
 endif;
@@ -90,11 +90,11 @@ require ACF_EVENTS_DIR_PATH . 'inc/addtogcal.php';
 require ACF_EVENTS_DIR_PATH . 'inc/shortcodes.php';
 
 // Add Year Archive pages
-if ( get_field( 'yearly_archive', 'option' ) ) {
+if ( get_option( 'options_yearly_archive' ) ) {
 	require ACF_EVENTS_DIR_PATH . 'inc/year-archives.php';
 }
 
-if ( get_field( 'events_ajax_load_more', 'option' ) ) {
+if ( get_option( 'options_events_ajax_load_more' ) ) {
 	require ACF_EVENTS_DIR_PATH . 'inc/ajax-load-more.php';
 }
 
@@ -267,7 +267,7 @@ function squarecandy_acf_events_date_display( $event ) {
 // $style options are: 1line, 2line, 3line, infowindow, citystate
 function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true ) {
 
-	$home_country = get_field( 'home_country', 'option' );
+	$home_country = get_option( 'options_home_country' );
 
 	$output = '<div class="venue venue-' . $style . '" itemprop="location" itemscope="" itemtype="http://schema.org/MusicVenue">';
 	if ( ! empty( $event['venue'] ) ) {
@@ -327,7 +327,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				$output .= ', <span class="country">' . $event['country'] . '</span>';
 			}
 			if ( ! empty( $event['venue_location'] ) && ! empty( $event['venue_location']['address'] ) ) {
-				if ( $maplink && get_field( 'map_link', 'option' ) ) {
+				if ( $maplink && get_option( 'options_map_link' ) ) {
 					$output .= '<a class="button small button-gray button-map" href="https://www.google.com/maps/search/' . rawurlencode( $event['venue_location']['address'] ) . '">';
 					$output .= '<i class="fa fa-map"></i> ' . __( 'map', 'squarecandy-acf-events' );
 					$output .= '</a>';
@@ -400,7 +400,7 @@ if ( function_exists( 'acf_add_options_sub_page' ) ) {
 add_filter(
 	'acf/settings/google_api_key',
 	function () {
-		return get_field( 'google_maps_api_key', 'option' );
+		return get_option( 'options_google_maps_api_key' );
 	}
 );
 
