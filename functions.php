@@ -324,7 +324,10 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				$output .= ' <span class="zip">' . $event['zip'] . '</span>';
 			}
 			if ( ! empty( $event['country'] ) && $home_country !== $event['country'] ) {
-				$output .= ', <span class="country">' . $event['country'] . '</span>';
+				if ( ! empty( $event['address'] ) || ! empty( $event['city'] ) || ! empty( $event['state'] ) || ! empty( $event['zip'] ) ) {
+					$output .= ', ';
+				}
+				$output .= '<span class="country">' . $event['country'] . '</span>';
 			}
 			if ( ! empty( $event['venue_location'] ) && ! empty( $event['venue_location']['address'] ) ) {
 				if ( $maplink && get_option( 'options_map_link' ) ) {
