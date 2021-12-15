@@ -14,13 +14,15 @@ function squarecandy_events_func( $atts = array() ) {
 	// @TODO - remove this - see https://10up.github.io/Engineering-Best-Practices/php/#performance
 	$not_in = ! empty( $atts['not_in'] ) ? $atts['not_in'] : false;
 
-	// override total posts returned
-	// @TODO - remove this. too much power for users - see https://10up.github.io/Engineering-Best-Practices/php/#performance
-	// $posts_per_page = ! empty( $atts['posts_per_page'] ) ? $atts['posts_per_page'] : false;
+	// override total posts returned if too large
+	// see https://10up.github.io/Engineering-Best-Practices/php/#performance
+	$max_posts_per_page = 2500;
+	$posts_per_page = ! empty( $atts['posts_per_page'] ) && $atts['posts_per_page'] <= $max_posts_per_page ? $atts['posts_per_page'] : $max_posts_per_page;
 
-	$posts_per_page = 2500;
-	if ( get_field( 'events_ajax_load_more', 'option' ) ) {
-		$posts_per_page = get_field( 'events_posts_per_page', 'option' ) ?? 20;
+	// set total posts for ajax load more if not passed in
+	$default_ajax_posts_per_page = 20;
+	if ( empty( $atts['posts_per_page'] ) && get_option( 'options_events_ajax_load_more' ) ) {
+		$posts_per_page = get_option( 'options_events_posts_per_page' ) ?? $default_ajax_posts_per_page;
 	}
 
 	// filter for featured posts only
