@@ -77,21 +77,25 @@ get_header(); ?>
 
 				</div>
 
-				<?php the_post_thumbnail(); // @TODO - make this better: custom banner size, allow for caption, etc. ?>
-
 				<?php
-					$test_empty_content = get_the_content();
-					$test_empty_content = wp_strip_all_tags( $test_empty_content );
-					$test_empty_content = str_replace( '&nbsp;', '', $test_empty_content );
-					$test_empty_content = trim( $test_empty_content );
-				?>
-				<?php if ( ! empty( $test_empty_content ) ) { ?>
+				the_post_thumbnail(); // @TODO - make this better: custom banner size, allow for caption, etc.
+
+				$test_empty_content = get_the_content();
+				$test_empty_content = wp_strip_all_tags( $test_empty_content );
+				$test_empty_content = str_replace( '&nbsp;', '', $test_empty_content );
+				$test_empty_content = trim( $test_empty_content );
+
+				if ( ! empty( $test_empty_content ) ) {
+					?>
 					<div class="post-content event-description" itemprop="description">
 						<?php echo apply_filters( 'the_content', get_the_content() ); ?>
 					</div>
-				<?php } ?>
-
-				<?php
+				<?php } elseif ( ! empty( $event['short_description'] ) ) { ?>
+					<div class="post-content event-description" itemprop="description">
+						<?php echo apply_filters( 'the_content', $event['short_description'] ); ?>
+					</div>
+					<?php
+				}
 				if ( ! empty( $event['featured_works'] ) ) :
 					$t = count( $event['featured_works'] );
 					?>
