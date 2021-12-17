@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.4.0...v1.5.0) (2021-12-17)
+
+
+### Features
+
+* add hook before event preview address ([a3866e4](https://github.com/squarecandy/squarecandy-acf-events/commit/a3866e453849a2a512b5af193d1cd1b3f4f745d5))
+* support events categories ([3e8bb28](https://github.com/squarecandy/squarecandy-acf-events/commit/3e8bb285c56d2021cacbc16d22e44d4cb4be0001))
+
+
+### Bug Fixes
+
+* ACF 5.11.1 compatibility ([f74eb85](https://github.com/squarecandy/squarecandy-acf-events/commit/f74eb85bae190891f70c59fc4bea295b0d00e27e))
+* ACF 5.11.1 compatibility ([a707f1c](https://github.com/squarecandy/squarecandy-acf-events/commit/a707f1cc636872ad64aa6f5f80b39c4df3779025))
+* ACF 5.11.1 compatibility ([6ec03b6](https://github.com/squarecandy/squarecandy-acf-events/commit/6ec03b614a6dadf2f926dc496c3ef566d6a27515))
+* add another filter hook preview_before_title ([a1c6860](https://github.com/squarecandy/squarecandy-acf-events/commit/a1c6860d2c418622eea794042b2d64ca76e4f9c1))
+* add classes for upcoming and year archives ([796750c](https://github.com/squarecandy/squarecandy-acf-events/commit/796750ca5c2e1b1c12c73c963a0706080bad39ff))
+* apply <section> around no events message ([a9843fe](https://github.com/squarecandy/squarecandy-acf-events/commit/a9843fe819b3eb535512994a1d1fc7b5c38147d5))
+* avoid multiple date meta_query ([ab13316](https://github.com/squarecandy/squarecandy-acf-events/commit/ab13316897c838f30497e8dc412c21134e3855f6))
+* display short_description if post_content is empty ([3f545fd](https://github.com/squarecandy/squarecandy-acf-events/commit/3f545fd112ff61d5889e71694855e628d67fa0d9))
+* don't display comma in event location if only country is set ([a59a63e](https://github.com/squarecandy/squarecandy-acf-events/commit/a59a63eafa18a091927a9b564dd96c9d7be38708))
+* reinstate posts_per_page att ([6469371](https://github.com/squarecandy/squarecandy-acf-events/commit/6469371968452d6b430e1482cf714208180df945))
+* reinstate shortcodes in no_events_text ([4dae748](https://github.com/squarecandy/squarecandy-acf-events/commit/4dae748a483299ce3da6eebf08c51889e574602b))
+* remove old style admin columns hard coded set ([040fd9f](https://github.com/squarecandy/squarecandy-acf-events/commit/040fd9f1ed89a61ca643e54f2ee80a1507b65186))
+
 ## [1.4.0](https://github.com/squarecandy/squarespace-event-import/compare/v1.3.0...v1.4.0) (2021-01-29)
 
 
