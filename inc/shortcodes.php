@@ -311,7 +311,7 @@ function squarecandy_events_func( $atts = array() ) {
 
 	else :
 		if ( ! $ajax ) {
-			$output .= '<section class="event-listing no-events">' . get_option( 'options_no_events_text' ) . '</section>';
+			$output .= '<section class="event-listing no-events">' . do_shortcode( get_option( 'options_no_events_text' ) ) . '</section>';
 		}
 	endif;
 
