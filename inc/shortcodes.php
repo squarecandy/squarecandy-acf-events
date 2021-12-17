@@ -288,7 +288,7 @@ function squarecandy_events_func( $atts = array() ) {
 		if ( ! $ajax ) :
 			// for the "compact" view, show the link to the full events page if there are more events.
 			$more_link = get_option( 'options_more_link' );
-			if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && is_array( $more_link ) && isset( $more_link['url'] ) &&  isset( $more_link['title'] ) ) {
+			if ( $compact && $the_query2->post_count >= $args['posts_per_page'] && is_array( $more_link ) && isset( $more_link['url'] ) && isset( $more_link['title'] ) ) {
 				$output .= '<a class="events-more-link button" href="' . $more_link['url'] . '">' . $more_link['title'] . '</a>';
 			}
 
