@@ -202,7 +202,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		}
 
 		$instructions = '';
-		if ( ! get_field( 'google_maps_api_key', 'option' ) ) {
+		if ( ! get_option( 'options_google_maps_api_key' ) ) {
 			$instructions = 'Looks like you don‘t have a Google Maps API key yet. First,
 			<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
 			target="_blank">get your API key here</a>. Then enter it on the
@@ -211,9 +211,9 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		}
 
 		// only show map fields if an api key has been entered
-		if ( get_field( 'google_maps_api_key', 'option' ) ) :
-
-			$default_zoom = get_field( 'default_zoom_level', 'option' ) ? get_field( 'default_zoom_level', 'option' ) : 15;
+		if ( get_option( 'options_google_maps_api_key' ) ) :
+			$zoom_option  = get_option( 'options_default_zoom_level' );
+			$default_zoom = $zoom_option ? $zoom_option : 15;
 
 			$eventfields['venue_location'] = array(
 				'key'          => 'field_5616c0e68be8f',
@@ -285,7 +285,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'delay'         => 0,
 		);
 
-		if ( get_field( 'enable_categories', 'option' ) ) :
+		if ( get_option( 'options_enable_categories' ) ) :
 
 			$eventfields['category'] = array(
 				'key'           => 'field_5b9318c9d74e7',
