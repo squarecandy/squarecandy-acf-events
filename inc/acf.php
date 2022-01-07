@@ -776,6 +776,20 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'true_false',
 					'message'       => 'Enable Events Categories System',
 					'default_value' => 1,
+					'wrapper'       => array(
+						'width' => '50',
+					),
+				),
+				array(
+					'key'           => 'field_eventcattype39264951',
+					'label'         => '',
+					'name'          => 'event_categories_type',
+					'type'          => 'true_false',
+					'message'       => 'Show only upcoming events on Event Category Pages',
+					'default_value' => 0,
+					'wrapper'       => array(
+						'width' => '50',
+					),
 				),
 				array(
 					'key'           => 'field_5a712237b7a78',

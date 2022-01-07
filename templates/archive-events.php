@@ -15,7 +15,8 @@ if ( get_query_var( 'archive_year' ) ) {
 } elseif ( is_tax( 'events-category' ) ) {
 	$this_tax   = get_queried_object();
 	$page_title = $this_tax->name;
-	$shortcode  = '[squarecandy_events cat=' . $this_tax->slug . ']';
+	$querytype  = get_option( 'options_event_categories_type' ) ? '' : ' type=all';
+	$shortcode  = '[squarecandy_events cat=' . $this_tax->slug . $querytype . ']';
 	$classes    = 'event-archive-category';
 } else {
 	$page_title = __( 'Upcoming Events', 'squarecandy-acf-events' );
