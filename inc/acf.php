@@ -782,7 +782,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				),
 				array(
 					'key'           => 'field_eventcattype39264951',
-					'label'         => '',
+					'label'         => 'Events Categories Page - Display Type',
 					'name'          => 'event_categories_type',
 					'type'          => 'true_false',
 					'message'       => 'Show only upcoming events on Event Category Pages',
