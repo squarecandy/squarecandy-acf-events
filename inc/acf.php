@@ -392,6 +392,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		'd/m'       => '26/10',
 	);
 
+	//add ACF fields on 'Events Settings' page
 	acf_add_local_field_group(
 		array(
 			'key'                   => 'group_5a6e81f786514',
@@ -639,6 +640,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'default_value' => 1,
 					'wrapper'       => array(
 						'width' => '52',
+						'class' => 'before-conditional-half',
 					),
 				),
 				array(
@@ -679,6 +681,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'ui'      => 0,
 					'wrapper' => array(
 						'width' => '52',
+						'class' => 'before-conditional-half',
 					),
 				),
 				array(
@@ -709,7 +712,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'link',
 					'return_format' => 'array',
 					'wrapper'       => array(
-						'width' => '50',
+						'width' => '52',
 					),
 				),
 				array(
@@ -723,7 +726,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'max'           => 99,
 					'step'          => 1,
 					'wrapper'       => array(
-						'width' => '50',
+						'width' => '48',
 					),
 				),
 				array(
@@ -734,7 +737,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'message'       => 'Show Short Description in Compact View',
 					'default_value' => 1,
 					'wrapper'       => array(
-						'width' => '50',
+						'width' => '52',
 					),
 				),
 				array(
@@ -745,7 +748,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'message'       => 'Show Title Field in Compact View',
 					'default_value' => 1,
 					'wrapper'       => array(
-						'width' => '50',
+						'width' => '48',
 					),
 				),
 				array(
@@ -756,7 +759,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'message'       => 'Show Image in Compact View',
 					'default_value' => 1,
 					'wrapper'       => array(
-						'width' => '33',
+						'width' => '52',
 					),
 				),
 				array(
@@ -766,7 +769,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'default_value' => 'thumbnail',
 					'type'          => 'text', // @TODO - make the image size option a select that automatically gets all the sizes
 					'wrapper'       => array(
-						'width' => '33',
+						'width' => '48',
 					),
 				),
 				array(
@@ -777,7 +780,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'message'       => 'Enable Events Categories System',
 					'default_value' => 1,
 					'wrapper'       => array(
-						'width' => '50',
+						'width' => '52', //52/48 widths are so line wrapping stays the same when conditional fields are hidden
+						'class' => 'before-conditional-half',
 					),
 				),
 				array(
@@ -788,7 +792,16 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'message'       => 'Show only upcoming events on Event Category Pages',
 					'default_value' => 0,
 					'wrapper'       => array(
-						'width' => '50',
+						'width' => '48',
+					),
+					'conditional_logic' => array(
+						array(
+							array(
+								'field'    => 'field_eventcat7283947892',
+								'operator' => '==',
+								'value'    => '1',
+							),
+						),
 					),
 				),
 				array(

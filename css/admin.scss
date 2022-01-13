@@ -28,3 +28,13 @@
 	color: #888;
 	font-size: 12px;
 }
+
+.acf-field.before-conditional-half::after {
+	position: absolute;
+	top: -1px;
+	left: 100%;
+	width: calc(100% - 4px);
+	height: 1px;
+	background: #eee;
+	content: "";
+}
