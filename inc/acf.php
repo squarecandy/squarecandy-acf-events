@@ -203,7 +203,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 		$instructions = '';
 		if ( ! get_option( 'options_google_maps_api_key' ) ) {
-			$instructions = 'Looks like you don‘t have a Google Maps API key yet. First,
+			$instructions = 'Looks like you don\'t have a Google Maps API key yet. First,
 			<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
 			target="_blank">get your API key here</a>. Then enter it on the
 			<a href="/wp-admin/edit.php?post_type=event&page=acf-options-event-settings">Events
@@ -785,13 +785,13 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					),
 				),
 				array(
-					'key'           => 'field_eventcattype39264951',
-					'label'         => 'Events Categories Page - Display Type',
-					'name'          => 'event_categories_type',
-					'type'          => 'true_false',
-					'message'       => 'Show only upcoming events on Event Category Pages',
-					'default_value' => 0,
-					'wrapper'       => array(
+					'key'               => 'field_eventcattype39264951',
+					'label'             => 'Events Categories Page - Display Type',
+					'name'              => 'event_categories_type',
+					'type'              => 'true_false',
+					'message'           => 'Show only upcoming events on Event Category Pages',
+					'default_value'     => 0,
+					'wrapper'           => array(
 						'width' => '48',
 					),
 					'conditional_logic' => array(
