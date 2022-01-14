@@ -15,6 +15,7 @@
  *      $archive_year
  *      $page
  *      $type values: 'past', 'all', 'upcoming'
+ *      $order - ASC or DESC, only read in case of type='all'
  * }
  */
 function squarecandy_events_func( $atts = array() ) {
@@ -130,8 +131,12 @@ function squarecandy_events_func( $atts = array() ) {
 	} elseif ( isset( $atts['type'] ) && 'all' === $atts['type'] ) {
 		// show all events, both past and present [squarecandy_events type=all]
 		$args['meta_key'] = 'magic_sort_date';
-		$args['order']    = 'DESC';
-		$past             = false;
+		if ( isset( $atts['order'] ) && in_array( $atts['order'], array( 'ASC', 'DESC' ), true ) ) {
+			$args['order'] = $atts['order'];
+		} else {
+			$args['order'] = 'DESC';
+		}
+		$past = false;
 	} else {
 		// upcoming events - this is the default display
 		$args['meta_query']['relation']     = 'AND';
