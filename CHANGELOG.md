@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.5.0...v1.6.0) (2022-01-14)
+
+
+### Features
+
+* add option to event catagory page to show all events or upcoming events ([9f6f528](https://github.com/squarecandy/squarecandy-acf-events/commit/9f6f52846f096c46723114938e8a84eeae21acf3))
+
+
+### Bug Fixes
+
+* add ability to reverse order on all events listing ([f0a51a2](https://github.com/squarecandy/squarecandy-acf-events/commit/f0a51a2c2a5172d4889934f97dc8ba1b756a2336))
+* add label for category page display acf field ([8ed070f](https://github.com/squarecandy/squarecandy-acf-events/commit/8ed070ffcb7c4b7b3a9185b76a728f123ea787d2))
+* make event category option conditional & tidy up events setting layout ([77beb11](https://github.com/squarecandy/squarecandy-acf-events/commit/77beb11cc39de7d4a56f00f3efcca8fe65eb977b))
+
 ## [1.5.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.4.0...v1.5.0) (2021-12-17)
 
 
