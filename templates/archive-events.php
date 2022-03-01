@@ -21,7 +21,11 @@ if ( get_query_var( 'archive_year' ) ) {
 		$shortcode_args['type'] = 'all';
 	}
 	$shortcode_args['cat'] = $this_tax->slug;
-	$classes               = 'event-archive-category';
+	$tax_order             = get_term_meta( $this_tax->term_id, 'events_order', true );
+	if ( $tax_order ) {
+		$shortcode_args['order'] = $tax_order;
+	}
+	$classes = 'event-archive-category';
 } else {
 	$page_title = __( 'Upcoming Events', 'squarecandy-acf-events' );
 	$classes    = 'event-archive-upcoming';
