@@ -28,7 +28,7 @@
 		"@wordpress/scripts": "^18.0.1",
 		"autoprefixer": "^9.8.6",
 		"cssnano": "^4.1.10",
-		"grunt": "^1.2.1",
+		"grunt": "^1.5.2",
 		"grunt-contrib-watch": "^1.1.0",
 		"grunt-eslint": "^22.0.0",
 		"grunt-phpcs": "^0.4.0",
