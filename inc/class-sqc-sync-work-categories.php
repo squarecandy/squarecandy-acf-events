@@ -7,7 +7,8 @@
  * 'featured_works_cats' postmeta on event post to keep track of which works cause which categories to be attached
  * Checkbox to enable sync
  * Bulk update to populate the taxonomy etc on first run
- * acf save post actions for events and works
+ * acf save post actions for events and works edit screen
+ * pre_post_update for works inline edit
  * edit taxonomy action for 'works-category'
  * utility functions
  */
@@ -47,6 +48,9 @@ class SQC_Sync_Work_Categories {
 
 				//when we're editing a work check if we added or removed a work category
 				add_action( 'acf/save_post', array( $this, 'save_post_work' ), 5 );
+
+				//when we're inline editing a work check if we added or removed a work category
+				add_action( 'pre_post_update', array( $this, 'pre_post_update_work' ), 10, 2 );
 
 			endif;
 
@@ -272,10 +276,14 @@ class SQC_Sync_Work_Categories {
 			return;
 		}
 
+		if ( ! $this->verify_save_post( $post ) ) {
+			return;
+		}
+
 		$event_id      = $post_id;
 		$field_key     = 'field_5841cdf6350d1';
 		$works         = get_post_meta( $post_id, 'featured_works', true );
-		$updated_works = isset( $_POST['acf'][ $field_key ] ) ? $_POST['acf'][ $field_key ] : array();
+		$updated_works = isset( $_POST['acf'][ $field_key ] ) ? $_POST['acf'][ $field_key ] : array(); //phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$this->debug_log( $works, 'Previous works for event ' . $post_id );
 		$this->debug_log( $updated_works, 'Updated works for event ' . $post_id );
@@ -335,11 +343,61 @@ class SQC_Sync_Work_Categories {
 			return;
 		}
 
-		$work_id      = $post_id;
+		if ( ! $this->verify_save_post( $post ) ) {
+			return;
+		}
+
 		$field_key    = 'field_5839d8ee566b2';
 		$cats         = get_the_terms( $post_id, self::ORIGINAL_TAX_SLUG );
 		$cat_ids      = $cats ? wp_list_pluck( $cats, 'term_id' ) : array();
-		$updated_cats = isset( $_POST['acf'][ $field_key ] ) ? $_POST['acf'][ $field_key ] : array();
+		$updated_cats = isset( $_POST['acf'][ $field_key ] ) ? $_POST['acf'][ $field_key ] : array(); //phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		$this->handle_work_changes( $post_id, $cat_ids, $updated_cats );
+
+	}
+
+	//when we're inline editing a work check if we added or removed a work category
+	public function pre_post_update_work( $post_id, $data ) {
+
+		$post = get_post( $post_id );
+
+		// only run for post type work
+		if ( self::ORIGINAL_POST_TYPE !== $post->post_type ) {
+			return;
+		}
+
+		if ( ! $this->verify_save_post( $post, 'inline' ) ) {
+			return;
+		}
+
+		$this->debug_log( 'inline work save' );
+
+		$cats         = get_the_terms( $post_id, self::ORIGINAL_TAX_SLUG );
+		$cat_ids      = $cats ? wp_list_pluck( $cats, 'term_id' ) : array();
+		$updated_cats = array();
+
+		//phpcs:disable WordPress.Security.NonceVerification.Missing
+		if ( empty( $_POST['tax_input'][ ORIGINAL_TAX_SLUG ] ) ) {
+			$term_names = array();
+		} elseif ( is_array( $_POST['tax_input'][ ORIGINAL_TAX_SLUG ] ) ) {
+			$term_names = $_POST['tax_input'][ ORIGINAL_TAX_SLUG ];
+		} else {
+			$term_names = explode( ', ', $_POST['tax_input'][ ORIGINAL_TAX_SLUG ] );
+		}
+		//phpcs:enable WordPress.Security.NonceVerification.Missing
+
+		foreach ( $term_names as $term_name ) {
+			$term = get_term_by( 'name', $term_name, ORIGINAL_TAX_SLUG );
+			if ( $term ) {
+				$updated_cats[] = $term->term_id;
+			}
+		}
+
+		$this->handle_work_changes( $post_id, $cat_ids, $updated_cats );
+
+	}
+
+	private function handle_work_changes( $post_id, $cat_ids, $updated_cats ) {
 
 		$this->debug_log( $cat_ids, 'Previous categories for work ' . $post_id );
 		$this->debug_log( $updated_cats, 'Updated categories for work ' . $post_id );
@@ -365,7 +423,7 @@ class SQC_Sync_Work_Categories {
 				$this->debug_log( $work_meta, 'Stored category postmeta for event ' . $event_id );
 
 				// clear the meta for this work
-				unset( $work_meta[ $work_id ] );
+				unset( $work_meta[ $post_id ] );
 
 				//check if we should keep the category bc it's attached to another work associated with this event
 				foreach ( $removed_cats as $removed_cat_id ) {
@@ -394,7 +452,7 @@ class SQC_Sync_Work_Categories {
 					$this->debug_log( $added_cat_id, 'Adding categories to event' );
 					$event_work_cat_id = get_term_meta( $added_cat_id, 'event_work_cat_id', true );
 					wp_set_post_terms( $event_id, array( (int) $event_work_cat_id ), self::TARGET_TAX_SLUG, true );
-					$work_meta[ $work_id ][ $added_cat_id ] = $event_work_cat_id;
+					$work_meta[ $post_id ][ $added_cat_id ] = $event_work_cat_id;
 				}
 
 				// update meta
@@ -403,6 +461,37 @@ class SQC_Sync_Work_Categories {
 
 			}
 		}
+
+	}
+
+	private function verify_save_post( $post, $type = 'main' ) {
+
+		// if new post or autosave not saving meta so bail (?)
+		if ( 'auto-draft' === $post->post_status || defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || empty( $_POST ) ) {
+			$this->debug_log( 'Save post aborted: auto draft / auto save / Broadcaster save' );
+			return;
+		}
+
+		//check nonces
+		if ( 'main' === $type ) {
+			$nonce_key = '_wpnonce';
+			$action    = 'update-post_' . $post->ID;
+		} elseif ( 'inline' === $type ) {
+			$nonce_key = '_inline_edit';
+			$action    = 'inlineeditnonce';
+		} else {
+			return;
+		}
+
+		$nonce = isset( $_POST[ $nonce_key ] ) && wp_verify_nonce( $_POST[ $nonce_key ], $action );
+
+		if ( ! $nonce ) {
+			$this->debug_log( 'Save post aborted: incorrect nonce' );
+			return false;
+		}
+
+		return true;
+
 	}
 
 	// Utility functions
