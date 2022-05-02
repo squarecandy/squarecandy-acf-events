@@ -98,6 +98,10 @@ if ( get_option( 'options_events_ajax_load_more' ) ) {
 	require ACF_EVENTS_DIR_PATH . 'inc/ajax-load-more.php';
 }
 
+//require ACF_EVENTS_DIR_PATH . 'inc/sync-work-categories.php';
+require ACF_EVENTS_DIR_PATH . 'inc/class-sqc-sync-work-categories.php';
+$sqc_event_cat_sync = new SQC_Sync_Work_Categories();
+
 // provide custom theming for individual event pages
 // https://code.tutsplus.com/articles/plugin-templating-within-wordpress--wp-31088
 
