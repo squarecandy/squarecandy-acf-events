@@ -165,12 +165,11 @@ class SQC_Sync_Work_Categories {
 	public function bulk_sync_categories() {
 
 		// set a transient to make sure it only runs once
-		$transient = 'squarecandy_bulk_sync_event_work_cats20210429';
+		$transient = 'squarecandy_bulk_sync_event_work_cats202205';
 		$all_done  = true;
 
-		// only user id 1 can run this update
-		//if ( 1 !== get_current_user_id() || get_transient( $transient ) ) {
-		if ( get_transient( $transient ) ) {
+		// only user id 1 or 7 can run this update
+		if ( ! in_array( get_current_user_id(), array( 1, 7 ), true ) || get_transient( $transient ) ) {
 			return;
 		}
 
