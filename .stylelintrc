@@ -1,7 +1,7 @@
 {
 	"extends": [
 		"stylelint-config-recommended-scss",
-		"stylelint-config-wordpress"
+		"@wordpress/stylelint-config"
 	],
 	"syntax": "scss",
 	"plugins": [
