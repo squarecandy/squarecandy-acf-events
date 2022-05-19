@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.6.0...v1.6.1) (2022-03-03)
+
+
+### Bug Fixes
+
+* add option to change event category order ([b48c1c0](https://github.com/squarecandy/squarecandy-acf-events/commit/b48c1c0a0655d7a1648bd1eebbd9f60e5cb34f5b))
+
 ## [1.6.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.5.0...v1.6.0) (2022-01-14)
 
 
