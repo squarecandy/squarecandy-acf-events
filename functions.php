@@ -3,6 +3,7 @@
 
 define( 'ACF_EVENTS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ACF_EVENTS_URL', plugin_dir_url( __FILE__ ) );
+define( 'ACF_EVENTS_VERSION', 'version-1.6.1' );
 
 // don't let users activate w/o ACF
 register_activation_hook( __FILE__, 'squarecandy_acf_events_activate' );
@@ -21,8 +22,8 @@ function squarecandy_acf_events_activate() {
 // Front End Scripts and Styles
 function squarecandy_acf_events_enqueue_scripts() {
 
-	wp_enqueue_style( 'squarecandy-fontawesome', ACF_EVENTS_URL . 'dist/css/vendor/font-awesome/css/font-awesome.min.css', false, 'version-1.6.1' );
-	wp_enqueue_style( 'squarecandy-acf-events-css', ACF_EVENTS_URL . 'dist/css/main.min.css', false, 'version-1.6.1' );
+	wp_enqueue_style( 'squarecandy-fontawesome', ACF_EVENTS_URL . 'dist/css/vendor/font-awesome/css/font-awesome.min.css', false, ACF_EVENTS_VERSION );
+	wp_enqueue_style( 'squarecandy-acf-events-css', ACF_EVENTS_URL . 'dist/css/main.min.css', false, ACF_EVENTS_VERSION );
 
 	if (
 		// if maps option is on
@@ -35,8 +36,8 @@ function squarecandy_acf_events_enqueue_scripts() {
 		'event' === get_post_type( get_the_ID() )
 	) {
 		$google_maps_api_key = get_option( 'options_google_maps_api_key' );
-		wp_enqueue_script( 'squarecandy-acf-events-gmapapi', 'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key, array(), 'version-1.6.1', true );
-		wp_enqueue_script( 'squarecandy-acf-events-maps', ACF_EVENTS_URL . 'dist/js/googlemaps.min.js', array( 'jquery' ), 'version-1.6.1', true );
+		wp_enqueue_script( 'squarecandy-acf-events-gmapapi', 'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key, array(), ACF_EVENTS_VERSION, true );
+		wp_enqueue_script( 'squarecandy-acf-events-maps', ACF_EVENTS_URL . 'dist/js/googlemaps.min.js', array( 'jquery' ), ACF_EVENTS_VERSION, true );
 		// gather data to localize in the google maps script
 		$data['location']   = get_field( 'venue_location' );
 		$data['mapjson']    = get_option( 'options_google_maps_json' );
@@ -53,7 +54,7 @@ function squarecandy_acf_events_enqueue_scripts() {
 		wp_localize_script( 'squarecandy-acf-events-maps', 'DATA', $data );
 	}
 
-	wp_enqueue_script( 'squarecandy-acf-events-js', ACF_EVENTS_URL . 'dist/js/main.min.js', array( 'jquery' ), 'version-1.6.1', true );
+	wp_enqueue_script( 'squarecandy-acf-events-js', ACF_EVENTS_URL . 'dist/js/main.min.js', array( 'jquery' ), ACF_EVENTS_VERSION, true );
 	wp_localize_script(
 		'squarecandy-acf-events-js',
 		'eventsdata',
@@ -67,8 +68,8 @@ add_action( 'wp_enqueue_scripts', 'squarecandy_acf_events_enqueue_scripts' );
 
 // Admin Scripts and Styles
 function squarecandy_acf_events_admin_enqueue() {
-	wp_enqueue_style( 'squarecandy-acf-events-admin-css', ACF_EVENTS_URL . 'dist/css/admin.min.css', false, 'version-1.6.1' );
-	wp_enqueue_script( 'squarecandy-acf-events-admin-js', ACF_EVENTS_URL . 'dist/js/admin.min.js', array( 'jquery' ), 'version-1.6.1', true );
+	wp_enqueue_style( 'squarecandy-acf-events-admin-css', ACF_EVENTS_URL . 'dist/css/admin.min.css', false, ACF_EVENTS_VERSION );
+	wp_enqueue_script( 'squarecandy-acf-events-admin-js', ACF_EVENTS_URL . 'dist/js/admin.min.js', array( 'jquery' ), ACF_EVENTS_VERSION, true );
 }
 add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_admin_enqueue' );
 
@@ -419,7 +420,7 @@ require ACF_EVENTS_DIR_PATH . 'inc/data-cleanup.php';
 if ( ! get_transient( 'squarecandy_event_cleanup_complete5' ) ) {
 	// Bulk Update Script
 	function squarecandy_acf_events_bulk_update_enqueue() {
-		wp_enqueue_script( 'squarecandy-acf-events-bluk-update-js', ACF_EVENTS_URL . 'dist/js/bulk-update.min.js', array( 'jquery' ), 'version-1.6.1', true );
+		wp_enqueue_script( 'squarecandy-acf-events-bluk-update-js', ACF_EVENTS_URL . 'dist/js/bulk-update.min.js', array( 'jquery' ), ACF_EVENTS_VERSION, true );
 		$nonce = wp_create_nonce( 'squarecandy_event_bulk_update' );
 		wp_localize_script(
 			'squarecandy-acf-events-bluk-update-js',
