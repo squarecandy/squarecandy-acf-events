@@ -99,7 +99,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-phpcs' );
 	grunt.loadNpmTasks( 'grunt-stylelint' );
 	grunt.loadNpmTasks( 'grunt-eslint' );
-	grunt.loadNpmTasks( 'grunt-postcss' );
+	grunt.loadNpmTasks( '@lodder/grunt-postcss' );
 	grunt.loadNpmTasks( 'grunt-run' );
 	grunt.registerTask( 'init', [ 'string-replace', 'sass', 'postcss', 'terser' ] );
 	grunt.registerTask( 'default', [ 'sass', 'postcss', 'terser', 'watch' ] );

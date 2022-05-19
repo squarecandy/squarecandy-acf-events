@@ -1,7 +1,6 @@
 {
 	"extends": [
 		"stylelint-config-recommended-scss",
-		"stylelint-config-rational-order",
 		"stylelint-config-wordpress"
 	],
 	"syntax": "scss",
