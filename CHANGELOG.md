@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.6.1...v1.7.0) (2022-05-20)
+
+
+### Features
+
+* sync work categories to events ([5c8eafa](https://github.com/squarecandy/squarecandy-acf-events/commit/5c8eafa4dcc503602df493ed702c47d106db9fe4))
+
+
+### Bug Fixes
+
+* add both squarecandy users ([26b5144](https://github.com/squarecandy/squarecandy-acf-events/commit/26b5144b0bb96f481a69d4ca50fdb058f8fa460e))
+* sync categories on inline edit of works ([d815437](https://github.com/squarecandy/squarecandy-acf-events/commit/d815437ff3519cabd19ff3a7bd6ac823adc020eb))
+* update version in only one place in functions.php ([fb9c11f](https://github.com/squarecandy/squarecandy-acf-events/commit/fb9c11f24032711af7e5012242bfbe58d961e131))
+
 ### [1.6.1](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.6.0...v1.6.1) (2022-03-03)
 
 
