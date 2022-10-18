@@ -100,11 +100,10 @@ function squarecandy_calculate_event_magic_sort_date( $event ) {
 	}
 
 	// get the values
-	$start_date = $event['start_date'];
-	$start_time = $event['start_time'] ?? '00:00:01';
-
-	$seconds_calc    = new DateTime( "1970-01-01 $start_time", new DateTimeZone( 'UTC' ) );
-	$seconds         = (int) $seconds_calc->getTimestamp();
+	$start_date      = $event['start_date'];
+	$start_time      = get_post_meta( $post_id, 'start_time', true ) ?: '00:00:01'; // get raw, not acf formatted
+	$seconds_calc    = date_create_from_format( 'Y-m-d h:i:s', "1970-01-01 $start_time", new DateTimeZone( 'UTC' ) ); //use create_from_format so we get false if date not valid
+	$seconds         = $seconds_calc ? (int) $seconds_calc->getTimestamp() : 1; // avoid error if $seconds_calc is false
 	$seconds         = $seconds < 1 ? 1 : $seconds;
 	$magic_sort_date = date_i18n( 'Y-m-d H:i:s', strtotime( "$start_date +1 day -$seconds seconds" ) );
 	return $magic_sort_date;
@@ -144,6 +143,14 @@ function squarecandy_cleanup_event_data( $post_id ) {
 		return false;
 	}
 
+	// try converting the start_time (if is a timestamp)
+	$start_time_meta      = get_post_meta( $post_id, 'start_time', true );
+	$converted_start_time = squarecandy_convert_event_time( $start_time_meta );
+
+	if ( $converted_start_time && $start_time !== $converted_start_time ) {
+		update_post_meta( $post_id, 'start_time', $converted_start_time );
+	}
+
 	// set the archive date (will make queries much simpler)
 	$archive_date = squarecandy_calculate_event_archive_date( $post_id );
 	update_post_meta( $post_id, 'archive_date', $archive_date );
@@ -173,4 +180,28 @@ function squarecandy_cleanup_event_data( $post_id ) {
 		}
 	}
 	return true;
+}
+
+/**
+ * Convert start time from timestamp to G:i:s
+ *
+ * @param string $start_time - start_time postmeta
+ * @return string - start_time (new value if converted, old value if not)
+ */
+function squarecandy_convert_event_time( $start_time ) {
+
+	// is it in "g:i:s" format?
+	preg_match( '/\d{2}:\d{2}:\d{2}/', $start_time, $matches );
+
+	if ( ! count( $matches ) ) {
+
+		//is it a timestamp maybe?
+		$time = date_create_from_format( 'U', $start_time, new DateTimeZone( 'UTC' ) ); // should return false if not valid timestamp
+
+		if ( $time ) {
+			$start_time = $time->format( 'H:i:s' );
+		}
+	}
+
+	return $start_time;
 }
