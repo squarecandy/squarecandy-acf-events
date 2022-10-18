@@ -392,6 +392,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		'd/m'       => '26/10',
 	);
 
+	$default_date_formats  = squarecandy_events_default_date_formats();
+
 	$event_settings_fields = array(
 		array(
 			'key'               => 'field_5a71126cf1def',
@@ -415,7 +417,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'select',
 					'choices'       => $date_formats,
 					'default_value' => array(
-						0 => 'l, F j, Y',
+						0 => $default_date_formats['date_format'],
 					),
 					'allow_null'    => 0,
 					'return_format' => 'value',
@@ -430,7 +432,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'select',
 					'choices'       => $date_formats,
 					'default_value' => array(
-						0 => 'F j',
+						0 => $default_date_formats['date_format_multi_start'],
 					),
 					'allow_null'    => 0,
 					'return_format' => 'value',
@@ -445,7 +447,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'select',
 					'choices'       => $date_formats,
 					'default_value' => array(
-						0 => 'F j, Y',
+						0 => $default_date_formats['date_format_multi_end'],
 					),
 					'allow_null'    => 0,
 					'return_format' => 'value',
@@ -460,7 +462,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'select',
 					'choices'       => $date_formats,
 					'default_value' => array(
-						0 => 'D, M j',
+						0 => $default_date_formats['date_format_compact'],
 					),
 					'allow_null'    => 0,
 					'return_format' => 'value',
@@ -475,7 +477,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'select',
 					'choices'       => $date_formats,
 					'default_value' => array(
-						0 => 'M j',
+						0 => $default_date_formats['date_format_compact_multi_start'],
 					),
 					'allow_null'    => 0,
 					'return_format' => 'value',
@@ -490,7 +492,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'type'          => 'select',
 					'choices'       => $date_formats,
 					'default_value' => array(
-						0 => 'M j, Y',
+						0 => $default_date_formats['date_format_compact_multi_end'],
 					),
 					'allow_null'    => 0,
 					'return_format' => 'value',
@@ -510,7 +512,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 						'H:i'   => '13:21',
 					),
 					'default_value' => array(
-						0 => 'g:ia',
+						0 => $default_date_formats['time_format'],
 					),
 					'allow_null'    => 0,
 					'return_format' => 'value',
@@ -523,7 +525,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'label'         => 'Date/Time Separator',
 					'name'          => 'datetime_sep',
 					'type'          => 'text',
-					'default_value' => ' – ',
+					'default_value' => $default_date_formats['datetime_sep'],
 					'wrapper'       => array(
 						'width' => '25',
 					),
@@ -533,7 +535,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'label'         => 'Date/Time Separator 2',
 					'name'          => 'datetime_sep2',
 					'type'          => 'text',
-					'default_value' => ', ',
+					'default_value' => $default_date_formats['datetime_sep2'],
 					'wrapper'       => array(
 						'width' => '25',
 					),
@@ -543,7 +545,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'label'         => 'Date/Time Range Character',
 					'name'          => 'datetime_range',
 					'type'          => 'text',
-					'default_value' => '–',
+					'default_value' => $default_date_formats['datetime_range'],
 					'wrapper'       => array(
 						'width' => '25',
 					),
