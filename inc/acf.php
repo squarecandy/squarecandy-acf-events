@@ -392,7 +392,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		'd/m'       => '26/10',
 	);
 
-	$default_date_formats  = squarecandy_events_default_date_formats();
+	$default_date_formats = squarecandy_events_default_date_formats();
 
 	$event_settings_fields = array(
 		array(

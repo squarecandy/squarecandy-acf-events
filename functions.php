@@ -147,8 +147,8 @@ function squarecandy_acf_events_template_chooser( $template ) {
 function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 
 	// timedate formats and separators
-	$formats          = get_field( 'date_formats', 'option' );
-	$default_formats  = squarecandy_events_default_date_formats();
+	$formats         = get_field( 'date_formats', 'option' );
+	$default_formats = squarecandy_events_default_date_formats();
 
 	foreach ( array_keys( $default_formats ) as $format ) {
 		if ( ! isset( $formats[ $format ] ) ) {
@@ -156,9 +156,9 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 		}
 	}
 
-	$sep     = '<span class="datetime-sep">' . $formats['datetime_sep'] . '</span>';
-	$sep2    = '<span class="datetime-sep">' . $formats['datetime_sep2'] . '</span>';
-	$range   = '<span class="datetime-range">' . $formats['datetime_range'] . '</span>';
+	$sep   = '<span class="datetime-sep">' . $formats['datetime_sep'] . '</span>';
+	$sep2  = '<span class="datetime-sep">' . $formats['datetime_sep2'] . '</span>';
+	$range = '<span class="datetime-range">' . $formats['datetime_range'] . '</span>';
 
 	// ensure all required fields have a value
 	$multi_day  = $event['multi_day'] ?? false;
@@ -420,18 +420,18 @@ function squarecandy_acf_events_address_display( $event, $style = '2line', $mapl
 }
 
 
-function squarecandy_events_default_date_formats(){
+function squarecandy_events_default_date_formats() {
 	$default_date_formats = array(
-		'date_format' => 'l, F j, Y',
-		'date_format_multi_start' => 'F j, Y',
-		'date_format_multi_end' => 'F j',
-		'date_format_compact' => 'D, M j',
+		'date_format'                     => 'l, F j, Y',
+		'date_format_multi_start'         => 'F j, Y',
+		'date_format_multi_end'           => 'F j',
+		'date_format_compact'             => 'D, M j',
 		'date_format_compact_multi_start' => 'M j',
-		'date_format_compact_multi_end' => 'M j, Y',
-		'time_format' => 'g:ia',
-		'datetime_sep' => ' – ',
-		'datetime_sep2' => ', ',
-		'datetime_range' => '–',
+		'date_format_compact_multi_end'   => 'M j, Y',
+		'time_format'                     => 'g:ia',
+		'datetime_sep'                    => ' – ',
+		'datetime_sep2'                   => ', ',
+		'datetime_range'                  => '–',
 	);
 	return $default_date_formats;
 }
