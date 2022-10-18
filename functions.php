@@ -342,14 +342,32 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				}
 				$output .= '<span class="country">' . $event['country'] . '</span>';
 			}
-			if ( ! empty( $event['venue_location'] ) && ! empty( $event['venue_location']['address'] ) ) {
-				if ( $maplink && get_option( 'options_map_link' ) ) {
-					$output .= '<a class="button small button-gray button-map" href="https://www.google.com/maps/search/' . rawurlencode( $event['venue_location']['address'] ) . '">';
+
+			if ( $maplink && get_option( 'options_map_link' ) ) :
+				// to get full adress: if google map field exists, use that, otherwise try to concatenate address fields
+				if ( ! empty( $event['venue_location']['address'] ) ) :
+					$map_location = $event['venue_location']['address'];
+				elseif ( $event['address'] && ( ( $event['city'] && $event['state'] ) || $event['zip'] ) ) :
+					$address_fields = array( 'city', 'state', 'zip', 'country' );
+					$map_location   = $event['address'];
+					foreach ( $address_fields as $address_field ) {
+						if ( $event[ $address_field ] ) :
+							$map_location .= ' ' . $event[ $address_field ];
+							$map_location .= 'city' === $address_field ? ',' : '';
+						endif;
+					}
+				endif;
+				$map_link = apply_filters( 'squarecandy_events_map_link', 'https://www.google.com/maps/search/' . rawurlencode( $map_location ), $map_location );
+				if ( $map_link ) :
+					$output .= '<a class="button small button-gray button-map" href="' . $map_link . '">';
 					$output .= '<i class="fa fa-map"></i> ' . __( 'map', 'squarecandy-acf-events' );
 					$output .= '</a>';
-				}
-				$output .= '<meta itemprop="address" content="' . $event['venue_location']['address'] . '">';
-			}
+				endif;
+			endif;
+			if ( $map_location ) :
+				$output .= '<meta itemprop="address" content="' . $map_location . '">';
+			endif;
+
 			break;
 
 		case 'infowindow':
