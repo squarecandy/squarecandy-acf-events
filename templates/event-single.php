@@ -124,7 +124,15 @@ get_header(); ?>
 						<div id="map"></div>
 					<?php endif; ?>
 				</div>
+				<footer class="squarecandy-footer squarecandy-events-footer">
+					<?php
+					$events_slug = apply_filters( 'squarecandy_events_slug', 'events' );
+					$all_events  = apply_filters( 'squarecandy_events_see_all', 'See All Events' );
 					?>
+					<a class="back-to-list back-to-events" href="/<?php echo $events_slug; ?>/">
+						<?php echo $all_events; ?>
+					</a>
+				</footer>
 			</article><!-- #post-## -->
 		<?php endwhile; // End of the loop. ?>
 
