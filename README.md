@@ -71,7 +71,7 @@ More options are now available:
 * `only_featured=true` // filter for featured posts only
 * `featured_at_top=true` // order featured posts at top
 * `exclude_featured=true` // filter out featured posts
-* `more_info_post_link=true` // force more info button to link to the single post instead of to an external website
+* `more_info_post_link=true` // force the more info button to appear by default & link to the single post instead of to an external website
 
 ## Filters
 

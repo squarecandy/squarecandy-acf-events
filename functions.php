@@ -357,7 +357,8 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 						endif;
 					}
 				endif;
-				$map_link = apply_filters( 'squarecandy_events_map_link', 'https://www.google.com/maps/search/' . rawurlencode( $map_location ), $map_location );
+				$map_link = $map_link ? 'https://www.google.com/maps/search/' . rawurlencode( $map_location ) : '';
+				$map_link = apply_filters( 'squarecandy_events_map_link', $map_link, $map_location );
 				if ( $map_link ) :
 					$output .= '<a class="button small button-gray button-map" href="' . $map_link . '">';
 					$output .= '<i class="fa fa-map"></i> ' . __( 'map', 'squarecandy-acf-events' );

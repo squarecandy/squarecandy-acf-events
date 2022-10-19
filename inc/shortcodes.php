@@ -205,6 +205,7 @@ function squarecandy_events_func( $atts = array() ) {
 	}
 
 	if ( $compact ) {
+		// this will always override the number set in $atts - seems counterintuituve
 		$args['posts_per_page'] = get_option( 'options_number_of_upcoming' );
 	}
 
