@@ -343,6 +343,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				$output .= '<span class="country">' . $event['country'] . '</span>';
 			}
 
+			$map_location = '';
 			if ( $maplink && get_option( 'options_map_link' ) ) :
 				// to get full adress: if google map field exists, use that, otherwise try to concatenate address fields
 				if ( ! empty( $event['venue_location']['address'] ) ) :
@@ -357,7 +358,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 						endif;
 					}
 				endif;
-				$map_link = $map_link ? 'https://www.google.com/maps/search/' . rawurlencode( $map_location ) : '';
+				$map_link = $map_location ? 'https://www.google.com/maps/search/' . rawurlencode( $map_location ) : '';
 				$map_link = apply_filters( 'squarecandy_events_map_link', $map_link, $map_location );
 				if ( $map_link ) :
 					$output .= '<a class="button small button-gray button-map" href="' . $map_link . '">';
