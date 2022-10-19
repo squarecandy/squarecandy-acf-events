@@ -492,4 +492,61 @@ if ( ! function_exists( 'pre_r' ) ) :
 	}
 endif;
 
+/**
+ * Add sortable start_date column to admin event list, sort descending by default
+ */
 
+add_filter( 'manage_event_posts_columns', 'squarecandy_events_filter_posts_columns' );
+function squarecandy_events_filter_posts_columns( $columns ) {
+	//add our column
+	$columns['event_date'] = __( 'Event Date' );
+	//rearrange so it's before author & date
+	$move_columns = array( 'author', 'date' );
+	foreach ( $move_columns as $key ) {
+		$column = $columns[ $key ];
+		unset( $columns[ $key ] );
+		$columns[ $key ] = $column;
+	}
+	return $columns;
+}
+
+add_action( 'manage_event_posts_custom_column', 'squarecandy_events_column', 10, 2 );
+function squarecandy_events_column( $column, $post_id ) {
+	if ( 'event_date' === $column ) {
+		echo get_field( 'start_date', $post_id );
+	}
+}
+
+add_filter( 'manage_edit-event_sortable_columns', 'squarecandy_events_sortable_columns' );
+function squarecandy_events_sortable_columns( $columns ) {
+	$columns['event_date'] = 'sort_event_date';
+	return $columns;
+}
+
+add_action( 'pre_get_posts', 'squarecandy_events_edit_event_orderby' );
+function squarecandy_events_edit_event_orderby( $query ) {
+	if ( ! is_admin() || ! $query->is_main_query() ) {
+		return;
+	}
+	$screen = get_current_screen();
+	if ( isset( $screen->id ) && 'edit-event' === $screen->id ) :
+
+		$orderby = $query->get( 'orderby' );
+
+		if ( 'sort_event_date' === $orderby ) {
+
+			// if we're manually sorting by the column:
+			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'meta_key', 'start_date' );
+			$query->set( 'meta_type', 'date' );
+
+		} elseif ( ! $orderby ) {
+			// if there's no manual sort set, sort by date descending:
+			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'meta_key', 'start_date' );
+			$query->set( 'meta_type', 'date' );
+			$query->set( 'order', 'DESC' );
+		}
+
+	endif;
+}
