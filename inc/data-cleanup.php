@@ -101,7 +101,7 @@ function squarecandy_calculate_event_magic_sort_date( $event ) {
 
 	// get the values
 	$start_date      = $event['start_date'];
-	$start_time      = get_post_meta( $post_id, 'start_time', true ) ?: '00:00:01'; // get raw, not acf formatted
+	$start_time      = get_post_meta( $post_id, 'start_time', true ) ? get_post_meta( $post_id, 'start_time', true ) : '00:00:01'; // get raw, not acf formatted
 	$seconds_calc    = date_create_from_format( 'Y-m-d h:i:s', "1970-01-01 $start_time", new DateTimeZone( 'UTC' ) ); //use create_from_format so we get false if date not valid
 	$seconds         = $seconds_calc ? (int) $seconds_calc->getTimestamp() : 1; // avoid error if $seconds_calc is false
 	$seconds         = $seconds < 1 ? 1 : $seconds;
