@@ -50,6 +50,6 @@
 		"stylelint-config-scss": "^1.0.0-security",
 		"stylelint-order": "^5.0.0",
 		"stylelint-scss": "^4.2.0",
-		"terser": "^4.8.1"
+		"terser": "^5.14.2"
 	}
 }
