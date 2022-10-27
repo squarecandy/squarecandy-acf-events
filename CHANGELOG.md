@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.0...v1.7.1) (2022-10-27)
+
+
+### Bug Fixes
+
+* add "back to" footer to events single display to match other plugins, but hide by default ([e2900a3](https://github.com/squarecandy/squarecandy-acf-events/commit/e2900a31b73e5eb26923bdc055a0a6b9e7bf40c1))
+* add default date formats to avoid errors when plugin first activated ([f8aa0a1](https://github.com/squarecandy/squarecandy-acf-events/commit/f8aa0a175df1d7b52dc3528c79b44533f5e9e5b0))
+* add sortable event start_date column to admin list view ([eeb6912](https://github.com/squarecandy/squarecandy-acf-events/commit/eeb6912f1711d6a0d9279569616a7562148efc27))
+* don't make an empty map link ([cc3590d](https://github.com/squarecandy/squarecandy-acf-events/commit/cc3590d8357c498315fc5a7e1e92cf36f63cf90f))
+* fix issue with fatal data cleanup error when start_time not set, convert start_time from timestamp to G:i:s ([6643a83](https://github.com/squarecandy/squarecandy-acf-events/commit/6643a8361ae936388b1a196e4a7d31502f966b17))
+* use address fields to populate map link if google map field is empty ([b2f4274](https://github.com/squarecandy/squarecandy-acf-events/commit/b2f4274f9200e32a9a0fb3fac8586343889b9427))
+* variable name issue ([73d9fd1](https://github.com/squarecandy/squarecandy-acf-events/commit/73d9fd1511334f1e79d6661427b816c789ed3a33))
+
 ## [1.7.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.6.1...v1.7.0) (2022-05-20)
 
 

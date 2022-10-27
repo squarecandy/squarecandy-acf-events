@@ -1,6 +1,6 @@
 {
 	"name": "squarecandy-acf-events",
-	"version": "1.7.0",
+	"version": "1.7.1",
 	"description": "Square Candy’s Events plugin",
 	"repository": {
 		"type": "git",
@@ -29,27 +29,27 @@
 		"@wordpress/stylelint-config": "^20.0.2",
 		"autoprefixer": "^9.8.6",
 		"cssnano": "^5.1.8",
-		"grunt": "^1.2.1",
+		"grunt": "^1.5.3",
 		"grunt-contrib-watch": "^1.1.0",
 		"grunt-eslint": "^22.0.0",
 		"grunt-phpcs": "^0.4.0",
 		"grunt-run": "^0.8.1",
 		"grunt-sass": "^3.1.0",
-		"grunt-string-replace": "^1.3.1",
+		"grunt-string-replace": "^1.3.3",
 		"grunt-stylelint": "^0.18.0",
 		"grunt-terser": "^1.0.0",
 		"node-sass": "^7.0.1",
 		"php-codesniffer": "^1.0.2",
 		"pixrem": "^5.0.0",
 		"prettier": "npm:wp-prettier@1.19.1",
-		"sass": "^1.26.10",
-		"standard-version": "^9.3.0",
+		"sass": "^1.55.0",
+		"standard-version": "^9.5.0",
 		"stylelint": "^14.8.2",
 		"stylelint-config-recommended-scss": "^6.0.0",
 		"stylelint-config-sass-guidelines": "^9.0.1",
 		"stylelint-config-scss": "^1.0.0-security",
 		"stylelint-order": "^5.0.0",
 		"stylelint-scss": "^4.2.0",
-		"terser": "^4.8.0"
+		"terser": "^4.8.1"
 	}
 }
