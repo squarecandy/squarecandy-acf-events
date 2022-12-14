@@ -47,7 +47,7 @@ function events_category_init() {
 				'back_to_items'              => __( '&larr; Back to Events categories', 'squarecandy-acf-events' ),
 			),
 			'show_in_rest'          => true,
-			'rest_base'             => 'events-category',
+			'rest_base'             => 'events_category',
 			'rest_controller_class' => 'WP_REST_Terms_Controller',
 			'meta_box_cb'           => false,
 		)
