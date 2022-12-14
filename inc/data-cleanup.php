@@ -86,22 +86,25 @@ function squarecandy_calculate_event_sort_date( $event ) {
  * Calculate the magic sort date based on start date and time
  * Produces a single meta field that can be used for sorting by date decending, time ascending
  *
- * @param array|int $event An event post ID, or an event array that includes start_date, start_time and all_day
+ * @param array|int $event An event post ID, or an event array that includes id, start_date, start_time and all_day
  * @return string $date The sort datetime in YYYY-MM-DD HH:MM:SS
  */
 function squarecandy_calculate_event_magic_sort_date( $event ) {
 	// if it's a post ID, grab the fields
 	if ( is_int( $event ) ) {
-		$event = get_fields( $event );
+		$event_id    = $event;
+		$event       = get_fields( $event );
+		$event['id'] = $event_id;
 	}
 	// bailout if we don't have the data we need
-	if ( ! is_array( $event ) || ! isset( $event['start_date'] ) ) {
+	if ( ! is_array( $event ) || ! isset( $event['start_date'] ) || ! isset( $event['id'] ) ) {
 		return false;
 	}
 
 	// get the values
 	$start_date      = $event['start_date'];
-	$start_time      = get_post_meta( $post_id, 'start_time', true ) ? get_post_meta( $post_id, 'start_time', true ) : '00:00:01'; // get raw, not acf formatted
+	$start_time_meta = get_post_meta( $event['id'], 'start_time', true );
+	$start_time      = $start_time_meta ? $start_time_meta : '00:00:01'; // get raw, not acf formatted
 	$seconds_calc    = date_create_from_format( 'Y-m-d h:i:s', "1970-01-01 $start_time", new DateTimeZone( 'UTC' ) ); //use create_from_format so we get false if date not valid
 	$seconds         = $seconds_calc ? (int) $seconds_calc->getTimestamp() : 1; // avoid error if $seconds_calc is false
 	$seconds         = $seconds < 1 ? 1 : $seconds;
@@ -147,7 +150,7 @@ function squarecandy_cleanup_event_data( $post_id ) {
 	$start_time_meta      = get_post_meta( $post_id, 'start_time', true );
 	$converted_start_time = squarecandy_convert_event_time( $start_time_meta );
 
-	if ( $converted_start_time && $start_time !== $converted_start_time ) {
+	if ( $converted_start_time && $start_time_meta !== $converted_start_time ) {
 		update_post_meta( $post_id, 'start_time', $converted_start_time );
 	}
 
