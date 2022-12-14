@@ -3,7 +3,7 @@
 
 define( 'ACF_EVENTS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ACF_EVENTS_URL', plugin_dir_url( __FILE__ ) );
-define( 'ACF_EVENTS_VERSION', 'version-1.7.1' );
+define( 'ACF_EVENTS_VERSION', 'version-1.7.2-dev.0' );
 
 // don't let users activate w/o ACF
 register_activation_hook( __FILE__, 'squarecandy_acf_events_activate' );
