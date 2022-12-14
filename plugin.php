@@ -4,7 +4,7 @@ Plugin Name:       Square Candy ACF Events
 Plugin URI:        https://github.com/squarecandy/squarecandy-acf-events
 GitHub Plugin URI: https://github.com/squarecandy/squarecandy-acf-events
 Description:       A custom events plugin that using Advanced Custom Fields
-Version: 1.7.2-dev.0
+Version: 1.7.2
 Author:            Peter Wise
 Author URI:        http://squarecandy.net
 Text Domain:       squarecandy-acf-events
