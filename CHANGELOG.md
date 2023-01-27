@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.2](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.1...v1.7.2) (2022-12-14)
+
+
+### Bug Fixes
+
+* conflict in rest_base slug throws errors in WP CLI ([a11fb69](https://github.com/squarecandy/squarecandy-acf-events/commit/a11fb6921dd2166c52031605489572063f79265c))
+* fix php warnings in data-cleanup.php ([406f6ae](https://github.com/squarecandy/squarecandy-acf-events/commit/406f6aed7d8fd8dd98aa28895ec55b5bfb564c6e))
+
 ### [1.7.1](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.0...v1.7.1) (2022-10-27)
 
 
