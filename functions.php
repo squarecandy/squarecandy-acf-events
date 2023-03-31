@@ -551,3 +551,23 @@ function squarecandy_events_edit_event_orderby( $query ) {
 
 	endif;
 }
+
+// WP All Import events import compatibility
+// This runs the function that creates the values for sort_date magic_sort_date and archive_date for each event imported
+//
+function squarecandy_events_pmxi_saved_post( $post_id, $xml_node, $is_update ) {
+	if ( 'event' === get_post_type( $post_id ) ) {
+		if ( function_exists( 'squarecandy_cleanup_event_data' ) ) {
+			$cleanup = squarecandy_cleanup_event_data( $post_id );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				if ( $cleanup ) {
+					error_log( 'squarecandy_cleanup_event_data ran successfully! ' . $post_id ); // phpcs:ignore
+				} else {
+					error_log( 'squarecandy_cleanup_event_data failed. ' . $post_id ); // phpcs:ignore
+				}
+			}
+		}
+	}
+}
+add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
+
