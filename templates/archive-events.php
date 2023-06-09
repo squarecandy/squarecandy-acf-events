@@ -37,6 +37,7 @@ $shortcode_args = apply_filters( 'squarecandy_events_category_shortcode_args', $
 
 			<header class="page-header">
 				<h1 class="page-title"><?php echo $page_title; ?></h1>
+				<?php do_action( 'squarecandy_after_events_archive_title' ); ?>
 			</header><!-- .page-header -->
 
 			<?php echo squarecandy_events_func( $shortcode_args ); ?>
