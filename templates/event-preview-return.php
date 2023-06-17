@@ -1,11 +1,24 @@
 <?php
 // Square Candy ACF Events Preview/Listing Post Template
-$event = get_fields();
+$event       = get_fields();
+$event_link  = get_permalink();
+$event_title = get_the_title();
+$show_image  = get_field( 'event_show_image', 'option' );
+$classes     = array( 'events-preview' );
+$image_html  = '';
+if ( $show_image ) :
+	$image_size = get_field( 'event_image_preview_size', 'option' );
+	$image_html = get_the_post_thumbnail( null, $image_size );
+	if ( $image_html ) :
+		$classes[] = 'has-image';
+	endif;
+endif;
+$class = implode( ' ', $classes );
 
-$output .= '<article id="post-' . get_the_ID() . '" class="events-preview" itemscope="" itemtype="http://schema.org/MusicEvent">';
+$output .= '<article id="post-' . get_the_ID() . '" class="' . $class . '" itemscope="" itemtype="http://schema.org/MusicEvent">';
 
 $output .= '<h1 class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
-$output .= '<a href="' . get_permalink() . '">' . get_squarecandy_acf_events_date_display( $event, $compact ) . '</a>';
+$output .= '<a href="' . $event_link . '">' . get_squarecandy_acf_events_date_display( $event, $compact ) . '</a>';
 $output .= '</h1>';
 
 if ( ! empty( $event['end_date'] ) ) {
@@ -19,9 +32,9 @@ $output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
 $output = apply_filters( 'squarecandy_events_preview_before_title', $output, get_the_ID() );
 
 if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
-	$output .= '<h2 class="entry-title" itemprop="name"><a href="' . get_permalink() . '">' . get_the_title() . '</a></h2>';
+	$output .= '<h2 class="entry-title" itemprop="name"><a href="' . $event_link . '">' . $event_title . '</a></h2>';
 }
-$output .= '<meta itemprop="url" content="' . get_permalink() . '">';
+$output .= '<meta itemprop="url" content="' . $event_link . '">';
 
 $output = apply_filters( 'squarecandy_events_preview_before_address', $output, get_the_ID() );
 
@@ -40,15 +53,17 @@ if ( ! empty( $event['short_description'] ) ) {
 	}
 }
 
-if ( get_field( 'event_show_image', 'option' ) ) {
+if ( $show_image ) :
 	// @TODO - add bottom/left/top/right options and css
 	$output .= '<div class="event-image-bottom event-image">';
-	$output .= '<a href="' . get_permalink() . '">';
-	$size    = get_field( 'event_image_preview_size', 'option' );
-	$output .= get_the_post_thumbnail( null, $size );
-	$output .= '</a>';
+	// don't add link if no image, but leave outer element in place to avoid screwing up legacy layouts?
+	if ( $image_html ) :
+		$output .= '<a href="' . $event_link . '">';
+		$output .= $image_html;
+		$output .= '</a>';
+	endif;
 	$output .= '</div>';
-}
+endif;
 
 $output .= '<div class="more-info-buttons">';
 if ( ! empty( $event['tickets_link'] ) ) {
@@ -62,7 +77,7 @@ if ( ! empty( $event['tickets_link'] ) ) {
 if ( $compact || $moreinfo_post_link ) {
 	$moreinfo_post_link_text = __( 'More Info', 'squarecandy-acf-events' );
 	$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', $moreinfo_post_link_text );
-	$output                 .= '<a class="button button-bold button-more-info" href="' . get_permalink() . '">
+	$output                 .= '<a class="button button-bold button-more-info" href="' . $event_link . '">
 			<i class="fa fa-info-circle"></i> ' . $moreinfo_post_link_text . '
 		</a> ';
 } elseif ( ! empty( $event['more_info_link'] ) && ! $compact ) {
@@ -98,7 +113,7 @@ if ( get_field( 'add_to_gcal', 'option' ) ) :
 	$event_address = $event['venue_location']['address'] ?? null;
 
 	$output .= squarecandy_add_to_gcal(
-		get_the_title(),
+		$event_title,
 		$start_date,
 		$end_date,
 		$event['short_description'] ?? false,

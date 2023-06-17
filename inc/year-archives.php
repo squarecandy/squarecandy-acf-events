@@ -59,6 +59,7 @@ function squarecandy_archive_year_nav( $archiveyear = '' ) {
 	}
 	?>
 	<nav class="event-nav-by-year">
+		<?php do_action( 'squarecandy_before_events_year_nav' ); ?>
 		<ul>
 			<li class="upcoming">
 				<a <?php echo $archiveyear ? '' : 'class="active"'; ?> href="/events/">Upcoming Events</a>

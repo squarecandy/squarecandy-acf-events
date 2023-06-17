@@ -126,6 +126,7 @@ get_header(); ?>
 				</div>
 				<footer class="squarecandy-footer squarecandy-events-footer">
 					<?php
+					do_action( 'squarecandy_acf_event_before_footer' );
 					$events_slug = apply_filters( 'squarecandy_events_slug', 'events' );
 					$all_events  = apply_filters( 'squarecandy_events_see_all', 'See All Events' );
 					?>
