@@ -12,6 +12,7 @@ get_header(); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'events-full' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
 					<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
+					<?php do_action( 'squarecandy_after_events_single_title' ); ?>
 					<h2 class="event-date-time" itemprop="startDate" content="<?php echo date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
 						<?php squarecandy_acf_events_date_display( $event ); ?>
 					</h2>
