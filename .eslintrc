@@ -4,6 +4,8 @@
 		"plugin:@wordpress/eslint-plugin/recommended"
 	],
 	"env": {
+		"browser": true,
+		"node": true,
 		"jquery": true
 	},
 	"rules": {
