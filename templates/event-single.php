@@ -80,7 +80,12 @@ get_header(); ?>
 					</div>
 
 					<?php
-					the_post_thumbnail(); // @TODO - make this better: custom banner size, allow for caption, etc.
+					$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false );
+					if ( $event_image_html ) :
+						echo $event_image_html;
+					else :
+						the_post_thumbnail();
+					endif;
 
 					$test_empty_content = get_the_content();
 					$test_empty_content = wp_strip_all_tags( $test_empty_content );
