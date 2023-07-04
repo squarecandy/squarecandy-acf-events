@@ -65,65 +65,9 @@ if ( $show_image ) :
 	$output .= '</div>';
 endif;
 
+$show_post_link_button = $compact || $moreinfo_post_link ? $event_link : false; //@TODO check if $moreinfo_post_link is passed in properly here
+
 $output .= '<div class="more-info-buttons">';
-if ( ! empty( $event['tickets_link'] ) ) {
-	$output .= '<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-			<a class="button button-bold button-tickets" itemprop="url" href="' . $event['tickets_link'] . '">
-				<i class="fa fa-ticket"></i> ' . __( 'Tickets', 'squarecandy-acf-events' ) . '
-			</a>
-		</span> ';
-}
-
-if ( $compact || $moreinfo_post_link ) {
-	$moreinfo_post_link_text = __( 'More Info', 'squarecandy-acf-events' );
-	$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', $moreinfo_post_link_text );
-	$output                 .= '<a class="button button-bold button-more-info" href="' . $event_link . '">
-			<i class="fa fa-info-circle"></i> ' . $moreinfo_post_link_text . '
-		</a> ';
-} elseif ( ! empty( $event['more_info_link'] ) && ! $compact ) {
-	$moreinfo_external_link_text = __( 'More Info', 'squarecandy-acf-events' );
-	$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', $moreinfo_external_link_text );
-	$output                     .= '<a class="button button-bold button-more-info" href="' . $event['more_info_link'] . '">
-			<i class="fa fa-info-circle"></i> ' . $moreinfo_external_link_text . '
-		</a> ';
-}
-
-
-if ( ! empty( $event['facebook_link'] ) ) {
-	$output .= '<a class="button button-bold button-facebook" href="' . $event['facebook_link'] . '">
-			<i class="fa fa-facebook"></i>
-			<span class="screen-reader-text">' . __( 'Facebook Event', 'squarecandy-acf-events' ) . '</span>
-			</a> ';
-}
-
-if ( get_field( 'add_to_gcal', 'option' ) ) :
-
-	$start_date = $event['start_date'];
-	$end_date   = $event['end_date'] ?? false;
-	$multi_day  = $event['muilti_day'] ?? false;
-
-	if ( ! empty( $event['start_time'] ) ) {
-		$start_date .= ' ' . $event['start_time'];
-	}
-
-	if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
-		$end_date .= ' ' . $event['end_time'];
-	}
-
-	$event_address = $event['venue_location']['address'] ?? null;
-
-	$output .= squarecandy_add_to_gcal(
-		$event_title,
-		$start_date,
-		$end_date,
-		$event['short_description'] ?? false,
-		$event_address,
-		$event['all_day'] ?? false,
-		'<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>',
-		array( 'gcal-button', 'button', 'button-bold' )
-	);
-
-endif;
-
+$output .= squarecandy_events_generate_buttons( $event, $show_post_link_button, false );
 $output .= '</div>
 </article>';

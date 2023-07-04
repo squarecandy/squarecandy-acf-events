@@ -20,64 +20,7 @@ get_header(); ?>
 					<meta itemprop="url" content="<?php the_permalink(); ?>">
 					<?php squarecandy_acf_events_address_display( $event, '3line' ); ?>
 
-					<div class="more-info-buttons">
-
-					<?php if ( ! empty( $event['tickets_link'] ) ) { ?>
-						<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-							<a class="button button-bold button-tickets" itemprop="url" href="<?php echo $event['tickets_link']; ?>">
-								<i class="fa fa-ticket"></i> Tickets
-							</a>
-						</span>
-					<?php } ?>
-
-					<?php
-					if ( ! empty( $event['more_info_link'] ) ) :
-						$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', __( 'More Info', 'squarecandy-acf-events' ) );
-						?>
-						<a class="button button-bold button-more-info" href="<?php echo $event['more_info_link']; ?>">
-							<i class="fa fa-info-circle"></i> <?php echo $moreinfo_external_link_text; ?>
-						</a>
-						<?php
-					endif;
-					?>
-
-					<?php if ( ! empty( $event['facebook_link'] ) ) { ?>
-						<a class="button button-bold button-facebook" href="<?php echo $event['facebook_link']; ?>">
-							<i class="fa fa-facebook"></i> <?php _e( 'Facebook', 'squarecandy-acf-events' ); ?>
-						</a>
-					<?php } ?>
-
-					<?php
-					if ( get_field( 'add_to_gcal', 'option' ) ) :
-						$start_date = $event['start_date'];
-						$end_date   = $event['end_date'] ?? false;
-						$multi_day  = $event['muilti_day'] ?? false;
-
-						if ( ! empty( $event['start_time'] ) ) {
-							$start_date .= ' ' . $event['start_time'];
-						}
-
-						if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
-							$end_date .= ' ' . $event['end_time'];
-						}
-
-						$event_address = $event['venue_location']['address'] ?? null;
-
-						echo squarecandy_add_to_gcal(
-							get_the_title(),
-							$start_date,
-							$end_date,
-							$event['short_description'] ?? '',
-							$event_address,
-							$event['all_day'] ?? false,
-							$linktext = '<i class="fa fa-google"></i> add to gCal',
-							$classes  = array( 'gcal-button', 'button', 'button-bold' )
-						);
-
-					endif;
-					?>
-
-					</div>
+					<div class="more-info-buttons"><?php squarecandy_events_generate_buttons( $event ); //don't put line breaks around this, we don't want extra spaces! ?></div>
 
 					<?php
 					$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false );

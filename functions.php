@@ -571,3 +571,71 @@ function squarecandy_events_pmxi_saved_post( $post_id, $xml_node, $is_update ) {
 }
 add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
 
+function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo = true ) {
+
+	$output = '';
+	$single = $echo;
+	if ( ! empty( $event['tickets_link'] ) ) :
+		$output .= '<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">';
+		$output .= '<a class="button button-bold button-tickets" itemprop="url" href="' . $event['tickets_link'] . '">';
+		$output .= '<i class="fa fa-ticket"></i> ' . __( 'Tickets', 'squarecandy-acf-events' );
+		$output .= '</a>';
+		$output .= '</span>';
+	endif;
+	if ( $show_post_link_button ) :
+		$moreinfo_post_link_text = __( 'More Info', 'squarecandy-acf-events' );
+		$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', $moreinfo_post_link_text );
+		$output                 .= '<a class="button button-bold button-more-info" href="' . $show_post_link_button . '">
+				<i class="fa fa-info-circle"></i> ' . $moreinfo_post_link_text . '
+			</a> ';
+	elseif ( ! empty( $event['more_info_link'] ) ) :
+		$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', __( 'More Info', 'squarecandy-acf-events' ) );
+		$output                     .= '<a class="button button-bold button-more-info" href="' . $event['more_info_link'] . '">';
+		$output                     .= '<i class="fa fa-info-circle"></i> ' . $moreinfo_external_link_text;
+		$output                     .= '</a>';
+	endif;
+	if ( ! empty( $event['facebook_link'] ) ) :
+		$output .= '<a class="button button-bold button-facebook" href="' . $event['facebook_link'] . '">';
+		$output .= '<i class="fa fa-facebook"></i> ';
+		$output .= ! $single ? '<span class="screen-reader-text">' : ''; //shortcode inconsistently wraps this text
+		$output .= __( 'Facebook', 'squarecandy-acf-events' );
+		$output .= ! $single ? '</span>' : '';
+		$output .= '</a>';
+	endif;
+	if ( get_field( 'add_to_gcal', 'option' ) ) :
+		$start_date = $event['start_date'];
+		$end_date   = $event['end_date'] ?? false;
+		$multi_day  = $event['muilti_day'] ?? false;
+
+		if ( ! empty( $event['start_time'] ) ) {
+			$start_date .= ' ' . $event['start_time'];
+		}
+
+		if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
+			$end_date .= ' ' . $event['end_time'];
+		}
+
+		$event_address = $event['venue_location']['address'] ?? null;
+
+		// shortcode also wraps this text & uses different icon
+		$linktext = $single ? '<i class="fa fa-google"></i> add to gCal' : '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>';
+
+		$output .= squarecandy_add_to_gcal(
+			get_the_title(),
+			$start_date,
+			$end_date,
+			$event['short_description'] ?? '',
+			$event_address,
+			$event['all_day'] ?? false,
+			$linktext,
+			array( 'gcal-button', 'button', 'button-bold' )
+		);
+
+	endif;
+	if ( $echo ) {
+		echo $output;
+	} else {
+		return $output;
+	}
+}
+
