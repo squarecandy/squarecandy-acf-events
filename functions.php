@@ -425,8 +425,8 @@ function squarecandy_acf_events_address_display( $event, $style = '2line', $mapl
 function squarecandy_events_default_date_formats() {
 	$default_date_formats = array(
 		'date_format'                     => 'l, F j, Y',
-		'date_format_multi_start'         => 'F j, Y',
-		'date_format_multi_end'           => 'F j',
+		'date_format_multi_start'         => 'F j',
+		'date_format_multi_end'           => 'F j, Y',
 		'date_format_compact'             => 'D, M j',
 		'date_format_compact_multi_start' => 'M j',
 		'date_format_compact_multi_end'   => 'M j, Y',
