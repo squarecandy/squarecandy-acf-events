@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.4](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.3...v1.7.4) (2023-08-04)
+
+
+### Bug Fixes
+
+* date range defaults are flipped from what they should be ([8f15b80](https://github.com/squarecandy/squarecandy-acf-events/commit/8f15b8042382fe417849184fe907242073a9b9e9))
+* detect new versions of squarecandy-acf-works plugin ([603d81b](https://github.com/squarecandy/squarecandy-acf-events/commit/603d81b1d3a6a9ddfa23860a4dd53703e4bdd101))
+
 ### [1.7.3](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.2...v1.7.3) (2023-01-27)
 
 ### [1.7.2](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.1...v1.7.2) (2022-12-14)
