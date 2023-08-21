@@ -191,4 +191,26 @@
 	<!-- Check for single blank line after namespace declaration. -->
 	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
 
+	<!--
+	Prevent errors caused by WordPress Coding Standards not supporting PHP 8.0+.
+	See https://github.com/WordPress/WordPress-Coding-Standards/issues/2035#issuecomment-1325532520
+	Note that this doesn't stop checking for depreciated errors in YOUR code,
+	it just stops wpcs incompatibility with php8 from stopping phpcs from running.
+	We don't want to have to switch back to 7.4 everytime we run linting.
+	This should be removed once wpcs updates their code.
+	-->
+	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
+
+	<!-- https://github.com/PHPCompatibility/PHPCompatibility -->
+
+	<!-- Run against the PHPCompatibility ruleset -->
+	<rule ref="PHPCompatibility"/>
+
+	<!--
+	Check within range 7.4 and up.
+	Note that only 8.0 checking currently exists, but this should automatically support higher versions
+	as they are added.
+	-->
+	<config name="testVersion" value="7.4-"/>
+
 </ruleset>

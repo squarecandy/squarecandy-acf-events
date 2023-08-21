@@ -3,7 +3,7 @@
 
 define( 'ACF_EVENTS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ACF_EVENTS_URL', plugin_dir_url( __FILE__ ) );
-define( 'ACF_EVENTS_VERSION', 'version-1.7.4' );
+define( 'ACF_EVENTS_VERSION', 'version-1.8.0-dev.6' );
 
 // don't let users activate w/o ACF
 register_activation_hook( __FILE__, 'squarecandy_acf_events_activate' );
@@ -551,3 +551,91 @@ function squarecandy_events_edit_event_orderby( $query ) {
 
 	endif;
 }
+
+// WP All Import events import compatibility
+// This runs the function that creates the values for sort_date magic_sort_date and archive_date for each event imported
+//
+function squarecandy_events_pmxi_saved_post( $post_id, $xml_node, $is_update ) {
+	if ( 'event' === get_post_type( $post_id ) ) {
+		if ( function_exists( 'squarecandy_cleanup_event_data' ) ) {
+			$cleanup = squarecandy_cleanup_event_data( $post_id );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				if ( $cleanup ) {
+					error_log( 'squarecandy_cleanup_event_data ran successfully! ' . $post_id ); // phpcs:ignore
+				} else {
+					error_log( 'squarecandy_cleanup_event_data failed. ' . $post_id ); // phpcs:ignore
+				}
+			}
+		}
+	}
+}
+add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
+
+function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo = true ) {
+
+	$output = '';
+	$single = $echo;
+	if ( ! empty( $event['tickets_link'] ) ) :
+		$output .= '<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">';
+		$output .= '<a class="button button-bold button-tickets" itemprop="url" href="' . $event['tickets_link'] . '">';
+		$output .= '<i class="fa fa-ticket"></i> ' . __( 'Tickets', 'squarecandy-acf-events' );
+		$output .= '</a>';
+		$output .= '</span>';
+	endif;
+	if ( $show_post_link_button ) :
+		$moreinfo_post_link_text = __( 'More Info', 'squarecandy-acf-events' );
+		$moreinfo_post_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_post_link_text', $moreinfo_post_link_text );
+		$output                 .= '<a class="button button-bold button-more-info" href="' . $show_post_link_button . '">
+				<i class="fa fa-info-circle"></i> ' . $moreinfo_post_link_text . '
+			</a> ';
+	elseif ( ! empty( $event['more_info_link'] ) ) :
+		$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', __( 'More Info', 'squarecandy-acf-events' ) );
+		$output                     .= '<a class="button button-bold button-more-info" href="' . $event['more_info_link'] . '">';
+		$output                     .= '<i class="fa fa-info-circle"></i> ' . $moreinfo_external_link_text;
+		$output                     .= '</a>';
+	endif;
+	if ( ! empty( $event['facebook_link'] ) ) :
+		$output .= '<a class="button button-bold button-facebook" href="' . $event['facebook_link'] . '">';
+		$output .= '<i class="fa fa-facebook"></i> ';
+		$output .= ! $single ? '<span class="screen-reader-text">' : ''; //shortcode inconsistently wraps this text
+		$output .= __( 'Facebook', 'squarecandy-acf-events' );
+		$output .= ! $single ? '</span>' : '';
+		$output .= '</a>';
+	endif;
+	if ( get_field( 'add_to_gcal', 'option' ) ) :
+		$start_date = $event['start_date'];
+		$end_date   = $event['end_date'] ?? false;
+		$multi_day  = $event['muilti_day'] ?? false;
+
+		if ( ! empty( $event['start_time'] ) ) {
+			$start_date .= ' ' . $event['start_time'];
+		}
+
+		if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
+			$end_date .= ' ' . $event['end_time'];
+		}
+
+		$event_address = $event['venue_location']['address'] ?? null;
+
+		// shortcode also wraps this text & uses different icon
+		$linktext = $single ? '<i class="fa fa-google"></i> add to gCal' : '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>';
+
+		$output .= squarecandy_add_to_gcal(
+			get_the_title(),
+			$start_date,
+			$end_date,
+			$event['short_description'] ?? '',
+			$event_address,
+			$event['all_day'] ?? false,
+			$linktext,
+			array( 'gcal-button', 'button', 'button-bold' )
+		);
+
+	endif;
+	if ( $echo ) {
+		echo $output;
+	} else {
+		return $output;
+	}
+}
+

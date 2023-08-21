@@ -12,6 +12,7 @@ get_header(); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'events-full' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
 					<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
+					<?php do_action( 'squarecandy_after_events_single_title' ); ?>
 					<h2 class="event-date-time" itemprop="startDate" content="<?php echo date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
 						<?php squarecandy_acf_events_date_display( $event ); ?>
 					</h2>
@@ -19,67 +20,15 @@ get_header(); ?>
 					<meta itemprop="url" content="<?php the_permalink(); ?>">
 					<?php squarecandy_acf_events_address_display( $event, '3line' ); ?>
 
-					<div class="more-info-buttons">
-
-					<?php if ( ! empty( $event['tickets_link'] ) ) { ?>
-						<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-							<a class="button button-bold button-tickets" itemprop="url" href="<?php echo $event['tickets_link']; ?>">
-								<i class="fa fa-ticket"></i> Tickets
-							</a>
-						</span>
-					<?php } ?>
+					<div class="more-info-buttons"><?php squarecandy_events_generate_buttons( $event ); //don't put line breaks around this, we don't want extra spaces! ?></div>
 
 					<?php
-					if ( ! empty( $event['more_info_link'] ) ) :
-						$moreinfo_external_link_text = apply_filters( 'squarecandy_filter_events_moreinfo_external_link_text', __( 'More Info', 'squarecandy-acf-events' ) );
-						?>
-						<a class="button button-bold button-more-info" href="<?php echo $event['more_info_link']; ?>">
-							<i class="fa fa-info-circle"></i> <?php echo $moreinfo_external_link_text; ?>
-						</a>
-						<?php
+					$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false );
+					if ( $event_image_html ) :
+						echo $event_image_html;
+					else :
+						the_post_thumbnail();
 					endif;
-					?>
-
-					<?php if ( ! empty( $event['facebook_link'] ) ) { ?>
-						<a class="button button-bold button-facebook" href="<?php echo $event['facebook_link']; ?>">
-							<i class="fa fa-facebook"></i> <?php _e( 'Facebook', 'squarecandy-acf-events' ); ?>
-						</a>
-					<?php } ?>
-
-					<?php
-					if ( get_field( 'add_to_gcal', 'option' ) ) :
-						$start_date = $event['start_date'];
-						$end_date   = $event['end_date'] ?? false;
-						$multi_day  = $event['muilti_day'] ?? false;
-
-						if ( ! empty( $event['start_time'] ) ) {
-							$start_date .= ' ' . $event['start_time'];
-						}
-
-						if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
-							$end_date .= ' ' . $event['end_time'];
-						}
-
-						$event_address = $event['venue_location']['address'] ?? null;
-
-						echo squarecandy_add_to_gcal(
-							get_the_title(),
-							$start_date,
-							$end_date,
-							$event['short_description'] ?? '',
-							$event_address,
-							$event['all_day'] ?? false,
-							$linktext = '<i class="fa fa-google"></i> add to gCal',
-							$classes  = array( 'gcal-button', 'button', 'button-bold' )
-						);
-
-					endif;
-					?>
-
-					</div>
-
-					<?php
-					the_post_thumbnail(); // @TODO - make this better: custom banner size, allow for caption, etc.
 
 					$test_empty_content = get_the_content();
 					$test_empty_content = wp_strip_all_tags( $test_empty_content );
@@ -126,6 +75,7 @@ get_header(); ?>
 				</div>
 				<footer class="squarecandy-footer squarecandy-events-footer">
 					<?php
+					do_action( 'squarecandy_acf_event_before_footer' );
 					$events_slug = apply_filters( 'squarecandy_events_slug', 'events' );
 					$all_events  = apply_filters( 'squarecandy_events_see_all', 'See All Events' );
 					?>

@@ -40,5 +40,5 @@ module.exports.writeVersion = function( contents, version ) {
 	if ( found3 ) {
 		return contents.replace( regex3, 'version-' + version );
 	}
-	return null;
+	return contents;
 };

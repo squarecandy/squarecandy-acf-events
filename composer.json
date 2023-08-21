@@ -2,6 +2,13 @@
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
 		"wp-coding-standards/wpcs": "*",
-		"gamajo/template-loader": "^1.3"
+		"gamajo/template-loader": "^1.3",
+		"phpcompatibility/php-compatibility": "dev-develop as 9.3.5",
+		"isaac/php-code-sniffer-standard": "*"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }
