@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.4...v1.8.0) (2023-08-21)
+
+
+### Features
+
+* support WP All Import events ([a5f45bd](https://github.com/squarecandy/squarecandy-acf-events/commit/a5f45bdb5a6e5d9ed073a17fb84fb8065430f3a9))
+
+
+### Bug Fixes
+
+* add after title hook ([1c05604](https://github.com/squarecandy/squarecandy-acf-events/commit/1c05604599411b05087e4fb2c9cb17764f3959da))
+* add central generate buttons function ([f51d77c](https://github.com/squarecandy/squarecandy-acf-events/commit/f51d77c2d2ee7ee152e73cb20b75d16ba2faa259))
+* add event page title filters ([788ee48](https://github.com/squarecandy/squarecandy-acf-events/commit/788ee481ed4e19c41163033b034926ec24888897))
+* add filter for year archive upcoming link ([22cb231](https://github.com/squarecandy/squarecandy-acf-events/commit/22cb2310a020f6c48fb084a6b35e11ed1dba257c))
+* add filter to image on single event pages ([d0d4f64](https://github.com/squarecandy/squarecandy-acf-events/commit/d0d4f64c682d559a42be97f03b0c31d28392a9f9))
+* add new hooks and update event preview template ([ddfc407](https://github.com/squarecandy/squarecandy-acf-events/commit/ddfc407451c226c3f4e892967a02aa585bb49673))
+* date range defaults are flipped from what they should be ([a301ffb](https://github.com/squarecandy/squarecandy-acf-events/commit/a301ffbf3fb509e6272d42c32872ebc1851c8ee5))
+
 ### [1.7.4](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.3...v1.7.4) (2023-08-04)
 
 
