@@ -467,7 +467,7 @@ class SQC_Sync_Work_Categories {
 
 		// if new post or autosave not saving meta so bail (?)
 		if ( 'auto-draft' === $post->post_status || defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || empty( $_POST ) ) {
-			$this->debug_log( 'Save post aborted: auto draft / auto save / Broadcaster save' );
+			//$this->debug_log( 'Save post aborted: auto draft / auto save / Broadcaster save' ); //logging this causes issues when DB_DEBIG or DEBUG_LOG are set
 			return;
 		}
 
