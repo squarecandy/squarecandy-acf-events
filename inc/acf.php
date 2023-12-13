@@ -310,7 +310,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		endif;
 
 		// allow linking to "works" if the Square Candy ACF Composer Works plugin is enabled
-		if ( function_exists( 'is_plugin_active' ) && is_plugin_active( 'squarecandy-acf-works/squarecandy-acf-works.php' ) || is_plugin_active( 'squarecandy-acf-works/plugin.php' ) ) :
+		if ( function_exists( 'is_plugin_active' ) && ( is_plugin_active( 'squarecandy-acf-works/squarecandy-acf-works.php' ) || is_plugin_active( 'squarecandy-acf-works/plugin.php' ) ) ) :
 			$eventfields['featured_works'] = array(
 				'key'                     => 'field_5841cdf6350d1',
 				'label'                   => 'Featured Works',
