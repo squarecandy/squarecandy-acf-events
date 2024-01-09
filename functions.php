@@ -255,7 +255,7 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 		) {
 			// start and end date the same; range of times
 			// example: July 4, 2019 - 3pm–5pm
-			$output .= date_i18n( $formats['date_format_multi_start'], strtotime( $start_date ) );
+			$output .= date_i18n( $formats['date_format'], strtotime( $start_date ) );
 			$output .= $sep;
 			$output .= '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) );
 			$output .= $range;
