@@ -82,14 +82,30 @@ Available filters:
 
 ## [Developer Guide](https://developers.squarecandy.net)
 
-For more detailed information about coding standards, development philosophy, how to run linting, how to release a new version, and more, visit the [Square Candy Developer Guide](https://developers.squarecandy.net).
+For more detailed information about coding standards, development philosophy, how to run linting, how to release a new version, and more, visit the [Square Candy Developer Guide Wiki](https://github.com/squarecandy/developer-guidelines/wiki).
 
 ## Roadmap
 
-* make options for both "past" and "all" to be grouped by year independently
-* Support more preview image positions (left, right, top)
-* throw error if end date is before start date
-* create hidden takedown/archive date for smoother queries
-* Either make an optional checkbox for loading archive years via AJAX - OR - just force this behavior if the past events query returns more than 250 items or something like that.
 * add cancelled feature and corresponding schema https://schema.org/EventCancelled
 * add online location feature https://schema.org/VirtualLocation https://schema.org/BroadcastEvent
+* install Gamajo and make single template overridable
+* refactor item previews to use an overridable template file, but don't break shortcodes in the process.
+* past events accordions: refactor for less queries
+* past events accordions: offer ASC and DESC year sorting
+* past events accordions: offer ASC and DESC item sorting within each year
+* past events accordions: accessibility fixes for accordion feature
+* page-per-year archive: SEO fixes for single year past https://example.com/events/2022/ - add year to title, unique description.
+* refactor button icons and labels: make consistent between preview and single; icons always optional; FA6 compatible; etc
+* consider a full refactor of external links? replace More Info/Tickets/Facebook fields with a repeater to allow for any amount/kind of external link.
+* refactor/rethink: "MORE INFO" button in preview links to single view; "MORE INFO" button in single links to external URL; "MORE INFO" is generic and not accessible.
+* accessibility review for entire system
+* Check if any clients are using the Google Maps integration anymore. Remove the feature and the code if not.
+* Create a v2 css option with a better basic/default look and CSS variables where appropriate.
+* Support more preview image positions (left, right, top)
+* Improve "add to calendar" to include more than Google.
+* make options for both "past" and "all" to be grouped by year independently
+* Consider performance limits for all past/archive options (full Past shortcode, Past shortcode with year accordions, page-per-year archives). Implement pagination, AJAX or load-more solutions past reasonable limitations.
+
+**done**
+* ~~create hidden takedown/archive date for smoother queries~~
+* ~~throw error if end date is before start date~~
