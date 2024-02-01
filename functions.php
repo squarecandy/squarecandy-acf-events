@@ -639,3 +639,7 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 	}
 }
 
+if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
+	require ACF_EVENTS_DIR_PATH . 'inc/class-gamajo-template-loader.php';
+}
+require ACF_EVENTS_DIR_PATH . 'inc/class-squarecandy-events-template-loader.php';
