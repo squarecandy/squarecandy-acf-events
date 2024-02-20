@@ -276,9 +276,18 @@ function squarecandy_acf_events_date_display( $event ) {
 	echo get_squarecandy_acf_events_date_display( $event );
 }
 
-// Function to get an address block output from the individual location fields
-// $style options are: 1line, 2line, 3line, infowindow, citystate
-function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true ) {
+/**
+ * Function to get an address block output from the individual location fields
+ * @param array $event
+ * @param string $style
+ * @param bool $maplink
+ * 
+ * $style options are: '1line', '2line', '3line', 'infowindow', 'citystate'
+ * $event properties: 
+ * 'venue', 'venue_link', 'venue_location', 'address', 'city', 'state', 'zip', 'country'
+ */
+function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true 
+) {
 
 	$home_country = get_option( 'options_home_country' );
 
@@ -504,9 +513,11 @@ function squarecandy_events_filter_posts_columns( $columns ) {
 	//rearrange so it's before author & date
 	$move_columns = array( 'author', 'date' );
 	foreach ( $move_columns as $key ) {
-		$column = $columns[ $key ];
-		unset( $columns[ $key ] );
-		$columns[ $key ] = $column;
+		if ( isset( $columns[ $key ] ) ) {
+			$column = $columns[ $key ];
+			unset( $columns[ $key ] );
+			$columns[ $key ] = $column;
+		}
 	}
 	return $columns;
 }
@@ -571,6 +582,16 @@ function squarecandy_events_pmxi_saved_post( $post_id, $xml_node, $is_update ) {
 }
 add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
 
+/**
+ * Generate and echo/return html to display buttons for an event
+ * @param array $event
+ * @param bool $show_post_link_button
+ * @param bool $echo
+ * @return string $output OR echos string $output
+ * 
+ * button types / $event properties:
+ * 'tickets_link', 'more_info_link', 'facebook_link', 'add_to_gcal'
+ */ 
 function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo = true ) {
 
 	$output = '';
