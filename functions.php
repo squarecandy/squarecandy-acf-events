@@ -281,12 +281,12 @@ function squarecandy_acf_events_date_display( $event ) {
  * @param array $event
  * @param string $style
  * @param bool $maplink
- * 
+ *
  * $style options are: '1line', '2line', '3line', 'infowindow', 'citystate'
- * $event properties: 
+ * $event properties:
  * 'venue', 'venue_link', 'venue_location', 'address', 'city', 'state', 'zip', 'country'
  */
-function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true 
+function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true
 ) {
 
 	$home_country = get_option( 'options_home_country' );
@@ -588,10 +588,10 @@ add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
  * @param bool $show_post_link_button
  * @param bool $echo
  * @return string $output OR echos string $output
- * 
+ *
  * button types / $event properties:
  * 'tickets_link', 'more_info_link', 'facebook_link', 'add_to_gcal'
- */ 
+ */
 function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo = true ) {
 
 	$output = '';

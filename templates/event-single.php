@@ -1,6 +1,6 @@
 <?php
 // Square Candy ACF Events Single Event Post Template
-$event = get_fields();
+$event    = get_fields();
 $template = new SquareCandy_Events_Template_Loader();
 get_header(); ?>
 
@@ -49,9 +49,9 @@ get_header(); ?>
 					}
 
 					echo $template->load_template_part( 'event', 'works' );
-					
+
 					do_action( 'squarecandy_acf_event_after_featured_works', $event );
-					
+
 					if ( get_field( 'show_map_on_detail_page', 'option' ) &&
 						! empty( $event['venue_location'] ) &&
 						! empty( $event['venue_location']['lat'] ) &&
