@@ -548,7 +548,7 @@ class SQC_Sync_Work_Categories {
 				if ( $message ) {
 					error_log( $message );
 				}
-				error_log( print_r( $var, true ), 3, WP_DEBUG_LOG );
+				error_log( print_r( $var, true ) );
 			}
 			// phpcs:enable
 		}

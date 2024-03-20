@@ -1,6 +1,7 @@
 <?php
 // Square Candy ACF Events Single Event Post Template
-$event = get_fields();
+$event    = get_fields();
+$template = new SquareCandy_Events_Template_Loader();
 get_header(); ?>
 
 	<div id="primary" class="content-area">
@@ -46,24 +47,11 @@ get_header(); ?>
 						</div>
 						<?php
 					}
-					if ( ! empty( $event['featured_works'] ) ) :
-						$t = count( $event['featured_works'] );
-						?>
-						<div class="featuredwork">
-							<span>Featured Work<?php echo $t > 1 ? 's' : ''; ?></span>
-							<?php
-							$works = array();
-							foreach ( $event['featured_works'] as $work ) {
-								$works[] = '<span itemscope itemprop="workPerformed" itemtype="http://schema.org/CreativeWork"><a itemprop="url" href="' . get_the_permalink( $work->ID ) . '"><span itemprop="name">' . $work->post_title . '</span></a></span>';
-							}
-							echo implode( ', ', $works );
-							?>
-						</div>
-					<?php endif; ?>
 
-					<?php do_action( 'squarecandy_acf_event_after_featured_works' ); ?>
+					echo $template->load_template_part( 'event', 'works' );
 
-					<?php
+					do_action( 'squarecandy_acf_event_after_featured_works', $event );
+
 					if ( get_field( 'show_map_on_detail_page', 'option' ) &&
 						! empty( $event['venue_location'] ) &&
 						! empty( $event['venue_location']['lat'] ) &&
