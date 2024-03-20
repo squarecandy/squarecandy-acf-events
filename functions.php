@@ -105,7 +105,7 @@ $sqc_event_cat_sync = new SQC_Sync_Work_Categories();
 
 // squarecandy-common files
 require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-common.php';
-require ACF_EVENTS_DIR_PATH . '/inc/plugin.php';
+require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-plugin.php';
 
 // provide custom theming for individual event pages
 // https://code.tutsplus.com/articles/plugin-templating-within-wordpress--wp-31088
