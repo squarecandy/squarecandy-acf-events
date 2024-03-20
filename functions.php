@@ -103,6 +103,10 @@ if ( get_option( 'options_events_ajax_load_more' ) ) {
 require ACF_EVENTS_DIR_PATH . 'inc/class-sqc-sync-work-categories.php';
 $sqc_event_cat_sync = new SQC_Sync_Work_Categories();
 
+// squarecandy-common files
+require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-common.php';
+require ACF_EVENTS_DIR_PATH . '/inc/plugin.php';
+
 // provide custom theming for individual event pages
 // https://code.tutsplus.com/articles/plugin-templating-within-wordpress--wp-31088
 
@@ -488,19 +492,6 @@ if ( ! get_transient( 'squarecandy_event_cleanup_complete5' ) ) {
 	add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_bulk_update_enqueue' );
 	require ACF_EVENTS_DIR_PATH . 'inc/bulk-update.php';
 }
-
-
-
-// for debugging
-if ( ! function_exists( 'pre_r' ) ) :
-	function pre_r( $array ) {
-		if ( WP_DEBUG ) {
-			print '<pre class="squarecandy-pre-r">';
-			print_r( $array ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions
-			print '</pre>';
-		}
-	}
-endif;
 
 /**
  * Add sortable start_date column to admin event list, sort descending by default

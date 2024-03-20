@@ -36,7 +36,7 @@ module.exports = function( grunt ) {
 			},
 		},
 		copy: {
-			init: {
+			preflight: {
 				files: [
 					{
 						expand: true,
@@ -45,10 +45,6 @@ module.exports = function( grunt ) {
 						dest: '',
 						dot: true,
 					},
-				],
-			},
-			preflight: {
-				files: [
 					// common
 					{
 						expand: true,
