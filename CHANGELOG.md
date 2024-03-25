@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.8.0...v1.9.0) (2024-03-25)
+
+
+### Features
+
+* add gamajo template loader, add separate featured works template ([0b30ea0](https://github.com/squarecandy/squarecandy-acf-events/commit/0b30ea047a52a11652684c6ce38a4c28c6efe5b5))
+
+
+### Bug Fixes
+
+* add fields list to readme ([59c29e9](https://github.com/squarecandy/squarecandy-acf-events/commit/59c29e92abacad97c29134476af482ec5684f5ad))
+* fix error with logging ([3b2f35f](https://github.com/squarecandy/squarecandy-acf-events/commit/3b2f35f113ac394eacdd4aa84c9e15d06d4a7535))
+* fix issues with logging ([5f3c889](https://github.com/squarecandy/squarecandy-acf-events/commit/5f3c88937342585caddfe3417e31920556e78f11))
+* fix php error, add comments ([4356439](https://github.com/squarecandy/squarecandy-acf-events/commit/4356439a0e6bfa60097ceb2e9875240396ca8350))
+* fix plugin exists error ([418c3d0](https://github.com/squarecandy/squarecandy-acf-events/commit/418c3d05ca1dd6e82bc13441a5bbb06ea813eba2))
+* fix typo in common filename ([b185369](https://github.com/squarecandy/squarecandy-acf-events/commit/b185369f2710f191d98e91e1556cc04b8b52b4f0))
+* range of times w/ same date should use base date format (usually w/ year) "July 4, 2019 - 3pm–5pm" ([acbd3c6](https://github.com/squarecandy/squarecandy-acf-events/commit/acbd3c604bd41ffbaf3e1118d0aa1bdeaade1700))
+
 ## [1.8.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.7.4...v1.8.0) (2023-08-21)
 
 
