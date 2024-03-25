@@ -40,3 +40,11 @@ if ( ! function_exists( 'sqcdy_log' ) ) :
 	}
 endif;
 //phpcs:enable WordPress.PHP.DevelopmentFunctions.error_log_error_log, WordPress.PHP.DevelopmentFunctions.error_log_print_r
+
+// Temporary shim for str_contains until all sites have php updated
+// based on original work from the PHP Laravel framework
+if ( ! function_exists( 'str_contains' ) ) {
+	function str_contains( $haystack, $needle ) {
+		return $needle !== '' && mb_strpos( $haystack, $needle ) !== false; // phpcs:ignore WordPress.PHP.YodaConditions.NotYoda
+	}
+}
