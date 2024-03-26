@@ -38,17 +38,27 @@ module.exports = function( grunt ) {
 		copy: {
 			preflight: {
 				files: [
-					{
-						expand: true,
-						cwd: 'node_modules/squarecandy-common/plugin',
-						src: '**/*',
-						dest: '',
-						dot: true,
-					},
 					// common
 					{
 						expand: true,
 						cwd: 'node_modules/squarecandy-common/common',
+						src: '**/*',
+						dest: '',
+						dot: true,
+						rename( dest, matchedSrcPath ) {
+							// the exact file name .gitignore is reserved by npm
+							// so we track it as /common/gitignore (no dot) and rename on copy
+							if ( matchedSrcPath === 'gitignore' ) {
+								return dest + '.gitignore';
+							}
+							// default for all other files
+							return dest + matchedSrcPath;
+						},
+					},
+					// plugin
+					{
+						expand: true,
+						cwd: 'node_modules/squarecandy-common/plugin',
 						src: '**/*',
 						dest: '',
 						dot: true,
