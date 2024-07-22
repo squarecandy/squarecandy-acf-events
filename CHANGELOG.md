@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.2](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.9.1...v1.9.2) (2024-07-22)
+
+
+### Bug Fixes
+
+* template heirarchy broken in some cases when there are no results. ([4344a5f](https://github.com/squarecandy/squarecandy-acf-events/commit/4344a5fee37123552906a4a72b6c78d13e54f8f0))
+
 ### [1.9.1](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.9.0...v1.9.1) (2024-03-26)
 
 ## [1.9.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.8.0...v1.9.0) (2024-03-25)
