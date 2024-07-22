@@ -132,10 +132,13 @@ function squarecandy_acf_events_template_chooser( $template ) {
 	}
 
 	// if this is the archive page, show custom archive template
+	// @TODO implement Gamajo template loader to match other plugins
 	if ( 'event' === get_post_type( $post_id ) && is_archive() ) {
 		// Check if a custom template exists in the theme folder, if not, load the plugin template file
 		if ( locate_template( array( 'archive-events.php' ) ) ) {
 			$file = locate_template( array( 'archive-events.php' ) );
+		} elseif ( locate_template( array( 'archive-event.php' ) ) ) {
+			$file = locate_template( array( 'archive-event.php' ) );
 		} else {
 			$file = ACF_EVENTS_DIR_PATH . '/templates/archive-events.php';
 		}
