@@ -1,6 +1,6 @@
 {
 	"name": "squarecandy-acf-events",
-	"version": "1.9.2",
+	"version": "1.9.3-dev.0",
 	"description": "Square Candy’s Events plugin",
 	"repository": {
 		"type": "git",
