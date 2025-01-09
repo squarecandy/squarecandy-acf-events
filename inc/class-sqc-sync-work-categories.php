@@ -17,6 +17,7 @@ class SQC_Sync_Work_Categories {
 
 	const ORIGINAL_TAX_SLUG  = 'works-category';
 	const ORIGINAL_POST_TYPE = 'works';
+	const WORKS_CAT_FIELD    = 'field_5839d8ee566b2'; // work category
 	const TARGET_TAX_SLUG    = 'event-works-category';
 	const TARGET_POST_TYPE   = 'event';
 	const OPTIONS_KEY        = 'sync_event_work_categories';
@@ -43,14 +44,17 @@ class SQC_Sync_Work_Categories {
 				// when we're changing the name or slug of the original category
 				add_action( 'edited_' . self::ORIGINAL_TAX_SLUG, array( $this, 'edited_original_category' ), 10, 2 );
 
-				//when we're editing an event check if we added or removed a work
+				// when we're editing an event check if we added or removed a work
 				add_action( 'acf/save_post', array( $this, 'save_post_event' ), 5 ); // 5 so pre-save
 
-				//when we're editing a work check if we added or removed a work category
+				// when we're editing a work check if we added or removed a work category
 				add_action( 'acf/save_post', array( $this, 'save_post_work' ), 5 );
 
-				//when we're inline editing a work check if we added or removed a work category
+				// when we're inline editing a work check if we added or removed a work category
 				add_action( 'pre_post_update', array( $this, 'pre_post_update_work' ), 10, 2 );
+
+				// handle changes when bulk editing using Admin Columns Pro
+				add_filter( 'acp/editing/save_value', array( $this, 'acp_bulk_edit' ), 10, 3 );
 
 			endif;
 
@@ -173,7 +177,7 @@ class SQC_Sync_Work_Categories {
 			return;
 		}
 
-		$this->debug_log( 'SQC_Sync_Work_Categories starting bulk sync' );
+		sqcdy_log( 'SQC_Sync_Work_Categories starting bulk sync' );
 
 		$cat_args = array(
 			'hide_empty' => false,
@@ -181,7 +185,7 @@ class SQC_Sync_Work_Categories {
 		);
 
 		$work_cats = get_terms( $cat_args );
-		$this->debug_log( $work_cats, 'Existing categories' );
+		sqcdy_log( $work_cats, 'Existing categories' );
 
 		if ( $work_cats ) :
 
@@ -215,7 +219,7 @@ class SQC_Sync_Work_Categories {
 			$meta  = array();
 			$terms = array();
 
-			$this->debug_log( $works, 'Works associated with event ' . $event_id );
+			sqcdy_log( $works, 'Works associated with event ' . $event_id );
 
 			if ( is_array( $works ) ) {
 				foreach ( $works as $work_id ) {
@@ -225,7 +229,7 @@ class SQC_Sync_Work_Categories {
 				}
 			}
 
-			$this->debug_log( $terms, 'Categories associated with event ' . $event_id );
+			sqcdy_log( $terms, 'Categories associated with event ' . $event_id );
 
 			// set postmeta
 			delete_post_meta( $event_id, 'featured_works_cats' );
@@ -258,7 +262,7 @@ class SQC_Sync_Work_Categories {
 			}
 		}
 
-		$this->debug_log( $changed_properties, 'Changed taxonomy properties for ' . $work_cat_term->slug );
+		sqcdy_log( $changed_properties, 'Changed taxonomy properties for ' . $work_cat_term->slug );
 
 		if ( $changed_properties ) {
 			wp_update_term( $event_work_cat_id, self::TARGET_TAX_SLUG, $changed_properties );
@@ -280,12 +284,12 @@ class SQC_Sync_Work_Categories {
 		}
 
 		$event_id      = $post_id;
-		$field_key     = 'field_5841cdf6350d1';
+		$field_key     = 'field_5841cdf6350d1'; //featured_works
 		$works         = get_post_meta( $post_id, 'featured_works', true );
 		$updated_works = isset( $_POST['acf'][ $field_key ] ) ? $_POST['acf'][ $field_key ] : array(); //phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		$this->debug_log( $works, 'Previous works for event ' . $post_id );
-		$this->debug_log( $updated_works, 'Updated works for event ' . $post_id );
+		sqcdy_log( $works, 'Previous works for event ' . $post_id );
+		sqcdy_log( $updated_works, 'Updated works for event ' . $post_id );
 
 		// if work list has been changed
 		if ( $updated_works !== $works ) {
@@ -301,7 +305,7 @@ class SQC_Sync_Work_Categories {
 				$work_cats     = get_the_terms( $work_id, self::ORIGINAL_TAX_SLUG );
 				$all_work_cats = array_merge( $all_work_cats, $work_cats );
 
-				$this->debug_log( $work_cats, 'Categories for work ' . $work_id );
+				sqcdy_log( $work_cats, 'Categories for work ' . $work_id );
 
 				foreach ( $work_cats as $work_cat_term ) {
 
@@ -320,8 +324,8 @@ class SQC_Sync_Work_Categories {
 			// get rid of duplicates
 			$event_work_cats = array_unique( $event_work_cats );
 
-			$this->debug_log( $event_work_cats, 'All categories for event ' . $post_id );
-			$this->debug_log( $work_meta, 'New postmeta for event ' . $post_id );
+			sqcdy_log( $event_work_cats, 'All categories for event ' . $post_id );
+			sqcdy_log( $work_meta, 'New postmeta for event ' . $post_id );
 
 			// update the meta
 			delete_post_meta( $event_id, 'featured_works_cats' );
@@ -346,7 +350,7 @@ class SQC_Sync_Work_Categories {
 			return;
 		}
 
-		$field_key    = 'field_5839d8ee566b2';
+		$field_key    = self::WORKS_CAT_FIELD; // work category
 		$cats         = get_the_terms( $post_id, self::ORIGINAL_TAX_SLUG );
 		$cat_ids      = $cats ? wp_list_pluck( $cats, 'term_id' ) : array();
 		$updated_cats = isset( $_POST['acf'][ $field_key ] ) ? $_POST['acf'][ $field_key ] : array(); //phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -369,24 +373,24 @@ class SQC_Sync_Work_Categories {
 			return;
 		}
 
-		$this->debug_log( 'inline work save' );
+		sqcdy_log( 'inline work save' );
 
 		$cats         = get_the_terms( $post_id, self::ORIGINAL_TAX_SLUG );
 		$cat_ids      = $cats ? wp_list_pluck( $cats, 'term_id' ) : array();
 		$updated_cats = array();
 
 		//phpcs:disable WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST['tax_input'][ ORIGINAL_TAX_SLUG ] ) ) {
+		if ( empty( $_POST['tax_input'][ self::ORIGINAL_TAX_SLUG ] ) ) {
 			$term_names = array();
-		} elseif ( is_array( $_POST['tax_input'][ ORIGINAL_TAX_SLUG ] ) ) {
-			$term_names = $_POST['tax_input'][ ORIGINAL_TAX_SLUG ];
+		} elseif ( is_array( $_POST['tax_input'][ self::ORIGINAL_TAX_SLUG ] ) ) {
+			$term_names = $_POST['tax_input'][ self::ORIGINAL_TAX_SLUG ];
 		} else {
-			$term_names = explode( ', ', $_POST['tax_input'][ ORIGINAL_TAX_SLUG ] );
+			$term_names = explode( ', ', $_POST['tax_input'][ self::ORIGINAL_TAX_SLUG ] );
 		}
 		//phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		foreach ( $term_names as $term_name ) {
-			$term = get_term_by( 'name', $term_name, ORIGINAL_TAX_SLUG );
+			$term = get_term_by( 'name', $term_name, self::ORIGINAL_TAX_SLUG );
 			if ( $term ) {
 				$updated_cats[] = $term->term_id;
 			}
@@ -396,10 +400,57 @@ class SQC_Sync_Work_Categories {
 
 	}
 
+	/**
+	 * handle changes when bulk editing using Admin Columns Pro
+	 * @param array{value: array, method: string} $value
+	 * @param AC\Column $column
+	 * @param int|string $post_id
+	 *
+	 * @return array{value: array, method: string}
+	 */
+
+	private function acp_bulk_edit( $value, $column, $post_id ) {
+
+		if ( $column->get_post_type() === self::ORIGINAL_POST_TYPE && $column->get_type() === self::WORKS_CAT_FIELD ) {
+
+			sqcdy_log( $post_id, 'acp_bulk_inline_edit' );
+			sqcdy_log( $value, 'Edit value' );
+
+			$cats    = get_the_terms( $post_id, self::ORIGINAL_TAX_SLUG );
+			$cat_ids = $cats ? wp_list_pluck( $cats, 'term_id' ) : array();
+
+			switch ( $value['method'] ) {
+				case 'add':
+					$updated_cats = array_merge( $cat_ids, $value['value'] );
+					break;
+				case 'remove':
+					$updated_cats = array_diff( $cat_ids, $value['value'] );
+					break;
+				case 'replace':
+					$updated_cats = $value['value'];
+					break;
+			}
+
+			if ( isset( $updated_cats ) ) {
+				$this->handle_work_changes( $post_id, $cat_ids, $updated_cats );
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * When a work's categories are updated, populate those changes to the associated events.
+	 *
+	 * @param int|string $post_id work ID
+	 * @param array $cat_ids Previous categories for work
+	 * @param array $updated_cats Updated categories for work
+	 */
+
 	private function handle_work_changes( $post_id, $cat_ids, $updated_cats ) {
 
-		$this->debug_log( $cat_ids, 'Previous categories for work ' . $post_id );
-		$this->debug_log( $updated_cats, 'Updated categories for work ' . $post_id );
+		sqcdy_log( $cat_ids, 'Previous categories for work ' . $post_id );
+		sqcdy_log( $updated_cats, 'Updated categories for work ' . $post_id );
 
 		// if category list has been changed
 		if ( $updated_cats !== $cat_ids ) {
@@ -410,8 +461,8 @@ class SQC_Sync_Work_Categories {
 			// get associated events
 			$events = self::get_events_for_work( $post_id );
 
-			$this->debug_log( $removed_cats, 'Removed categories for work ' . $post_id );
-			$this->debug_log( $events, 'Events for ' . $post_id );
+			sqcdy_log( $removed_cats, 'Removed categories for work ' . $post_id );
+			sqcdy_log( $events, 'Events for ' . $post_id );
 
 			// loop through events to add/remove categories
 			foreach ( $events as $event_id ) {
@@ -419,7 +470,7 @@ class SQC_Sync_Work_Categories {
 				$work_meta = get_post_meta( $event_id, 'featured_works_cats', true );
 				$work_meta = is_array( $work_meta ) ? $work_meta : array();
 
-				$this->debug_log( $work_meta, 'Stored category postmeta for event ' . $event_id );
+				sqcdy_log( $work_meta, 'Stored category postmeta for event ' . $event_id );
 
 				// clear the meta for this work
 				unset( $work_meta[ $post_id ] );
@@ -439,7 +490,7 @@ class SQC_Sync_Work_Categories {
 					}
 
 					if ( ! $keep ) {
-						$this->debug_log( $removed_cat_id, 'Removing categories from event' );
+						sqcdy_log( $removed_cat_id, 'Removing categories from event' );
 						$event_work_cat_id = get_term_meta( $removed_cat_id, 'event_work_cat_id', true );
 						wp_remove_object_terms( $event_id, array( (int) $event_work_cat_id ), self::TARGET_TAX_SLUG );
 					}
@@ -448,7 +499,7 @@ class SQC_Sync_Work_Categories {
 				// don't worry about checking for adding, wp won't create duplicate term relationships
 				// re-add all categories on saved work just in case
 				foreach ( $updated_cats as $added_cat_id ) {
-					$this->debug_log( $added_cat_id, 'Adding categories to event' );
+					sqcdy_log( $added_cat_id, 'Adding categories to event' );
 					$event_work_cat_id = get_term_meta( $added_cat_id, 'event_work_cat_id', true );
 					wp_set_post_terms( $event_id, array( (int) $event_work_cat_id ), self::TARGET_TAX_SLUG, true );
 					$work_meta[ $post_id ][ $added_cat_id ] = $event_work_cat_id;
@@ -456,7 +507,7 @@ class SQC_Sync_Work_Categories {
 
 				// update meta
 				update_post_meta( $event_id, 'featured_works_cats', $work_meta );
-				$this->debug_log( $work_meta, 'New category postmeta for event ' . $event_id );
+				sqcdy_log( $work_meta, 'New category postmeta for event ' . $event_id );
 
 			}
 		}
@@ -468,7 +519,7 @@ class SQC_Sync_Work_Categories {
 		// if new post or autosave not saving meta so bail (?)
 		if ( 'auto-draft' === $post->post_status || defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || empty( $_POST ) ) {
 			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-			//$this->debug_log( 'Save post aborted: auto draft / auto save / Broadcaster save' ); //logging this causes issues when DB_DEBIG or DEBUG_LOG are set
+			//sqcdy_log( 'Save post aborted: auto draft / auto save / Broadcaster save' ); //logging this causes issues when DB_DEBIG or DEBUG_LOG are set
 			return;
 		}
 
@@ -486,7 +537,7 @@ class SQC_Sync_Work_Categories {
 		$nonce = isset( $_POST[ $nonce_key ] ) && wp_verify_nonce( $_POST[ $nonce_key ], $action );
 
 		if ( ! $nonce ) {
-			$this->debug_log( 'Save post aborted: incorrect nonce' );
+			sqcdy_log( 'Save post aborted: incorrect nonce' );
 			return false;
 		}
 
@@ -530,31 +581,4 @@ class SQC_Sync_Work_Categories {
 
 		return $meta;
 	}
-
-	//@TODO use squarecandy-common function
-	private function debug_log( $var, $message = '', $tab = 0 ) {
-
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			$pre     = str_pad( '', $tab * 5 );
-			$message = is_string( $message ) ? $message : '';
-			$message = $message ? $message . ': ' : $message;
-			$message = $pre . $message;
-
-			// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log, WordPress.PHP.DevelopmentFunctions.error_log_print_r
-			if ( is_string( $var ) || is_numeric( $var ) || is_bool( $var ) ) {
-				if ( is_bool( $var ) ) {
-					$var = $var ? 'true' : 'false';
-				}
-				error_log( $message . $var );
-			} else {
-				if ( $message ) {
-					error_log( $message );
-				}
-				error_log( print_r( $var, true ) );
-			}
-			// phpcs:enable
-		}
-
-	}
-
 }
