@@ -409,7 +409,7 @@ class SQC_Sync_Work_Categories {
 	 * @return array{value: array, method: string}
 	 */
 
-	private function acp_bulk_edit( $value, $column, $post_id ) {
+	public function acp_bulk_edit( $value, $column, $post_id ) {
 
 		if ( $column->get_post_type() === self::ORIGINAL_POST_TYPE && $column->get_type() === self::WORKS_CAT_FIELD ) {
 
