@@ -32,20 +32,11 @@ $output .= '<h1 class="event-date-time" itemprop="startDate" content="' . date_i
 $output .= '<a href="' . $event_link . '">' . get_squarecandy_acf_events_date_display( $event, $compact ) . '</a>';
 $output .= '</h1>';
 
-if ( ! empty( $event['end_date'] ) ) {
-	$meta_end_date = date_i18n( 'Y-m-d', strtotime( $event['end_date'] ) );
-} else {
-	$meta_end_date = date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) );
-}
-
-$output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
-
 $output = apply_filters( 'squarecandy_events_preview_before_title', $output, $event_id );
 
 if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
 	$output .= '<h2 class="entry-title" itemprop="name"><a href="' . $event_link . '">' . $event_title . '</a></h2>';
 }
-$output .= '<meta itemprop="url" content="' . $event_link . '">';
 
 $output = apply_filters( 'squarecandy_events_preview_before_address', $output, $event_id );
 
@@ -80,5 +71,15 @@ $show_post_link_button = $compact || $moreinfo_post_link ? $event_link : false; 
 
 $output .= '<div class="more-info-buttons">';
 $output .= squarecandy_events_generate_buttons( $event, $show_post_link_button, false );
-$output .= '</div>
-</article>';
+$output .= '</div>';
+
+if ( ! empty( $event['end_date'] ) ) {
+	$meta_end_date = date_i18n( 'Y-m-d', strtotime( $event['end_date'] ) );
+} else {
+	$meta_end_date = date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) );
+}
+
+$output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
+$output .= '<meta itemprop="url" content="' . $event_link . '">';
+
+$output .= '</article>';
