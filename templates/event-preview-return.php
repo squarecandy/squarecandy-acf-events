@@ -1,9 +1,7 @@
 <?php
 // Square Candy ACF Events Preview/Listing Post Template
-global $event_id;
-$event_id = (int) $event_id;
 
-$event_id = empty( $event_id ) ? get_the_ID() : $event_id;
+$event_id = empty( $event_id ) ? get_the_ID() : (int) $event_id;
 
 $event = get_fields( $event_id );
 
@@ -28,14 +26,48 @@ $class = implode( ' ', $classes );
 
 $output .= '<article id="post-' . $event_id . '" class="' . $class . '" itemscope="" itemtype="http://schema.org/MusicEvent">';
 
-$output .= '<h1 class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
-$output .= '<a href="' . $event_link . '">' . get_squarecandy_acf_events_date_display( $event, $compact ) . '</a>';
-$output .= '</h1>';
+$date_tag = sqcdy_is_views2( 'events' ) ? 'span' : 'h1';
 
-$output = apply_filters( 'squarecandy_events_preview_before_title', $output, $event_id );
+$date_container  = '<' . $date_tag . ' class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
+$date_container .= ! sqcdy_is_views2( 'events' ) ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
+$date_container .= get_squarecandy_acf_events_date_display( $event, $compact );
+$date_container .= ! sqcdy_is_views2( 'events' ) ? '</a>' : '';
+$date_container .= '</' . $date_tag . '>';
 
+
+
+$title_container = '';
 if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
-	$output .= '<h2 class="entry-title" itemprop="name"><a href="' . $event_link . '">' . $event_title . '</a></h2>';
+	$title_tag        = sqcdy_is_views2( 'events' ) ? 'span' : 'h2';
+	$title_container  = '<' . $title_tag . ' class="entry-title" itemprop="name">';
+	$title_container .= ! sqcdy_is_views2( 'events' ) ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
+	$title_container .= $event_title;
+	$title_container .= ! sqcdy_is_views2( 'events' ) ? '</a>' : '';
+	$title_container .= '</' . $title_tag . '>';
+}
+
+if ( ! sqcdy_is_views2( 'events' ) ) {
+	// legacy title/date layout
+	$output .= $date_container;
+	$output  = apply_filters( 'squarecandy_events_preview_before_title', $output, $event_id );
+	$output .= $title_container;
+} else {
+	// views2 title/date layout
+	$output = apply_filters( 'squarecandy_events_preview_before_title', $output, $event_id );
+
+	$h_level = empty( $h_level ) ? 'h2' : $h_level;
+
+	$output .= '<' . $h_level . ' class="event-date-title">';
+	$output .= '<a href="' . $event_link . '">';
+	if ( get_option( 'options_event_preview_title_first' ) ) {
+		$output .= $title_container;
+		$output .= $date_container;
+	} else {
+		$output .= $date_container;
+		$output .= $title_container;
+	}
+	$output .= '</a>';
+	$output .= '</' . $h_level . '>';
 }
 
 $output = apply_filters( 'squarecandy_events_preview_before_address', $output, $event_id );

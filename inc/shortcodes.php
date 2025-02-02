@@ -206,6 +206,8 @@ function squarecandy_events_func( $atts = array() ) {
 
 	if ( $compact ) {
 		// this will always override the number set in $atts - seems counterintuituve
+		// Note: the intention for "compact" is to be able to show the next 3 upcoming events in the footer,
+		// or homepage or similar context. - PW 2025-02-02
 		$args['posts_per_page'] = get_option( 'options_number_of_upcoming' );
 	}
 
@@ -310,6 +312,8 @@ function squarecandy_events_func( $atts = array() ) {
 				}
 				$output .= '">';
 
+				$h_level = 'h3';
+
 				foreach ( $items as $event_id ) {
 					include ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php';
 				}
@@ -320,6 +324,7 @@ function squarecandy_events_func( $atts = array() ) {
 			while ( $the_query2->have_posts() ) :
 				$the_query2->the_post();
 				$event_id = get_the_ID();
+				$h_level  = 'h2';
 				include ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php';
 			endwhile;
 		}

@@ -12,6 +12,7 @@ module.exports = function( grunt ) {
 			dist: {
 				files: {
 					'dist/css/main.min.css': 'css/main.scss',
+					'dist/css/views2.min.css': 'css/views2.scss',
 					'dist/css/admin.min.css': 'css/admin.scss',
 				},
 			},

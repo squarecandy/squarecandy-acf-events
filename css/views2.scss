@@ -1,0 +1,157 @@
+/* EVENTS */
+
+.events-preview {
+
+	position: relative;
+	margin-bottom: 2.5rem;
+
+	h2,
+	h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1.8rem;
+		line-height: 1.2;
+		text-wrap: balance;
+
+		.event-listing-compact & {
+			font-size: 1.2rem;
+		}
+
+		> a > span {
+			display: block;
+		}
+
+		.entry-title {
+			padding: 0;
+		}
+
+		.event-date-time {
+			font-weight: 600;
+			opacity: 0.92;
+		}
+	}
+
+	.more-info-buttons {
+		--sqcdy-button-padding-inline: 0.5rem;
+		--sqcdy-button-padding-block: 0.25rem;
+	}
+
+	.short-description {
+		font-size: 0.9rem;
+	}
+
+	.venue,
+	.short-description,
+	.more-info-buttons {
+		margin-block: 0.75rem;
+		margin-left: 3rem;
+
+		.event-listing-compact & {
+			margin-left: 0;
+		}
+	}
+
+}
+
+
+.post-type-archive-events article {
+	position: relative;
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0 0 8px 0;
+	padding: 0;
+	padding: 10px;
+	font-size: 16px;
+	transition: height 0.3s;
+}
+
+
+.event-listing-compact {
+
+	.more-info-buttons {
+		position: relative;
+		top: auto;
+		right: auto;
+		width: auto;
+		text-align: left;
+	}
+
+	h1,
+	h2 {
+		max-width: none;
+	}
+
+	.venue {
+		margin-top: 5px;
+		margin-left: 0;
+	}
+}
+
+
+.events-full {
+
+	h1,
+	h2 {
+		margin: 0 0 15px;
+		line-height: 1.1;
+	}
+}
+
+.more-events {
+	margin: 0 0 20px;
+	font-size: 90%;
+	text-align: center;
+
+	a {
+		color: #fff;
+	}
+}
+
+a.button-map,
+a.button.small {
+	margin: -3px 0 0 10px;
+	padding: 3px 8px;
+	font-size: 0.75em;
+	line-height: 1;
+	vertical-align: middle;
+}
+
+.more-info-buttons {
+	margin: 15px 0 5px;
+}
+
+.featuredwork,
+.event-description {
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid #aaa;
+}
+
+h2.accordion-header {
+	margin: 20px 0;
+	padding: 10px 10px 5px 10px;
+	color: #fff;
+	font-size: 2em;
+	line-height: 1.1;
+	background: #555;
+	cursor: pointer;
+
+	&:focus-visible {
+		outline: 2px solid #555;
+		outline-offset: 2px;
+	}
+}
+
+.js .accordion-content {
+	display: none;
+}
+
+
+/* hide empty button in upper left of google maps */
+.gm-style-mtc {
+	display: none;
+}
+
+.squarecandy-events-footer {
+	display: none;
+}

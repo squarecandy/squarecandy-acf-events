@@ -829,6 +829,21 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		);
 	}
 
+	// if views 2, add checkbox to put the title first in event preview
+	if ( sqcdy_is_views2( 'events' ) ) {
+		$event_settings_fields[] = array(
+			'key'           => 'field_eventtitlefirst39264951',
+			'label'         => 'Event Preview Title First',
+			'name'          => 'event_preview_title_first',
+			'type'          => 'true_false',
+			'message'       => 'Show the event title above the date in event previews',
+			'default_value' => 0,
+			'wrapper'       => array(
+				'width' => '48',
+			),
+		);
+	}
+
 	//add ACF fields on 'Events Settings' page
 	acf_add_local_field_group(
 		array(

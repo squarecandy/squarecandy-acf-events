@@ -22,8 +22,12 @@ function squarecandy_acf_events_activate() {
 // Front End Scripts and Styles
 function squarecandy_acf_events_enqueue_scripts() {
 
-	wp_enqueue_style( 'squarecandy-fontawesome', ACF_EVENTS_URL . 'dist/css/vendor/font-awesome/css/font-awesome.min.css', false, ACF_EVENTS_VERSION );
-	wp_enqueue_style( 'squarecandy-acf-events-css', ACF_EVENTS_URL . 'dist/css/main.min.css', false, ACF_EVENTS_VERSION );
+	if ( sqcdy_is_views2( 'events' ) ) {
+		wp_enqueue_style( 'squarecandy-acf-events-css', ACF_EVENTS_URL . 'dist/css/views2.min.css', false, ACF_EVENTS_VERSION );
+	} else {
+		wp_enqueue_style( 'squarecandy-fontawesome', ACF_EVENTS_URL . 'dist/css/vendor/font-awesome/css/font-awesome.min.css', false, ACF_EVENTS_VERSION );
+		wp_enqueue_style( 'squarecandy-acf-events-css', ACF_EVENTS_URL . 'dist/css/main.min.css', false, ACF_EVENTS_VERSION );
+	}
 
 	if (
 		// if maps option is on
@@ -81,9 +85,6 @@ if ( get_option( 'options_enable_categories' ) ) :
 	include ACF_EVENTS_DIR_PATH . 'taxonomies/events-category.php';
 endif;
 
-// add ACF fields for events
-require ACF_EVENTS_DIR_PATH . 'inc/acf.php';
-
 // Add to Calendar Generation Links
 require ACF_EVENTS_DIR_PATH . 'inc/addtogcal.php';
 
@@ -106,6 +107,9 @@ $sqc_event_cat_sync = new SQC_Sync_Work_Categories();
 // squarecandy-common files
 require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-common.php';
 require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-plugin.php';
+
+// add ACF fields for events
+require ACF_EVENTS_DIR_PATH . 'inc/acf.php';
 
 // provide custom theming for individual event pages
 // https://code.tutsplus.com/articles/plugin-templating-within-wordpress--wp-31088
