@@ -478,7 +478,7 @@ add_filter(
 require ACF_EVENTS_DIR_PATH . 'inc/data-cleanup.php';
 
 // run the bulk update if it has not been done yet.
-if ( ! get_transient( 'squarecandy_event_cleanup_complete5' ) ) {
+if ( ! get_transient( 'squarecandy_event_cleanup_complete5' ) && ! sqcdy_is_views2( 'events' ) ) {
 	// Bulk Update Script
 	function squarecandy_acf_events_bulk_update_enqueue() {
 		wp_enqueue_script( 'squarecandy-acf-events-bluk-update-js', ACF_EVENTS_URL . 'dist/js/bulk-update.min.js', array( 'jquery' ), ACF_EVENTS_VERSION, true );
