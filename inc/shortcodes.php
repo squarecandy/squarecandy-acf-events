@@ -222,6 +222,8 @@ function squarecandy_events_func( $atts = array() ) {
 	}
 
 	if ( $not_in ) {
+		// @TODO - remove this. Better to just filter them out of the retured array later.
+		// see https://10up.github.io/Engineering-Best-Practices/php/#performance
 		$args['post__not_in'] = explode( ',', $not_in );
 	}
 
@@ -257,16 +259,50 @@ function squarecandy_events_func( $atts = array() ) {
 			$pastevents = array();
 			while ( $the_query2->have_posts() ) :
 				$the_query2->the_post();
-				$year                  = date_i18n( 'Y', strtotime( get_field( 'start_date' ) ) );
-				$pastevents[ $year ][] = get_the_ID();
+				$start_date     = get_field( 'start_date' );
+				$start_time     = get_field( 'start_time' );
+				$year           = date_i18n( 'Y', strtotime( $start_date ) );
+				$month_day_time = date_i18n( 'md', strtotime( $start_date ) );
+				if ( ! empty( $start_time ) ) {
+					$month_day_time .= date_i18n( 'Hi', strtotime( $start_time ) );
+				}
+				// add the post date and ID to the key to ensure unique keys
+				$month_day_time                        .= get_the_date( 'YmdHi' );
+				$month_day_time                        .= get_the_ID();
+				$pastevents[ $year ][ $month_day_time ] = get_the_ID();
+
 			endwhile;
-			krsort( $pastevents );
+
+			// sort the results
+
+			// check for attr to determine year sort order
+			if ( ! empty( $atts['year_sort'] ) && 'ASC' === strtoupper( $atts['year_sort'] ) ) {
+				// sort the years in ascending order
+				ksort( $pastevents );
+			} else {
+				// sort the years in descending order
+				krsort( $pastevents );
+			}
+
+			// check for attr to determine subevent sort order
+			if ( ! empty( $atts['subevent_sort'] ) && 'DESC' === strtoupper( $atts['subevent_sort'] ) ) {
+				// sort in descending order
+				foreach ( $pastevents as $year => $items ) {
+					krsort( $pastevents[ $year ] );
+				}
+			} else {
+				// sort in ascending order
+				foreach ( $pastevents as $year => $items ) {
+					ksort( $pastevents[ $year ] );
+				}
+			}
+
 			foreach ( $pastevents as $year => $items ) {
 				$output .= '<h2 class="events-year-header';
 				if ( $accordion ) {
 					$output .= ' accordion-header';
 				}
-				$output .= '">' . $year . '</h2>';
+				$output .= '" tabindex="0">' . $year . '</h2>';
 
 				$output .= '<div class="event-year-content';
 				if ( $accordion ) {
@@ -274,19 +310,16 @@ function squarecandy_events_func( $atts = array() ) {
 				}
 				$output .= '">';
 
-				$args['post__in'] = $items;
-				$the_query3       = new WP_Query( $args );
-				if ( $the_query3->have_posts() ) :
-					while ( $the_query3->have_posts() ) :
-						$the_query3->the_post();
-						include ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php';
-					endwhile;
-				endif;
+				foreach ( $items as $event_id ) {
+					include ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php';
+				}
+
 				$output .= '</div>';
 			}
 		} else {
 			while ( $the_query2->have_posts() ) :
 				$the_query2->the_post();
+				$event_id = get_the_ID();
 				include ACF_EVENTS_DIR_PATH . 'templates/event-preview-return.php';
 			endwhile;
 		}

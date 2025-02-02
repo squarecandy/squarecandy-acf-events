@@ -161,6 +161,11 @@ h2.accordion-header {
 	line-height: 1.1;
 	background: #555;
 	cursor: pointer;
+
+	&:focus-visible {
+		outline: 2px solid #555;
+		outline-offset: 2px;
+	}
 }
 
 .js .accordion-content {
