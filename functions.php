@@ -297,8 +297,7 @@ function squarecandy_acf_events_date_display( $event ) {
  * $event properties:
  * 'venue', 'venue_link', 'venue_location', 'address', 'city', 'state', 'zip', 'country'
  */
-function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true
-) {
+function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true ) {
 
 	$home_country = get_option( 'options_home_country' );
 
@@ -368,7 +367,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				// to get full adress: if google map field exists, use that, otherwise try to concatenate address fields
 				if ( ! empty( $event['venue_location']['address'] ) ) :
 					$map_location = $event['venue_location']['address'];
-				elseif ( $event['address'] && ( ( $event['city'] && $event['state'] ) || $event['zip'] ) ) :
+				elseif ( $event['address'] && ( ( $event['city'] && $event['state'] ) || ( $event['city'] && $event['country'] ) || $event['zip'] ) ) :
 					$address_fields = array( 'city', 'state', 'zip', 'country' );
 					$map_location   = $event['address'];
 					foreach ( $address_fields as $address_field ) {
