@@ -801,17 +801,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				),
 			),
 		),
-		array(
-			'key'           => 'field_5a712237b7a78',
-			'label'         => 'No Events Text',
-			'name'          => 'no_events_text',
-			'type'          => 'wysiwyg',
-			'default_value' => '<h2>There are currently no upcoming events.</h2><p>Please join the email list and we will keep you posted when new events get added.</p>',
-			'tabs'          => 'all',
-			'toolbar'       => 'basic',
-			'media_upload'  => 0,
-			'delay'         => 0,
-		),
 	);
 
 	// if squarecandy-acf-works is present, add checkbox to sync work categories to events
@@ -839,10 +828,46 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'message'       => 'Show the event title above the date in event previews',
 			'default_value' => 0,
 			'wrapper'       => array(
+				'width' => '52',
+			),
+		);
+
+		$event_settings_fields[] = array(
+			'key'           => 'field_eventsingledatefirst64951',
+			'label'         => 'Event Single View: Date First',
+			'name'          => 'event_single_date_first',
+			'type'          => 'true_false',
+			'message'       => 'Show the event date above the title in event single view',
+			'default_value' => 0,
+			'wrapper'       => array(
 				'width' => '48',
 			),
 		);
+
+		$event_settings_fields[] = array(
+			'key'           => 'field_eventscpttitleheader55354',
+			'label'         => 'Event Single View: Use CPT Title Header',
+			'name'          => 'event_single_header_title',
+			'type'          => 'true_false',
+			'message'       => 'Show "Events" above the title in event single view',
+			'default_value' => 0,
+			'wrapper'       => array(
+				'width' => '52',
+			),
+		);
 	}
+
+	$event_settings_fields[] = array(
+		'key'           => 'field_5a712237b7a78',
+		'label'         => 'No Events Text',
+		'name'          => 'no_events_text',
+		'type'          => 'wysiwyg',
+		'default_value' => '<h2>There are currently no upcoming events.</h2><p>Please join the email list and we will keep you posted when new events get added.</p>',
+		'tabs'          => 'all',
+		'toolbar'       => 'basic',
+		'media_upload'  => 0,
+		'delay'         => 0,
+	);
 
 	//add ACF fields on 'Events Settings' page
 	acf_add_local_field_group(

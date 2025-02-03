@@ -16,6 +16,7 @@
 			font-size: 1.2rem;
 		}
 
+		> a,
 		> a > span {
 			display: block;
 		}
@@ -26,7 +27,6 @@
 
 		.event-date-time {
 			font-weight: 600;
-			opacity: 0.92;
 		}
 	}
 
@@ -53,105 +53,63 @@
 }
 
 
-.post-type-archive-events article {
-	position: relative;
-	display: block;
-	box-sizing: border-box;
-	width: 100%;
-	margin: 0 0 8px 0;
-	padding: 0;
-	padding: 10px;
-	font-size: 16px;
-	transition: height 0.3s;
-}
-
-
-.event-listing-compact {
-
-	.more-info-buttons {
-		position: relative;
-		top: auto;
-		right: auto;
-		width: auto;
-		text-align: left;
-	}
-
-	h1,
-	h2 {
-		max-width: none;
-	}
-
-	.venue {
-		margin-top: 5px;
-		margin-left: 0;
-	}
-}
-
-
+// Single Event
 .events-full {
 
-	h1,
-	h2 {
-		margin: 0 0 15px;
-		line-height: 1.1;
+	h1.event-date-title {
+		margin: 0 0 1rem;
+		font-size: var(--sqcdy-recordings-title-font-size, var(--sqcdy-font-size-xl));
+
+		> span {
+			display: block;
+		}
+	}
+
+	.more-info-buttons {
+		margin-block: 1rem;
+	}
+
+	.featuredwork,
+	.event-description {
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid #aaa;
 	}
 }
 
 .more-events {
-	margin: 0 0 20px;
-	font-size: 90%;
 	text-align: center;
+}
 
-	a {
-		color: #fff;
+// both single and preview
+article.type-event {
+
+	a.button-map {
+		--sqcdy-button-padding-inline: 0.25rem;
+		--sqcdy-button-padding-block: 0.25rem;
+		--sqcdy-button-border-color: transparent;
+		margin-block: 0;
+		margin-right: 0;
+		margin-left: 0.5rem;
+		font-size: 75%;
 	}
 }
 
-a.button-map,
-a.button.small {
-	margin: -3px 0 0 10px;
-	padding: 3px 8px;
-	font-size: 0.75em;
-	line-height: 1;
-	vertical-align: middle;
-}
-
-.more-info-buttons {
-	margin: 15px 0 5px;
-}
-
-.featuredwork,
-.event-description {
-	margin-top: 15px;
-	padding-top: 15px;
-	border-top: 1px solid #aaa;
-}
-
 h2.accordion-header {
-	margin: 20px 0;
-	padding: 10px 10px 5px 10px;
+	margin: 1.5rem 0;
+	padding: 0.75rem 1.5rem;
 	color: #fff;
-	font-size: 2em;
-	line-height: 1.1;
-	background: #555;
+	font-size: 2rem;
+	line-height: 1;
+	background: var(--sqcdy-events-accordion-bg, #555);
 	cursor: pointer;
 
 	&:focus-visible {
-		outline: 2px solid #555;
+		outline: 2px solid currentColor;
 		outline-offset: 2px;
 	}
 }
 
 .js .accordion-content {
-	display: none;
-}
-
-
-/* hide empty button in upper left of google maps */
-.gm-style-mtc {
-	display: none;
-}
-
-.squarecandy-events-footer {
 	display: none;
 }

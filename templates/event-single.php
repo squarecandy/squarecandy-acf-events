@@ -9,17 +9,49 @@ get_header(); ?>
 		<?php
 		while ( have_posts() ) :
 			the_post();
+
+			if ( sqcdy_is_views2( 'events' ) && get_option( 'options_event_single_header_title' ) ) :
+				$cpt_object = get_post_type_object( 'event' );
+				$cpt_plural = is_a( $cpt_object, 'WP_Post_Type' ) ? esc_html( $cpt_object->labels->name ) : 'Events';
+				?>
+				<header class="entry-header events-header template-header">
+					<div class="entry-title squarecandy-title events-title">
+						<?php echo $cpt_plural; ?>
+					</div>
+				</header>
+				<?php
+			endif;
 			?>
-			<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'events-full' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
+			<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
-					<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
-					<?php do_action( 'squarecandy_after_events_single_title' ); ?>
-					<h2 class="event-date-time" itemprop="startDate" content="<?php echo date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
-						<?php squarecandy_acf_events_date_display( $event ); ?>
-					</h2>
+					<?php if ( ! sqcdy_is_views2( 'events' ) ) : ?>
+						<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
+						<?php do_action( 'squarecandy_after_events_single_title' ); ?>
+						<h2 class="event-date-time" itemprop="startDate" content="<?php echo date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
+							<?php squarecandy_acf_events_date_display( $event ); ?>
+						</h2>
+					<?php else : ?>
+						<h1 class="event-date-title">
+							<?php
+							$date_first      = get_option( 'options_event_single_date_first' );
+							$date_container  = '<span class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
+							$date_container .= get_squarecandy_acf_events_date_display( $event );
+							$date_container .= '</span> ';
+							$title_container = '<span class="entry-title" itemprop="name">' . get_the_title() . '</span> ';
+							if ( $date_first ) {
+								echo $date_container;
+								echo $title_container;
+							} else {
+								echo $title_container;
+								echo $date_container;
+							}
+							?>
+						</h1>
+						<?php do_action( 'squarecandy_after_events_single_title' ); ?>
+					<?php endif; ?>
 
 					<meta itemprop="url" content="<?php the_permalink(); ?>">
-					<?php squarecandy_acf_events_address_display( $event, '3line' ); ?>
+					<?php squarecandy_acf_events_address_display( $event, '3line', true ); // 3line ?>
 
 					<div class="more-info-buttons"><?php squarecandy_events_generate_buttons( $event ); //don't put line breaks around this, we don't want extra spaces! ?></div>
 

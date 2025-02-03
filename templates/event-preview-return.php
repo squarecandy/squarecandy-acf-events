@@ -22,6 +22,13 @@ if ( $show_image ) :
 		$classes[] = 'has-image';
 	endif;
 endif;
+
+if ( sqcdy_is_views2( 'events' ) ) {
+	$classes[] = 'event';
+	$classes[] = 'event-' . $event_id;
+	$classes[] = 'type-event';
+}
+
 $class = implode( ' ', $classes );
 
 $output .= '<article id="post-' . $event_id . '" class="' . $class . '" itemscope="" itemtype="http://schema.org/MusicEvent">';
@@ -32,7 +39,7 @@ $date_container  = '<' . $date_tag . ' class="event-date-time" itemprop="startDa
 $date_container .= ! sqcdy_is_views2( 'events' ) ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
 $date_container .= get_squarecandy_acf_events_date_display( $event, $compact );
 $date_container .= ! sqcdy_is_views2( 'events' ) ? '</a>' : '';
-$date_container .= '</' . $date_tag . '>';
+$date_container .= '</' . $date_tag . '> ';
 
 
 
@@ -43,7 +50,7 @@ if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
 	$title_container .= ! sqcdy_is_views2( 'events' ) ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
 	$title_container .= $event_title;
 	$title_container .= ! sqcdy_is_views2( 'events' ) ? '</a>' : '';
-	$title_container .= '</' . $title_tag . '>';
+	$title_container .= '</' . $title_tag . '> ';
 }
 
 if ( ! sqcdy_is_views2( 'events' ) ) {
