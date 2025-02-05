@@ -304,6 +304,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 	$output = '<div class="venue venue-' . $style . '" itemprop="location" itemscope="" itemtype="http://schema.org/MusicVenue">';
 	if ( ! empty( $event['venue'] ) ) {
 		// link the venue name to the venue website, unless this is the map popup
+		// @TODO - strip out all 'infowindow' stuff if we fully kill the map feature
 		if ( ! empty( $event['venue_link'] ) && 'infowindow' !== $style ) {
 			$output .= '<a href="' . $event['venue_link'] . '" itemprop="url">';
 		}
@@ -312,10 +313,10 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 			$output .= '<a href="https://www.google.com/maps/search/' . rawurlencode( $event['venue_location']['address'] ) . '"><strong>';
 		}
 
-			$output .= '<span itemprop="name">' . $event['venue'] . '</span> ';
+			$output .= '<span itemprop="name">' . $event['venue'] . '</span>';
 
 		if ( ! empty( $event['venue_link'] ) && 'infowindow' !== $style ) {
-			$output .= '</a> ';
+			$output .= '</a>';
 		}
 		if ( ! empty( $event['venue_location'] ) && ! empty( $event['venue_location']['address'] ) && 'infowindow' === $style ) {
 			$output .= '</strong></a><br> ';
@@ -621,25 +622,45 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 		$output .= '</a>';
 	endif;
 	if ( get_field( 'add_to_gcal', 'option' ) ) :
-		$start_date = $event['start_date'];
-		$end_date   = $event['end_date'] ?? false;
-		$multi_day  = $event['muilti_day'] ?? false;
+		$output .= squarecandy_add_to_calendar( $event );
+	endif;
+	if ( $echo ) {
+		echo $output;
+	} else {
+		return $output;
+	}
+}
 
-		if ( ! empty( $event['start_time'] ) ) {
-			$start_date .= ' ' . $event['start_time'];
-		}
+function squarecandy_add_to_calendar( $event ) {
 
-		if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
-			$end_date .= ' ' . $event['end_time'];
-		}
+	if ( ! is_array( $event ) || empty( $event['start_date'] ) ) {
+		return;
+	}
 
-		$event_address = $event['venue_location']['address'] ?? null;
+	$start_date = $event['start_date'];
+	$end_date   = $event['end_date'] ?? false;
+	$multi_day  = $event['muilti_day'] ?? false;
+
+	if ( ! empty( $event['start_time'] ) ) {
+		$start_date .= ' ' . $event['start_time'];
+	}
+
+	if ( $multi_day && $end_date && isset( $event['end_time'] ) ) {
+		$end_date .= ' ' . $event['end_time'];
+	}
+
+	$event_address = get_squarecandy_acf_events_address_display( $event, '1line', false );
+	$event_address = wp_strip_all_tags( $event_address );
+
+	$event_title = get_the_title();
+
+	if ( ! sqcdy_is_views2( 'events' ) ) :
 
 		// shortcode also wraps this text & uses different icon
 		$linktext = $single ? '<i class="fa fa-google"></i> add to gCal' : '<i class="fa fa-google-plus"></i><span class="screen-reader-text">' . __( 'add to google calendar', 'squarecandy-acf-events' ) . '</span>';
 
-		$output .= squarecandy_add_to_gcal(
-			get_the_title(),
+		return squarecandy_add_to_gcal(
+			$event_title,
 			$start_date,
 			$end_date,
 			$event['short_description'] ?? '',
@@ -649,12 +670,62 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 			array( 'gcal-button', 'button', 'button-bold' )
 		);
 
-	endif;
-	if ( $echo ) {
-		echo $output;
-	} else {
+	else :
+
+		// https://calndr.link/api-docs
+		// additional valid values: 'yahoo', 'outlookcom'
+		$services = array(
+			'google'    => 'Google',
+			'apple'     => 'Apple',
+			'outlook'   => 'Outlook',
+			'office365' => 'Office 365',
+		);
+
+		// filter services
+		$services = apply_filters( 'squarecandy_add_to_calendar_services', $services );
+
+		$output  = '<div class="squarecandy-add-to-calendar">';
+		$output .= '<span class="label add-to-calendar-label">' . __( 'Add to Calendar:', 'squarecandy-acf-events' ) . '</span>';
+
+		// timezone
+		// use WordPress timezone
+		// $timezone = get_option( 'timezone_string' );
+		// @TODO - add per-event timezone option
+
+		// convert start date to ISO format
+		$start_date = date_i18n( 'c', strtotime( $start_date ) );
+
+		// convert end date to ISO format
+		if ( ! empty( $end_date ) && $multi_day ) {
+			$end_date = date_i18n( 'c', strtotime( $end_date ) );
+		}
+
+		$url_params  = '&title=' . rawurlencode( $event_title );
+		$url_params .= '&start=' . rawurlencode( $start_date );
+		if ( ! empty( $end_date ) ) {
+			$url_params .= '&end=' . rawurlencode( $end_date );
+		}
+		if ( ! empty( $event['short_description'] ) ) {
+			$url_params .= '&description=' . rawurlencode( $event['short_description'] );
+		}
+		if ( ! empty( $event_address ) ) {
+			$url_params .= '&location=' . rawurlencode( $event_address );
+		}
+		if ( ! empty( $event['all_day'] ) ) {
+			$url_params .= '&all_day=true';
+		}
+
+		// @TODO add timezone support
+		// $url_params .= '&timezone=' . rawurlencode( $timezone );
+
+		foreach ( $services as $service => $name ) {
+			$url     = 'https://calndr.link/d/event/?service=' . $service . $url_params;
+			$output .= '<a href="' . esc_url( $url ) . '" class="add-to-calendar-link">' . esc_html( $name ) . '</a>';
+		}
+
+		$output .= '</div>';
 		return $output;
-	}
+	endif;
 }
 
 if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {

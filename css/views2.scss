@@ -113,3 +113,27 @@ h2.accordion-header {
 .js .accordion-content {
 	display: none;
 }
+
+.squarecandy-add-to-calendar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 0.75rem;
+	font-size: 0.8em;
+
+	*,
+	a {
+		color: var(--sqcdy-events-add-to-calendar-color, #666);
+	}
+
+	a {
+		text-decoration: underline;
+	}
+
+	@media screen and (max-width: 414px ) {
+
+		.add-to-calendar-label {
+			display: block;
+			width: 100%;
+		}
+	}
+}
