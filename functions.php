@@ -621,8 +621,18 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 		$output .= ! $single ? '</span>' : '';
 		$output .= '</a>';
 	endif;
-	if ( get_field( 'add_to_gcal', 'option' ) ) :
-		$output .= squarecandy_add_to_calendar( $event );
+
+	$add_to_gcal = get_option( 'options_add_to_gcal' );
+	if ( $add_to_gcal ) :
+		date_i18n( 'Y-m-d', strtotime( 'now' ) );
+		if ( 'future' === $add_to_gcal ) :
+			$now = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
+			if ( ! empty( $event['archive_date'] ) && $event['archive_date'] > $now ) :
+				$output .= squarecandy_add_to_calendar( $event );
+			endif;
+		elseif ( 1 === $add_to_gcal ) :
+			$output .= squarecandy_add_to_calendar( $event );
+		endif;
 	endif;
 	if ( $echo ) {
 		echo $output;

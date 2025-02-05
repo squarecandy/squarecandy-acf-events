@@ -610,10 +610,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		),
 		array(
 			'key'           => 'field_5a711b987ee7c',
-			'label'         => 'Add to gCal',
+			'label'         => 'Add to Calendar Links',
 			'name'          => 'add_to_gcal',
-			'type'          => 'true_false',
-			'message'       => 'Display Add to Google Calendar Buttons',
+			'type'          => 'select',
+			'choices'       => array(
+				1        => 'Show',
+				0        => 'Hide',
+				'future' => 'Show on future events only',
+			),
 			'default_value' => 1,
 		),
 		array(

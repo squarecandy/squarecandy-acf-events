@@ -1,6 +1,16 @@
 <?php
 // Square Candy ACF Events Single Event Post Template
-$event    = get_fields();
+$event_id              = get_the_ID();
+$event                 = get_fields( $event_id );
+$event['ID']           = $event_id;
+$event['archive_date'] = get_field( 'archive_date', $event_id );
+if ( empty( $event['archive_date'] ) ) {
+	$event['archive_date'] = get_field( 'end_date', $event_id ) . ' ' . get_field( 'end_time', $event_id );
+}
+if ( empty( $event['archive_date'] ) ) {
+	$event['archive_date'] = get_field( 'start_date', $event_id ) . ' 23:59:59';
+}
+
 $template = new SquareCandy_Events_Template_Loader();
 get_header(); ?>
 
