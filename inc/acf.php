@@ -619,6 +619,23 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				'future' => 'Show on future events only',
 			),
 			'default_value' => 1,
+			'wrapper'       => array(
+				'width' => '52',
+			),
+		),
+		array(
+			'key'           => 'field_showticketslink7479',
+			'label'         => 'Show Ticket Links',
+			'name'          => 'show_tickets_link',
+			'type'          => 'select',
+			'choices'       => array(
+				0        => 'Always Show (if link exists)',
+				'future' => 'Show on future events only',
+			),
+			'default_value' => 0,
+			'wrapper'       => array(
+				'width' => '48',
+			),
 		),
 		array(
 			'key'           => 'field_homecountry17593483',

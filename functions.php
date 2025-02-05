@@ -594,7 +594,16 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 
 	$output = '';
 	$single = $echo;
-	if ( ! empty( $event['tickets_link'] ) ) :
+
+	$now       = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
+	$is_future = ! empty( $event['archive_date'] ) && $event['archive_date'] > $now;
+
+	$show_tickets_link = get_option( 'options_show_tickets_link' );
+
+	if (
+		( ! empty( $event['tickets_link'] ) && 'future' === $show_tickets_link && $is_future ) ||
+		( ! empty( $event['tickets_link'] ) && empty( $show_tickets_link ) )
+	) :
 		$output .= '<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">';
 		$output .= '<a class="button button-bold button-tickets" itemprop="url" href="' . $event['tickets_link'] . '">';
 		$output .= '<i class="fa fa-ticket"></i> ' . __( 'Tickets', 'squarecandy-acf-events' );
@@ -623,17 +632,13 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 	endif;
 
 	$add_to_gcal = get_option( 'options_add_to_gcal' );
-	if ( $add_to_gcal ) :
-		date_i18n( 'Y-m-d', strtotime( 'now' ) );
-		if ( 'future' === $add_to_gcal ) :
-			$now = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
-			if ( ! empty( $event['archive_date'] ) && $event['archive_date'] > $now ) :
-				$output .= squarecandy_add_to_calendar( $event );
-			endif;
-		elseif ( 1 === $add_to_gcal ) :
-			$output .= squarecandy_add_to_calendar( $event );
-		endif;
+	if (
+		( $add_to_gcal && 'future' === $add_to_gcal && $is_future ) ||
+		( $add_to_gcal && 1 === $add_to_gcal )
+	) :
+		$output .= squarecandy_add_to_calendar( $event );
 	endif;
+
 	if ( $echo ) {
 		echo $output;
 	} else {
