@@ -382,7 +382,9 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				$map_link = apply_filters( 'squarecandy_events_map_link', $map_link, $map_location );
 				if ( $map_link ) :
 					$output .= '<a class="button small button-gray button-map" href="' . $map_link . '">';
-					$output .= '<i class="fa fa-map"></i> ' . __( 'map', 'squarecandy-acf-events' );
+					$icon    = sqcdy_is_views2( 'events' ) ? '' : '<i class="fa fa-map"></i> ';
+					$icon    = apply_filters( 'squarecandy_events_map_icon', $icon );
+					$output .= $icon . __( 'map', 'squarecandy-acf-events' );
 					$output .= '</a>';
 				endif;
 			endif;
@@ -606,7 +608,9 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 	) :
 		$output .= '<span itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">';
 		$output .= '<a class="button button-bold button-tickets" itemprop="url" href="' . $event['tickets_link'] . '">';
-		$output .= '<i class="fa fa-ticket"></i> ' . __( 'Tickets', 'squarecandy-acf-events' );
+		$icon    = sqcdy_is_views2( 'events' ) ? '' : '<i class="fa fa-ticket"></i> ';
+		$icon    = apply_filters( 'squarecandy_events_ticket_icon', $icon );
+		$output .= $icon . __( 'Tickets', 'squarecandy-acf-events' );
 		$output .= '</a>';
 		$output .= '</span>';
 	endif;
