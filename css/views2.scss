@@ -146,3 +146,10 @@ a.button.button-events-more-info {
 		}
 	}
 }
+
+.featuredwork span.label {
+	margin-right: 0.5em;
+	color: var(--sqcdy-events-featured-work-label-color, var(--sqcdy-color-gray, #777));
+	font-size: var(--sqcdy-events-featured-work-label-size, 0.8em);
+	text-transform: var(--sqcdy-events-featured-work-label-text-transform, uppercase);
+}

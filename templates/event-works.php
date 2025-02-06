@@ -4,7 +4,7 @@ if ( ! empty( $featured_works ) ) :
 	$t = count( $featured_works );
 	?>
 	<div class="featuredwork">
-		<span>Featured Work<?php echo $t > 1 ? 's' : ''; ?></span>
+		<span class="label events-featured-work-label">Featured Work<?php echo $t > 1 ? 's' : ''; ?><span class="label-colon">:</span></span>
 		<?php
 		$works = array();
 		foreach ( $featured_works as $work ) {
