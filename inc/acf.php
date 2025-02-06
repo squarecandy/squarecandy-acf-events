@@ -5,6 +5,25 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 	function squarecandy_events_add_fields() {
 		$eventfields               = array();
+
+
+		$eventfields['featured_image'] = array(
+			'key'           => 'field_eventsfeaturedimage94124',
+			'label'         => 'Featured Image',
+			'name'          => '_thumbnail_id',
+			'type'          => 'image',
+			'instructions'  => '',
+			'required'      => 0,
+			'return_format' => 'array',
+			'preview_size'  => 'medium',
+			'library'       => 'all',
+			'wrapper'           => array(
+				'width' => '39',
+				'class' => '',
+				'id'    => '',
+			),
+		);
+
 		$eventfields['featured']   = array(
 			'key'               => 'field_5d2c47ed9268c',
 			'label'             => 'Feature Event',
@@ -14,7 +33,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'required'          => 0,
 			'conditional_logic' => 0,
 			'wrapper'           => array(
-				'width' => '100',
+				'width' => '61',
 				'class' => '',
 				'id'    => '',
 			),
@@ -24,6 +43,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'ui_on_text'        => 'Yes',
 			'ui_off_text'       => 'No',
 		);
+
 		$eventfields['start_date'] = array(
 			'key'               => 'field_5616bbe39fbec',
 			'label'             => '(Start) Date',
@@ -482,6 +502,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					6 => 'categories',
 					7 => 'tags',
 					8 => 'send-trackbacks',
+					9 => 'featured_image',
 				),
 				'active'                => 1,
 				'description'           => '',
