@@ -243,30 +243,154 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 		endif;
 
-		$eventfields['more_info_link']    = array(
-			'key'     => 'field_5616befced0ab',
-			'label'   => 'More Info Link',
-			'name'    => 'more_info_link',
-			'type'    => 'url',
-			'wrapper' => array(
-				'width' => 50,
-			),
-		);
-		$eventfields['tickets_link']      = array(
-			'key'     => 'field_5616bf58ed0ac',
-			'label'   => 'Tickets Link',
-			'name'    => 'tickets_link',
-			'type'    => 'url',
-			'wrapper' => array(
-				'width' => 50,
-			),
-		);
-		$eventfields['facebook_link']     = array(
-			'key'   => 'field_facebooklink7293484',
-			'label' => 'Facebook Event Link',
-			'name'  => 'facebook_link',
+		$eventfields['tickets_link'] = array(
+			'key'   => 'field_5616bf58ed0ac',
+			'label' => 'Tickets Link',
+			'name'  => 'tickets_link',
 			'type'  => 'url',
 		);
+
+		if ( sqcdy_is_views2( 'events' ) ) :
+			// new buttons repeater
+			$eventfields['more_info_buttons'] = array(
+				'key'                           => 'field_67a37d0867e35',
+				'label'                         => 'More Info Buttons',
+				'name'                          => 'more_info_buttons',
+				'aria-label'                    => '',
+				'type'                          => 'repeater',
+				'instructions'                  => '',
+				'required'                      => 0,
+				'conditional_logic'             => 0,
+				'wrapper'                       => array(
+					'width' => '',
+					'class' => '',
+					'id'    => '',
+				),
+				'acfe_repeater_stylised_button' => 0,
+				'layout'                        => 'table',
+				'pagination'                    => 0,
+				'min'                           => 0,
+				'max'                           => 0,
+				'collapsed'                     => 'field_67a37ee267e38',
+				'button_label'                  => 'Add Button',
+				'rows_per_page'                 => 20,
+				'sub_fields'                    => array(
+					array(
+						'key'               => 'field_67a37d2867e36',
+						'label'             => 'Icon',
+						'name'              => 'icon',
+						'aria-label'        => '',
+						'type'              => 'font-awesome',
+						'instructions'      => '',
+						'required'          => 0,
+						'conditional_logic' => 0,
+						'wrapper'           => array(
+							'width' => '',
+							'class' => '',
+							'id'    => '',
+						),
+						'icon_sets'         => array(
+							0 => 'solid',
+							1 => 'regular',
+							2 => 'brands',
+							// some additional options we can maybe add later: 'light', 'sharp_light', 'sharp_regular', 'sharp_solid'
+						),
+						'custom_icon_set'   => '',
+						'default_label'     => '',
+						'default_value'     => '',
+						'save_format'       => 'element',
+						'allow_null'        => 0,
+						'show_preview'      => 0,
+						'enqueue_fa'        => 0,
+						'allow_in_bindings' => 0,
+						'fa_live_preview'   => '',
+						'choices'           => array(),
+						'parent_repeater'   => 'field_67a37d0867e35',
+					),
+					array(
+						'key'               => 'field_67a37ee267e38',
+						'label'             => 'Button Text',
+						'name'              => 'button_text',
+						'aria-label'        => '',
+						'type'              => 'text',
+						'instructions'      => '',
+						'required'          => 1,
+						'conditional_logic' => 0,
+						'wrapper'           => array(
+							'width' => '',
+							'class' => '',
+							'id'    => '',
+						),
+						'default_value'     => '',
+						'maxlength'         => 80,
+						'allow_in_bindings' => 0,
+						'placeholder'       => '',
+						'prepend'           => '',
+						'append'            => '',
+						'parent_repeater'   => 'field_67a37d0867e35',
+					),
+					array(
+						'key'               => 'field_67a37e8d67e37',
+						'label'             => 'Link',
+						'name'              => 'link',
+						'aria-label'        => '',
+						'type'              => 'url',
+						'instructions'      => '',
+						'required'          => 1,
+						'conditional_logic' => 0,
+						'wrapper'           => array(
+							'width' => '',
+							'class' => '',
+							'id'    => '',
+						),
+						'default_value'     => '',
+						'allow_in_bindings' => 0,
+						'placeholder'       => '',
+						'parent_repeater'   => 'field_67a37d0867e35',
+					),
+				),
+			);
+		endif;
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if (
+			// if we're not in views 2 mode
+			( ! sqcdy_is_views2( 'events' ) ) ||
+			// or if we're on the front end anytime
+			( ! is_admin() ) ||
+			// or if we're on the edit screen for an event and the current event has a value for more_info_link
+			( is_admin() && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && 'event' === get_post_type( $_GET['post'] ) && get_field( 'more_info_link', $_GET['post'] ) ) ||
+			// or if we're on the edit screen for an event and the current event has a value for facebook_link
+			( is_admin() && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && 'event' === get_post_type( $_GET['post'] ) && get_field( 'facebook_link', $_GET['post'] ) ) ||
+			// or if we're in the admin and not editing an event (needed for saving legacy values, etc)
+			( is_admin() && ! isset( $_GET['post'] ) && ! isset( $_GET['post_type'] ) )
+		) :
+			$label = sqcdy_is_views2( 'events' ) ? 'More Info Link (Legacy)' : 'More Info Link';
+
+			$eventfields['more_info_link'] = array(
+				'key'     => 'field_5616befced0ab',
+				'label'   => $label,
+				'name'    => 'more_info_link',
+				'type'    => 'url',
+				'wrapper' => array(
+					'width' => 50,
+				),
+			);
+
+			$label = sqcdy_is_views2( 'events' ) ? 'Facebook Event Link (Legacy)' : 'Facebook Event Link';
+
+			$eventfields['facebook_link']  = array(
+				'key'     => 'field_facebooklink7293484',
+				'label'   => $label,
+				'name'    => 'facebook_link',
+				'type'    => 'url',
+				'wrapper' => array(
+					'width' => 50,
+				),
+			);
+		endif;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
 		$eventfields['short_description'] = array(
 			'key'           => 'field_5616bf8eed0ad',
 			'label'         => 'Short Description',

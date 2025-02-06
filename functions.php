@@ -631,6 +631,21 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 		$output .= '</a>';
 	endif;
 
+	if ( ! empty( $event['more_info_buttons'] ) && is_array( $event['more_info_buttons'] ) ) :
+		foreach ( $event['more_info_buttons'] as $button ) :
+			$button_text = $button['button_text'] ?? '';
+			$button_link = $button['link'] ?? '';
+			$button_icon = $button['icon'] ?? '';
+			$button_icon = apply_filters( 'squarecandy_events_more_info_button_icon', $button_icon );
+			if ( $button_text && $button_link ) :
+				$output .= '<a class="button button-events-more-info" href="' . $button_link . '">';
+				$output .= $button_icon ? '<span>' . $button_icon . '</span>' : '';
+				$output .= '<span>' . $button_text . '</span>';
+				$output .= '</a>';
+			endif;
+		endforeach;
+	endif;
+
 	$add_to_gcal = get_option( 'options_add_to_gcal' );
 	if (
 		( $add_to_gcal && 'future' === $add_to_gcal && $is_future ) ||
