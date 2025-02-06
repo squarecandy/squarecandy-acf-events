@@ -4,8 +4,7 @@
 if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 	function squarecandy_events_add_fields() {
-		$eventfields               = array();
-
+		$eventfields = array();
 
 		$eventfields['featured_image'] = array(
 			'key'           => 'field_eventsfeaturedimage94124',
@@ -17,14 +16,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'return_format' => 'array',
 			'preview_size'  => 'medium',
 			'library'       => 'all',
-			'wrapper'           => array(
+			'wrapper'       => array(
 				'width' => '39',
 				'class' => '',
 				'id'    => '',
 			),
 		);
 
-		$eventfields['featured']   = array(
+		$eventfields['featured'] = array(
 			'key'               => 'field_5d2c47ed9268c',
 			'label'             => 'Feature Event',
 			'name'              => 'featured',
@@ -399,7 +398,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 			$label = sqcdy_is_views2( 'events' ) ? 'Facebook Event Link (Legacy)' : 'Facebook Event Link';
 
-			$eventfields['facebook_link']  = array(
+			$eventfields['facebook_link'] = array(
 				'key'     => 'field_facebooklink7293484',
 				'label'   => $label,
 				'name'    => 'facebook_link',
