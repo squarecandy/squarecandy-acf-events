@@ -322,7 +322,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 			$output .= '</strong></a><br> ';
 		}
 
-		if ( '1line' === $style ) {
+		if ( '1line' === $style || 'citystate' === $style ) {
 			$output .= ', ';
 		}
 		if ( '2line' === $style || '3line' === $style ) {
