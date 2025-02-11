@@ -62,6 +62,13 @@ function squarecandy_events_func( $atts = array() ) {
 		$accordion = true;
 	}
 
+	// override accordion setting from settings panel via shortcode
+	if ( isset( $atts['accordion'] ) && 'true' === $atts['accordion'] ) {
+		$accordion = true;
+	} elseif ( isset( $atts['accordion'] ) && 'false' === $atts['accordion'] ) {
+		$accordion = false;
+	}
+
 	$archive_year = ! empty( $atts['archive_year'] ) ? (int) $atts['archive_year'] : false;
 
 	// check if the archive year value makes sense. 1970-2050 could be too restrictive eventually.

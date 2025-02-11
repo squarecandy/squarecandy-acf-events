@@ -74,6 +74,7 @@ More options are now available:
 * `more_info_post_link=true` // force the more info button to appear by default & link to the single post instead of to an external website
 * `year_sort="ASC"` // sort the past events accordion style years old to new (defaults to new to old)
 * `subevent_sort="DESC"` // sort the sub-events of each past year accordion style new to old (defaults to old to new)
+* `accordion=true` // force the past events archive into accordion/non-accordion mode. Overrides the global Event settings when used in a shortcode.
 
 ## Filters
 
