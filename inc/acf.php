@@ -915,13 +915,24 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		),
 		array(
 			'key'           => 'field_showimage834j20f',
-			'label'         => 'Show Image',
+			'label'         => 'Show Preview Image',
 			'name'          => 'event_show_image',
 			'type'          => 'true_false',
-			'message'       => 'Show Image in Compact View',
+			'message'       => 'Show Image in Preview View',
 			'default_value' => 1,
 			'wrapper'       => array(
-				'width' => '52',
+				'width' => '33',
+			),
+		),
+		array(
+			'key'           => 'field_showimagesingle34j20f',
+			'label'         => 'Show Single Image',
+			'name'          => 'event_show_image_single',
+			'type'          => 'true_false',
+			'message'       => 'Show Image in Single View',
+			'default_value' => 1,
+			'wrapper'       => array(
+				'width' => '33',
 			),
 		),
 		array(
@@ -930,6 +941,37 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'name'          => 'event_image_preview_size',
 			'default_value' => 'thumbnail',
 			'type'          => 'text', // @TODO - make the image size option a select that automatically gets all the sizes
+			'wrapper'       => array(
+				'width' => '33',
+			),
+		),
+		array(
+			'key'           => 'field_eventpreviewimagepos524234',
+			'label'         => 'Preview Image Position',
+			'name'          => 'event_image_preview_position',
+			'type'          => 'select',
+			'choices'       => array(
+				'left'   => 'Left',
+				'right'  => 'Right',
+				'top'    => 'Top',
+				'bottom' => 'Bottom',
+			),
+			'default_value' => 'right',
+			'wrapper'       => array(
+				'width' => '52',
+			),
+		),
+		array(
+			'key'           => 'field_eventsingleimagepos524234',
+			'label'         => 'Single Image Position',
+			'name'          => 'event_image_single_position',
+			'type'          => 'select',
+			'choices'       => array(
+				'top'    => 'Top',
+				'middle' => 'Middle',
+				'bottom' => 'Bottom',
+			),
+			'default_value' => 'top',
 			'wrapper'       => array(
 				'width' => '48',
 			),

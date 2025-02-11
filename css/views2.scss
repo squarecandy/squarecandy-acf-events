@@ -5,6 +5,48 @@
 	position: relative;
 	margin-bottom: 2.5rem;
 
+	&.has-image {
+
+		.event-image {
+			margin-bottom: 1rem;
+
+			img {
+				display: block;
+			}
+		}
+
+		&.has-image-bottom {
+			display: grid;
+			gap: 0;
+
+			.event-image {
+				order: 2;
+			}
+		}
+
+		@media screen and (min-width: 750px ) {
+
+			&.has-image-right,
+			&.has-image-left {
+				display: grid;
+				grid-template-columns: auto 1fr;
+				gap: 1.5rem;
+			}
+
+			&.has-image-right {
+				grid-template-columns: 1fr auto;
+
+				.event-image {
+					order: 2;
+				}
+
+				.event-content {
+					order: 1;
+				}
+			}
+		}
+	}
+
 	h2,
 	h3 {
 		margin: 0 0 0.5rem;
@@ -41,13 +83,18 @@
 
 	.venue,
 	.short-description,
-	.more-info-buttons {
+	.more-info-buttons,
+	.event-image-bottom {
 		margin-block: 0.75rem;
-		margin-left: 3rem;
+		margin-left: var(--sqcdy-events-preview-indent, 3rem);
 
 		.event-listing-compact & {
 			margin-left: 0;
 		}
+	}
+
+	.event-image-bottom {
+		margin-block: 0;
 	}
 
 }
@@ -74,6 +121,18 @@
 		margin-top: 1rem;
 		padding-top: 1rem;
 		border-top: 1px solid #aaa;
+	}
+
+	.event-image-top {
+		margin-bottom: 1rem;
+	}
+
+	.event-image-middle {
+		margin-block: 1rem;
+	}
+
+	.event-image-bottom {
+		margin-top: 1rem;
 	}
 }
 

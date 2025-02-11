@@ -24,10 +24,11 @@ $show_image  = get_option( 'options_event_show_image' );
 $classes     = array( 'events-preview' );
 $image_html  = '';
 if ( $show_image ) :
-	$image_size = get_option( 'options_event_image_preview_size' );
-	$image_html = get_the_post_thumbnail( $event_id, $image_size );
+	$image_size     = get_option( 'options_event_image_preview_size' );
+	$image_position = get_option( 'options_event_image_preview_position' );
+	$image_html     = get_the_post_thumbnail( $event_id, $image_size );
 	if ( $image_html ) :
-		$classes[] = 'has-image';
+		$classes[] = 'has-image has-image-' . $image_position;
 	endif;
 endif;
 
@@ -41,6 +42,25 @@ $class = implode( ' ', $classes );
 
 $output .= '<article id="post-' . $event_id . '" class="' . $class . '" itemscope="" itemtype="http://schema.org/MusicEvent">';
 
+
+$image_output = '';
+if ( $show_image ) :
+	// @TODO - add bottom/left/top/right options and css
+	$image_output .= '<div class="event-image-' . $image_position . ' event-image">';
+	// don't add link if no image, but leave outer element in place to avoid screwing up legacy layouts?
+	if ( $image_html ) :
+		$image_output .= '<a href="' . $event_link . '" tabindex="-1">';
+		$image_output .= $image_html;
+		$image_output .= '</a>';
+	endif;
+	$image_output .= '</div>';
+endif;
+
+if ( sqcdy_is_views2( 'events' ) ) {
+	$output .= $image_output;
+	$output .= '<div class="event-content">';
+}
+
 $date_tag = sqcdy_is_views2( 'events' ) ? 'span' : 'h1';
 
 $date_container  = '<' . $date_tag . ' class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
@@ -48,7 +68,6 @@ $date_container .= ! sqcdy_is_views2( 'events' ) ? '<a href="' . $event_link . '
 $date_container .= get_squarecandy_acf_events_date_display( $event, $compact );
 $date_container .= ! sqcdy_is_views2( 'events' ) ? '</a>' : '';
 $date_container .= '</' . $date_tag . '> ';
-
 
 
 $title_container = '';
@@ -102,17 +121,9 @@ if ( ! empty( $event['short_description'] ) ) {
 	}
 }
 
-if ( $show_image ) :
-	// @TODO - add bottom/left/top/right options and css
-	$output .= '<div class="event-image-bottom event-image">';
-	// don't add link if no image, but leave outer element in place to avoid screwing up legacy layouts?
-	if ( $image_html ) :
-		$output .= '<a href="' . $event_link . '" tabindex="-1">';
-		$output .= $image_html;
-		$output .= '</a>';
-	endif;
-	$output .= '</div>';
-endif;
+if ( ! sqcdy_is_views2( 'events' ) ) {
+	$output .= $image_output;
+}
 
 $show_post_link_button = $compact || $moreinfo_post_link ? $event_link : false; // @TODO check if $moreinfo_post_link is passed in properly here
 
@@ -128,5 +139,11 @@ if ( ! empty( $event['end_date'] ) ) {
 
 $output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
 $output .= '<meta itemprop="url" content="' . $event_link . '">';
+
+
+if ( sqcdy_is_views2( 'events' ) ) {
+	$output .= '</div><!-- .event-content -->';
+}
+
 
 $output .= '</article>';

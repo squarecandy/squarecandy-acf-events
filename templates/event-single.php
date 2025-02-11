@@ -31,9 +31,27 @@ get_header(); ?>
 				</header>
 				<?php
 			endif;
+
+			$event_image_html = '';
+			$show_image       = get_option( 'options_event_show_image_single' );
+
+			$image_position = get_option( 'options_event_image_single_position' );
+			if ( empty( $image_position ) ) {
+				$image_position = 'middle';
+			}
+
+			// if the checkbox is checked, or has never been set, show the image
+			if ( false === $show_image || ! empty( $show_image ) ) {
+				$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false );
+				if ( empty( $event_image_html ) ) {
+					$event_image_html = get_the_post_thumbnail( $event_id, 'large' );
+				}
+				$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
+			}
 			?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
+					<?php echo 'top' === $image_position ? $event_image_html : ''; ?>
 					<?php if ( ! sqcdy_is_views2( 'events' ) ) : ?>
 						<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
 						<?php do_action( 'squarecandy_after_events_single_title' ); ?>
@@ -66,12 +84,8 @@ get_header(); ?>
 					<div class="more-info-buttons"><?php squarecandy_events_generate_buttons( $event ); //don't put line breaks around this, we don't want extra spaces! ?></div>
 
 					<?php
-					$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false );
-					if ( $event_image_html ) :
-						echo $event_image_html;
-					else :
-						the_post_thumbnail();
-					endif;
+					// default/legacy image position
+					echo 'middle' === $image_position ? $event_image_html : '';
 
 					$test_empty_content = get_the_content();
 					$test_empty_content = wp_strip_all_tags( $test_empty_content );
@@ -102,6 +116,8 @@ get_header(); ?>
 						?>
 						<div id="map"></div>
 					<?php endif; ?>
+
+					<?php echo 'bottom' === $image_position ? $event_image_html : ''; ?>
 				</div>
 				<footer class="squarecandy-footer squarecandy-events-footer">
 					<?php
