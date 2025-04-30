@@ -154,7 +154,14 @@ function squarecandy_acf_events_template_chooser( $template ) {
 	return $template;
 }
 
-
+/**
+ * Take event (as array) and create formatted date string
+ *
+ * @param array $event [ 'multi_day', 'all_day', 'start_date', 'end_date', 'start_time', 'end_time' ]
+ * @param string $compact
+ *
+ * @return string formatted date
+ */
 function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 
 	// timedate formats and separators
@@ -299,32 +306,57 @@ function squarecandy_acf_events_date_display( $event ) {
  */
 function get_squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true ) {
 
+	// set default (empty) values so we don't have to worry about array values not being set
+	$event = wp_parse_args(
+		$event,
+		array(
+			'venue'          => '',
+			'venue_link'     => '',
+			'venue_location' => array(
+				'address' => '',
+			),
+			'address'        => '',
+			'city'           => '',
+			'state'          => '',
+			'zip'            => '',
+			'country'        => '',
+		)
+	);
+
 	$home_country = get_option( 'options_home_country' );
 
 	$output = '<div class="venue venue-' . $style . '" itemprop="location" itemscope="" itemtype="http://schema.org/MusicVenue">';
-	if ( ! empty( $event['venue'] ) ) {
+	if ( $event['venue'] ) {
+
+		$is_map_popup = 'infowindow' === $style;
+
 		// link the venue name to the venue website, unless this is the map popup
 		// @TODO - strip out all 'infowindow' stuff if we fully kill the map feature
-		if ( ! empty( $event['venue_link'] ) && 'infowindow' !== $style ) {
+		if ( $event['venue_link'] && ! $is_map_popup ) {
 			$output .= '<a href="' . $event['venue_link'] . '" itemprop="url">';
 		}
+
 		// link the venue name to the full version of google maps in the map popup style
-		if ( ! empty( $event['venue_location'] ) && ! empty( $event['venue_location']['address'] ) && 'infowindow' === $style ) {
+		if ( $event['venue_location']['address'] && $is_map_popup ) {
 			$output .= '<a href="https://www.google.com/maps/search/' . rawurlencode( $event['venue_location']['address'] ) . '"><strong>';
 		}
 
-			$output .= '<span itemprop="name">' . $event['venue'] . '</span>';
+		$output .= '<span itemprop="name">' . $event['venue'] . '</span> ';
 
-		if ( ! empty( $event['venue_link'] ) && 'infowindow' !== $style ) {
-			$output .= '</a>';
+		// close link for venue website
+		if ( $event['venue_link'] && ! $is_map_popup ) {
+			$output .= '</a> ';
 		}
-		if ( ! empty( $event['venue_location'] ) && ! empty( $event['venue_location']['address'] ) && 'infowindow' === $style ) {
+
+		// close link for full version of google maps
+		if ( $event['venue_location']['address'] && $is_map_popup ) {
 			$output .= '</strong></a><br> ';
 		}
 
 		if ( '1line' === $style || 'citystate' === $style ) {
 			$output .= ', ';
 		}
+
 		if ( '2line' === $style || '3line' === $style ) {
 			$output .= '<br>';
 		}
@@ -333,10 +365,10 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 		case '1line':
 		case '2line':
 		case '3line':
-			if ( ! empty( $event['address'] ) ) {
+			if ( $event['address'] ) {
 				$output .= '<span class="address">' . $event['address'] . '</span>';
 			}
-			if ( ! empty( $event['address'] ) && ! empty( $event['city'] ) ) {
+			if ( $event['address'] && $event['city'] ) {
 				if ( '1line' === $style || '2line' === $style ) {
 					$output .= ', ';
 				}
@@ -344,19 +376,19 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 					$output .= '<br>';
 				}
 			}
-			if ( ! empty( $event['city'] ) ) {
+			if ( $event['city'] ) {
 				$output .= '<span class="city">' . $event['city'] . '</span>';
 			}
-			if ( ! empty( $event['city'] ) && ! empty( $event['state'] ) ) {
+			if ( $event['city'] && $event['state'] ) {
 				$output .= ', ';
 			}
-			if ( ! empty( $event['state'] ) ) {
+			if ( $event['state'] ) {
 				$output .= '<span class="state">' . $event['state'] . '</span>';
 			}
-			if ( ! empty( $event['zip'] ) ) {
+			if ( $event['zip'] ) {
 				$output .= ' <span class="zip">' . $event['zip'] . '</span>';
 			}
-			if ( ! empty( $event['country'] ) && $home_country !== $event['country'] ) {
+			if ( $event['country'] && $home_country !== $event['country'] ) {
 				if ( ! empty( $event['address'] ) || ! empty( $event['city'] ) || ! empty( $event['state'] ) || ! empty( $event['zip'] ) ) {
 					$output .= ', ';
 				}
@@ -366,7 +398,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 			$map_location = '';
 			if ( $maplink && get_option( 'options_map_link' ) ) :
 				// to get full adress: if google map field exists, use that, otherwise try to concatenate address fields
-				if ( ! empty( $event['venue_location']['address'] ) ) :
+				if ( $event['venue_location']['address'] ) :
 					$map_location = $event['venue_location']['address'];
 				elseif ( $event['address'] && ( ( $event['city'] && $event['state'] ) || ( $event['city'] && $event['country'] ) || $event['zip'] ) ) :
 					$address_fields = array( 'city', 'state', 'zip', 'country' );
@@ -396,22 +428,22 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 
 		case 'infowindow':
 			// for use with google maps
-			if ( ! empty( $event['address'] ) ) {
+			if ( $event['address'] ) {
 				$output .= '<span class="address">' . $event['address'] . '</span><br>';
 			}
-			if ( ! empty( $event['city'] ) ) {
+			if ( $event['city'] ) {
 				$output .= '<span class="city">' . $event['city'] . '</span>';
 			}
-			if ( ! empty( $event['city'] ) && ! empty( $event['state'] ) ) {
+			if ( $event['city'] && $event['state'] ) {
 				$output .= ', ';
 			}
-			if ( ! empty( $event['state'] ) ) {
+			if ( $event['state'] ) {
 				$output .= '<span class="state">' . $event['state'] . '</span>';
 			}
-			if ( ! empty( $event['zip'] ) ) {
+			if ( $event['zip'] ) {
 				$output .= ' <span class="zip">' . $event['zip'] . '</span>';
 			}
-			if ( ! empty( $event['country'] ) && $home_country !== $event['country'] ) {
+			if ( $event['country'] && $home_country !== $event['country'] ) {
 				$output .= ', <span class="country">' . $event['country'] . '</span>';
 			}
 			break;
@@ -419,7 +451,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 		case 'citystate':
 		default:
 			// for short display
-			if ( ! empty( $event['city'] ) ) {
+			if ( $event['city'] ) {
 				$output .= '<span class="city">' . $event['city'] . '</span>';
 			}
 			if ( $home_country && $event['country'] !== $home_country ) {
@@ -427,8 +459,8 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 					$output .= ', ';
 				}
 				$output .= '<span class="country">' . $event['country'] . '</span>';
-			} elseif ( ! empty( $event['state'] ) ) {
-				if ( ! empty( $event['city'] ) ) {
+			} elseif ( $event['state'] ) {
+				if ( $event['city'] ) {
 					$output .= ', ';
 				}
 				$output .= '<span class="state">' . $event['state'] . '</span>';
@@ -439,6 +471,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 	$output .= '</div>';
 	return $output;
 }
+
 function squarecandy_acf_events_address_display( $event, $style = '2line', $maplink = true ) {
 	echo get_squarecandy_acf_events_address_display( $event, $style, $maplink );
 }
