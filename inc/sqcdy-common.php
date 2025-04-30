@@ -1,5 +1,8 @@
 <?php
-// PHP code that should be distributed to all themes & plugins goes here.
+/**
+ * PHP code that should be distributed to all themes & plugins goes here.
+ * Version: 1.5.4
+ */
 
 // for debugging
 
@@ -228,5 +231,25 @@ if ( ! function_exists( 'squarecandy_pagination' ) ) :
 		}
 
 		echo $page_links;
+	}
+endif;
+
+// wrapper for acf_add_options_page
+if ( ! function_exists( 'squarecandy_add_options_page' ) ) :
+	function squarecandy_add_options_page( $array, $is_subpage = false ) {
+		$acf_present = function_exists( 'acf_add_options_page' );
+		if ( ! $acf_present ) {
+			return;
+		}
+		add_action(
+			'init',
+			function() use ( $array, $is_subpage ) {
+				if ( $is_subpage ) {
+					acf_add_options_sub_page( $array );
+				} else {
+					acf_add_options_page( $array );
+				}
+			}
+		);
 	}
 endif;
