@@ -313,7 +313,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 			'venue'          => '',
 			'venue_link'     => '',
 			'venue_location' => array(
-				'address' => '',
+				'address' => '', // nested doesn't work if $event['venue_location'] is set but empty
 			),
 			'address'        => '',
 			'city'           => '',
@@ -322,6 +322,8 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 			'country'        => '',
 		)
 	);
+
+	$event['venue_location'] = $event['venue_location'] ? $event['venue_location'] : array( 'address' => '' );
 
 	$home_country = get_option( 'options_home_country' );
 
