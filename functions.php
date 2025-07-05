@@ -417,10 +417,10 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				if ( $map_link ) :
 					if ( sqcdy_is_views2( 'events' ) ) {
 
-						$map_link_html = ' <a class="map-link" href="' . $map_link . '">';
-						$icon          = apply_filters( 'squarecandy_events_map_icon', '' );
-						$map_link_html       .= $icon . __( '[map]', 'squarecandy-acf-events' );
-						$map_link_html       .= '</a>';
+						$map_link_html  = ' <a class="map-link" href="' . $map_link . '">';
+						$icon           = apply_filters( 'squarecandy_events_map_icon', '' );
+						$map_link_html .= $icon . __( '[map]', 'squarecandy-acf-events' );
+						$map_link_html .= '</a>';
 					} else {
 						// views 1
 						$map_link_html  = '<a class="button small button-gray button-map" href="' . $map_link . '">';
