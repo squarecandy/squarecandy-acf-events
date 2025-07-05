@@ -3,6 +3,22 @@
 
 if ( function_exists( 'acf_add_local_field_group' ) ) :
 
+	if ( ! function_exists( 'is_acf_fontawesome_plugin_active' ) ) {
+		function is_acf_fontawesome_plugin_active() {
+			if (
+				class_exists( 'acf_field_font_awesome' ) ||
+				in_array(
+					'advanced-custom-fields-font-awesome/acf-font-awesome.php',
+					(array) get_option( 'active_plugins', array() ),
+					true
+				)
+			) {
+				return true;
+			}
+			return false;
+		}
+	}
+
 	function squarecandy_events_add_fields() {
 		$eventfields = array();
 
@@ -270,6 +286,86 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 		);
 
 		if ( sqcdy_is_views2( 'events' ) ) :
+
+			$subfields = array();
+
+			if ( is_acf_fontawesome_plugin_active() ) {
+				$subfields[] = array(
+					'key'               => 'field_67a37d2867e36',
+					'label'             => 'Icon',
+					'name'              => 'icon',
+					'aria-label'        => '',
+					'type'              => 'font-awesome',
+					'instructions'      => '',
+					'required'          => 0,
+					'conditional_logic' => 0,
+					'wrapper'           => array(
+						'width' => '',
+						'class' => '',
+						'id'    => '',
+					),
+					'icon_sets'         => array(
+						0 => 'solid',
+						1 => 'regular',
+						2 => 'brands',
+						// some additional options we can maybe add later: 'light', 'sharp_light', 'sharp_regular', 'sharp_solid'
+					),
+					'custom_icon_set'   => '',
+					'default_label'     => '',
+					'default_value'     => '',
+					'save_format'       => 'element',
+					'allow_null'        => 0,
+					'show_preview'      => 0,
+					'enqueue_fa'        => 0,
+					'allow_in_bindings' => 0,
+					'fa_live_preview'   => '',
+					'choices'           => array(),
+					'parent_repeater'   => 'field_67a37d0867e35',
+				);
+			}
+
+			$subfields[] = array(
+				'key'               => 'field_67a37ee267e38',
+				'label'             => 'Button Text',
+				'name'              => 'button_text',
+				'aria-label'        => '',
+				'type'              => 'text',
+				'instructions'      => '',
+				'required'          => 1,
+				'conditional_logic' => 0,
+				'wrapper'           => array(
+					'width' => '',
+					'class' => '',
+					'id'    => '',
+				),
+				'default_value'     => '',
+				'maxlength'         => 80,
+				'allow_in_bindings' => 0,
+				'placeholder'       => '',
+				'prepend'           => '',
+				'append'            => '',
+				'parent_repeater'   => 'field_67a37d0867e35',
+			);
+			$subfields[] = array(
+				'key'               => 'field_67a37e8d67e37',
+				'label'             => 'Link',
+				'name'              => 'link',
+				'aria-label'        => '',
+				'type'              => 'url',
+				'instructions'      => '',
+				'required'          => 1,
+				'conditional_logic' => 0,
+				'wrapper'           => array(
+					'width' => '',
+					'class' => '',
+					'id'    => '',
+				),
+				'default_value'     => '',
+				'allow_in_bindings' => 0,
+				'placeholder'       => '',
+				'parent_repeater'   => 'field_67a37d0867e35',
+			);
+
 			// new buttons repeater
 			$eventfields['more_info_buttons'] = array(
 				'key'                           => 'field_67a37d0867e35',
@@ -293,81 +389,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				'collapsed'                     => 'field_67a37ee267e38',
 				'button_label'                  => 'Add Button',
 				'rows_per_page'                 => 20,
-				'sub_fields'                    => array(
-					array(
-						'key'               => 'field_67a37d2867e36',
-						'label'             => 'Icon',
-						'name'              => 'icon',
-						'aria-label'        => '',
-						'type'              => 'font-awesome',
-						'instructions'      => '',
-						'required'          => 0,
-						'conditional_logic' => 0,
-						'wrapper'           => array(
-							'width' => '',
-							'class' => '',
-							'id'    => '',
-						),
-						'icon_sets'         => array(
-							0 => 'solid',
-							1 => 'regular',
-							2 => 'brands',
-							// some additional options we can maybe add later: 'light', 'sharp_light', 'sharp_regular', 'sharp_solid'
-						),
-						'custom_icon_set'   => '',
-						'default_label'     => '',
-						'default_value'     => '',
-						'save_format'       => 'element',
-						'allow_null'        => 0,
-						'show_preview'      => 0,
-						'enqueue_fa'        => 0,
-						'allow_in_bindings' => 0,
-						'fa_live_preview'   => '',
-						'choices'           => array(),
-						'parent_repeater'   => 'field_67a37d0867e35',
-					),
-					array(
-						'key'               => 'field_67a37ee267e38',
-						'label'             => 'Button Text',
-						'name'              => 'button_text',
-						'aria-label'        => '',
-						'type'              => 'text',
-						'instructions'      => '',
-						'required'          => 1,
-						'conditional_logic' => 0,
-						'wrapper'           => array(
-							'width' => '',
-							'class' => '',
-							'id'    => '',
-						),
-						'default_value'     => '',
-						'maxlength'         => 80,
-						'allow_in_bindings' => 0,
-						'placeholder'       => '',
-						'prepend'           => '',
-						'append'            => '',
-						'parent_repeater'   => 'field_67a37d0867e35',
-					),
-					array(
-						'key'               => 'field_67a37e8d67e37',
-						'label'             => 'Link',
-						'name'              => 'link',
-						'aria-label'        => '',
-						'type'              => 'url',
-						'instructions'      => '',
-						'required'          => 1,
-						'conditional_logic' => 0,
-						'wrapper'           => array(
-							'width' => '',
-							'class' => '',
-							'id'    => '',
-						),
-						'default_value'     => '',
-						'allow_in_bindings' => 0,
-						'placeholder'       => '',
-						'parent_repeater'   => 'field_67a37d0867e35',
-					),
-				),
+				'sub_fields'                    => $subfields,
 			);
 		endif;
 
