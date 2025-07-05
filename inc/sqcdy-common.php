@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP code that should be distributed to all themes & plugins goes here.
- * Version: 1.5.4
+ * Version: 1.6.1
  */
 
 // for debugging
@@ -186,8 +186,10 @@ if ( ! function_exists( 'squarecandy_pagination' ) ) :
 		$next_text .= '</span>';
 
 		$pagination_args = array(
-			'prev_text' => $prev_text,
-			'next_text' => $next_text,
+			'prev_text'          => $prev_text,
+			'next_text'          => $next_text,
+			'before_page_number' => '<span>',
+			'after_page_number'  => '</span>',
 		);
 
 		global $wp_query;
@@ -211,6 +213,8 @@ if ( ! function_exists( 'squarecandy_pagination' ) ) :
 			$term                    = get_term_by( 'slug', $custom_query->query['tax_query'][0]['terms'], $custom_query->query['tax_query'][0]['taxonomy'] );
 			$pagination_args['base'] = get_term_link( $term ) . 'page/%#%/';
 		}
+
+		$pagination_args = apply_filters( 'squarecandy_pagination_args', $pagination_args );
 
 		// generate the pagination
 		$page_links = paginate_links( $pagination_args );
