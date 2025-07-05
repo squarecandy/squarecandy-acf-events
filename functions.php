@@ -415,11 +415,23 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				$map_link = $map_location ? 'https://www.google.com/maps/search/' . rawurlencode( $map_location ) : '';
 				$map_link = apply_filters( 'squarecandy_events_map_link', $map_link, $map_location );
 				if ( $map_link ) :
-					$output .= '<a class="button small button-gray button-map" href="' . $map_link . '">';
-					$icon    = sqcdy_is_views2( 'events' ) ? '' : '<i class="fa fa-map"></i> ';
-					$icon    = apply_filters( 'squarecandy_events_map_icon', $icon );
-					$output .= $icon . __( 'map', 'squarecandy-acf-events' );
-					$output .= '</a>';
+					if ( sqcdy_is_views2( 'events' ) ) {
+
+						$map_link_html = ' <a class="map-link" href="' . $map_link . '">';
+						$icon          = apply_filters( 'squarecandy_events_map_icon', '' );
+						$map_link_html       .= $icon . __( '[map]', 'squarecandy-acf-events' );
+						$map_link_html       .= '</a>';
+					} else {
+						// views 1
+						$map_link_html  = '<a class="button small button-gray button-map" href="' . $map_link . '">';
+						$icon           = '<i class="fa fa-map"></i> ';
+						$icon           = apply_filters( 'squarecandy_events_map_icon', $icon );
+						$map_link_html .= $icon . __( 'map', 'squarecandy-acf-events' );
+						$map_link_html .= '</a>';
+					}
+
+					$map_link_html = apply_filters( 'squarecandy_events_map_link_html', $map_link_html );
+					$output       .= $map_link_html;
 				endif;
 			endif;
 			if ( $map_location ) :
