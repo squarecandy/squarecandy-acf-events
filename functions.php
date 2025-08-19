@@ -454,16 +454,13 @@ function squarecandy_events_default_date_formats() {
 	return $default_date_formats;
 }
 
+$subpage = array(
+	'title'      => 'Event Settings',
+	'parent'     => 'edit.php?post_type=event',
+	'capability' => 'manage_options',
+);
+squarecandy_add_options_page( $subpage, true );
 
-if ( function_exists( 'acf_add_options_sub_page' ) ) {
-	acf_add_options_sub_page(
-		array(
-			'title'      => 'Event Settings',
-			'parent'     => 'edit.php?post_type=event',
-			'capability' => 'manage_options',
-		)
-	);
-}
 
 // Make sure we have a valid google maps api key
 add_filter(
