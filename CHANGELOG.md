@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.4](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.9.2...v1.9.4) (2025-08-19)
+
+
+### Bug Fixes
+
+* use new options page function to avoid textdomain errors ([5d985f8](https://github.com/squarecandy/squarecandy-acf-events/commit/5d985f8fbfab3565c879e3e14a15a3db17aab2d3))
+
 ### [1.9.2](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.9.1...v1.9.2) (2024-07-22)
 
 
