@@ -213,12 +213,32 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				'width' => 25,
 			),
 		);
+
 		$eventfields['country']    = array(
 			'key'   => 'field_country1749283947',
 			'label' => 'Country',
 			'name'  => 'country',
 			'type'  => 'text',
 		);
+
+		// override with our own custom countries list if available
+		// use define('SQCDY_EVENTS_LEGACY_COUNTRY_FIELD', true); in wp-config.php to force use of the legacy text field instead
+		if ( function_exists( 'squarecandy_get_countries' ) && ! defined( 'SQCDY_EVENTS_LEGACY_COUNTRY_FIELD' ) ) {
+			$eventfields['country'] = array(
+				'key'           => $eventfields['country']['key'],
+				'label'         => $eventfields['country']['label'],
+				'name'          => $eventfields['country']['name'],
+				'type'          => 'select',
+				'choices'       => squarecandy_get_countries(),
+				'default_value' => get_option( 'options_home_country' ) ?? 'United States',
+				'allow_null'    => 0,
+				'multiple'      => 0,
+				'ui'            => 1,
+				'ajax'          => 0,
+				'return_format' => 'value',
+			);
+		}
+
 		if ( class_exists( 'AcfCountry' ) ) {
 			$eventfields['country'] = array(
 				'key'           => 'field_country1749283947',
@@ -804,18 +824,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			),
 		),
 		array(
-			'key'           => 'field_homecountry17593483',
-			'label'         => 'Home Country',
-			'name'          => 'home_country',
-			'type'          => 'text',
-			'instructions'  => 'If the majority of your events are in one country, enter
-		your home country here to override some location displays. Hides the home
-		country name in most places. Provides <strong>City, State/Province</strong>
-		for the short version of your home country and <strong>City, Country</strong>
-		short version display for others.',
-			'default_value' => 'United States',
-		),
-		array(
 			'key'           => 'field_5a711c1103fad',
 			'label'         => 'Archive by Year',
 			'name'          => 'archive_by_year',
@@ -1031,6 +1039,46 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			),
 		),
 	);
+
+	$home_country_basics = array(
+		'key'           => 'field_homecountry17593483',
+		'label'         => 'Home Country',
+		'name'          => 'home_country',
+		'instructions'  => 'If the majority of your events are in one country, enter
+			your home country here to override some location displays. Hides the home
+			country name in most places. Provides <strong>City, State/Province</strong>
+			for the short version of your home country and <strong>City, Country</strong>
+			short version display for others.',
+		'default_value' => 'United States',
+	);
+
+	// override with our own custom countries list if available
+	// use define('SQCDY_EVENTS_LEGACY_COUNTRY_FIELD', true); in wp-config.php to force use of the legacy text field instead
+	if ( function_exists( 'squarecandy_get_countries' ) && ! defined( 'SQCDY_EVENTS_LEGACY_COUNTRY_FIELD' ) ) {
+		$event_settings_fields[] = array(
+			'key'           => $home_country_basics['key'],
+			'label'         => $home_country_basics['label'],
+			'name'          => $home_country_basics['name'],
+			'instructions'  => $home_country_basics['instructions'],
+			'type'          => 'select',
+			'choices'       => squarecandy_get_countries(),
+			'default_value' => 'United States',
+			'allow_null'    => 1,
+			'multiple'      => 0,
+			'ui'            => 1,
+			'ajax'          => 0,
+			'return_format' => 'value',
+		);
+	} else {
+		$event_settings_fields[] = array(
+			'key'           => $home_country_basics['key'],
+			'label'         => $home_country_basics['label'],
+			'name'          => $home_country_basics['name'],
+			'instructions'  => $home_country_basics['instructions'],
+			'type'          => 'text',
+			'default_value' => 'United States',
+		);
+	}
 
 	// if squarecandy-acf-works is present, add checkbox to sync work categories to events
 	if ( taxonomy_exists( 'works-category' ) && post_type_exists( 'works' ) ) {

@@ -108,6 +108,9 @@ $sqc_event_cat_sync = new SQC_Sync_Work_Categories();
 require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-common.php';
 require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-plugin.php';
 
+// custom countries list
+require ACF_EVENTS_DIR_PATH . 'inc/countries.php';
+
 // add ACF fields for events
 require ACF_EVENTS_DIR_PATH . 'inc/acf.php';
 
