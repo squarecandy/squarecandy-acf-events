@@ -256,15 +256,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			);
 		}
 
-		$instructions = '';
-		if ( ! get_option( 'options_google_maps_api_key' ) ) {
-			$instructions = 'Looks like you don\'t have a Google Maps API key yet. First,
-			<a href="https://developers.google.com/maps/documentation/javascript/get-api-key"
-			target="_blank">get your API key here</a>. Then enter it on the
-			<a href="/wp-admin/edit.php?post_type=event&page=acf-options-event-settings">Events
-			Settings page here</a>.';
-		}
-
 		// only show map fields if an api key has been entered
 		if ( get_option( 'options_google_maps_api_key' ) ) :
 			$zoom_option  = get_option( 'options_default_zoom_level' );
@@ -275,7 +266,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				'label'        => 'Venue Location',
 				'name'         => 'venue_location',
 				'type'         => 'google_map',
-				'instructions' => $instructions,
+				'instructions' => '',
 				'center_lat'   => '40.6976701',
 				'center_lng'   => '-74.25987,10',
 				'zoom'         => $default_zoom,
@@ -740,16 +731,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 		),
 		array(
-			'key'          => 'field_5a6e820093be4',
-			'label'        => 'Google Maps API Key',
-			'name'         => 'google_maps_api_key',
-			'type'         => 'text',
-			'instructions' => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Get Your API Key Here</a>',
-			'wrapper'      => array(
-				'width' => '50',
-			),
-		),
-		array(
 			'key'           => 'field_5a711b7d7ee7b',
 			'label'         => 'Map Link',
 			'name'          => 'map_link',
@@ -760,40 +741,9 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				'width' => '50',
 			),
 		),
-		array(
-			'key'           => 'field_5a71494e83bcb',
-			'label'         => 'Show Map',
-			'name'          => 'show_map_on_detail_page',
-			'type'          => 'true_false',
-			'message'       => 'Show a Google map with pin on the individual event page',
-			'default_value' => 0,
-			'wrapper'       => array(
-				'width' => '50',
-			),
-		),
-		array(
-			'key'           => 'field_5a8123e9241f6',
-			'label'         => 'Default Map Zoom Level',
-			'name'          => 'default_zoom_level',
-			'type'          => 'range',
-			'instructions'  => 'select how far zoomed in the maps appear by default',
-			'default_value' => 15,
-			'min'           => 8,
-			'max'           => 21,
-			'step'          => 1,
-			'prepend'       => '-',
-			'append'        => '+',
-			'wrapper'       => array(
-				'width' => '50',
-			),
-		),
-		array(
-			'key'          => 'field_mapjson738474635',
-			'label'        => 'Google Maps JSON',
-			'name'         => 'google_maps_json',
-			'type'         => 'textarea',
-			'instructions' => 'Generate JSON map stype code or edit existing code here: <a href="https://mapstyle.withgoogle.com/">https://mapstyle.withgoogle.com</a>',
-		),
+
+
+
 		array(
 			'key'           => 'field_5a711b987ee7c',
 			'label'         => 'Add to Calendar Links',
@@ -1039,6 +989,55 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			),
 		),
 	);
+
+	// Keep these fields for legacy sites.
+	// But once you delete the google maps api key, or if it never gets entered, don't show the fields or allow the feature to be used.
+	if ( get_option( 'options_google_maps_api_key' ) ) :
+		$event_settings_fields[] = array(
+			'key'          => 'field_5a6e820093be4',
+			'label'        => 'Google Maps API Key',
+			'name'         => 'google_maps_api_key',
+			'type'         => 'text',
+			'instructions' => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Get Your API Key Here</a>',
+			'wrapper'      => array(
+				'width' => '50',
+			),
+		);
+		$event_settings_fields[] = array(
+			'key'           => 'field_5a71494e83bcb',
+			'label'         => 'Show Map',
+			'name'          => 'show_map_on_detail_page',
+			'type'          => 'true_false',
+			'message'       => 'Show a Google map with pin on the individual event page',
+			'default_value' => 0,
+			'wrapper'       => array(
+				'width' => '50',
+			),
+		);
+		$event_settings_fields[] = array(
+			'key'           => 'field_5a8123e9241f6',
+			'label'         => 'Default Map Zoom Level',
+			'name'          => 'default_zoom_level',
+			'type'          => 'range',
+			'instructions'  => 'select how far zoomed in the maps appear by default',
+			'default_value' => 15,
+			'min'           => 8,
+			'max'           => 21,
+			'step'          => 1,
+			'prepend'       => '-',
+			'append'        => '+',
+			'wrapper'       => array(
+				'width' => '50',
+			),
+		);
+		$event_settings_fields[] = array(
+			'key'          => 'field_mapjson738474635',
+			'label'        => 'Google Maps JSON',
+			'name'         => 'google_maps_json',
+			'type'         => 'textarea',
+			'instructions' => 'Generate JSON map stype code or edit existing code here: <a href="https://mapstyle.withgoogle.com/">https://mapstyle.withgoogle.com</a>',
+		);
+	endif;
 
 	$home_country_basics = array(
 		'key'           => 'field_homecountry17593483',
