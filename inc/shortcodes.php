@@ -215,7 +215,7 @@ function squarecandy_events_func( $atts = array() ) {
 		// this will always override the number set in $atts - seems counterintuituve
 		// Note: the intention for "compact" is to be able to show the next 3 upcoming events in the footer,
 		// or homepage or similar context. - PW 2025-02-02
-		$args['posts_per_page'] = get_option( 'options_number_of_upcoming' );
+		$args['posts_per_page'] = get_option( 'options_number_of_upcoming' ); // phpcs:ignore WordPress.WP.PostsPerPage
 	}
 
 	if ( $cat ) {

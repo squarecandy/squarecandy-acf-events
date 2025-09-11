@@ -214,7 +214,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			),
 		);
 
-		$eventfields['country']    = array(
+		$eventfields['country'] = array(
 			'key'   => 'field_country1749283947',
 			'label' => 'Country',
 			'name'  => 'country',
