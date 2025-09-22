@@ -274,8 +274,8 @@ class SQC_Sync_Work_Categories {
 
 		$post = get_post( $post_id );
 
-		// only run for post type work
-		if ( self::TARGET_POST_TYPE !== $post->post_type ) {
+		// only run for post type work. acf save post runs on options save too, where post_type isn't set
+		if ( ! isset( $post->post_type ) || self::TARGET_POST_TYPE !== $post->post_type ) {
 			return;
 		}
 
@@ -342,7 +342,7 @@ class SQC_Sync_Work_Categories {
 		$post = get_post( $post_id );
 
 		// only run for post type work
-		if ( self::ORIGINAL_POST_TYPE !== $post->post_type ) {
+		if ( ! isset( $post->post_type ) || self::ORIGINAL_POST_TYPE !== $post->post_type ) {
 			return;
 		}
 
@@ -365,7 +365,7 @@ class SQC_Sync_Work_Categories {
 		$post = get_post( $post_id );
 
 		// only run for post type work
-		if ( self::ORIGINAL_POST_TYPE !== $post->post_type ) {
+		if ( ! isset( $post->post_type ) || self::ORIGINAL_POST_TYPE !== $post->post_type ) {
 			return;
 		}
 
