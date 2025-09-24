@@ -24,7 +24,7 @@
  *      return $countries;
  * }
  * add_filter( 'squarecandy_countries_filters', 'squarecandy_countries_filter', 10 );
- * 
+ *
  * Source: https://gist.github.com/DHS/1340150?permalink_comment_id=2161080#gistcomment-2161080
  * See also: https://en.wikipedia.org/wiki/ISO_3166-1
  *
