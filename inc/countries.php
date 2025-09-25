@@ -101,7 +101,7 @@ if ( ! function_exists( 'squarecandy_get_countries' ) ) :
 			'Croatia'                                      => __( 'Croatia', 'squarecandy' ),
 			'Cuba'                                         => __( 'Cuba', 'squarecandy' ),
 			'Cyprus'                                       => __( 'Cyprus', 'squarecandy' ),
-			'Czech Republic'                               => __( 'Czech Republic', 'squarecandy' ), //Czechia
+			'Czechia'                                      => __( 'Czechia', 'squarecandy' ), //Czechia
 			'Denmark'                                      => __( 'Denmark', 'squarecandy' ),
 			'Djibouti'                                     => __( 'Djibouti', 'squarecandy' ),
 			'Dominica'                                     => __( 'Dominica', 'squarecandy' ),
