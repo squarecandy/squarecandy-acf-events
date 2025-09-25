@@ -239,23 +239,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			);
 		}
 
-		if ( class_exists( 'AcfCountry' ) ) {
-			$eventfields['country'] = array(
-				'key'           => 'field_country1749283947',
-				'label'         => 'Country',
-				'name'          => 'country',
-				'type'          => 'country',
-				'default_value' => array(
-					0 => 'United States',
-				),
-				'allow_null'    => 1,
-				'multiple'      => 0,
-				'ui'            => 1,
-				'return_format' => 'name',
-				'placeholder'   => 'Select a country',
-			);
-		}
-
 		// only show map fields if an api key has been entered
 		if ( get_option( 'options_google_maps_api_key' ) ) :
 			$zoom_option  = get_option( 'options_default_zoom_level' );
