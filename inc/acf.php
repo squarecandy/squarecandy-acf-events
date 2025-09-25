@@ -231,12 +231,15 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				'type'          => 'select',
 				'choices'       => squarecandy_get_countries(),
 				'default_value' => get_option( 'options_home_country' ) ?? 'United States',
-				'allow_null'    => 0,
+				'allow_null'    => 1,
 				'multiple'      => 0,
 				'ui'            => 1,
 				'ajax'          => 0,
 				'return_format' => 'value',
 			);
+
+			// add filter to handle instances where an already stored value isn't on the country list
+			add_filter( 'acf/prepare_field/key=' . $eventfields['country']['key'], 'squarecandy_events_prepare_country_field' );
 		}
 
 		// only show map fields if an api key has been entered
@@ -526,6 +529,21 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 	}
 	add_action( 'after_setup_theme', 'squarecandy_events_add_fields' );
+
+	// filter the country list to handle instances where the already stored value isn't on the list
+	function squarecandy_events_prepare_country_field( $field ) {
+
+		// check if the current value is in the country list
+		if ( $field['value'] && ! in_array( $field['value'], $field['choices'], true ) ) {
+			// add the current value to the select options so the field can be saved
+			$field['choices'][ $field['value'] ] = $field['value'];
+			// add a prompt to select a preset country instead
+			$field['instructions'] .= ' <em>The current value, "' . $field['value'] . '" is not on our country list. Would you like to choose a country from the list instead?</em>';
+		}
+
+		return $field;
+
+	}
 
 
 	$date_formats = array(
