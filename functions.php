@@ -303,7 +303,13 @@ function squarecandy_acf_events_date_display( $event ) {
  * @param string $style
  * @param bool $maplink
  *
- * $style options are: '1line', '2line', '3line', 'infowindow', 'citystate'
+ * $style options are:
+ *    '1line'      - output all info on one line without line breaks (not currently in use?)
+ *    '2line'      - venue on line 1, address and all other info on line 2 (used in default event-preview output)
+ *    '3line'      - venue on line 1, address on line 2, city etc on line 3 (used in event single)
+ *    'infowindow' - $is_map_popup (used in google maps popup)
+ *    'citystate'  - corresponds to style=compact in shortcode (SO Percussion uses on home page)
+ *                 - all on one line: Venue, City, Country OR if no country then Venue, City, State
  * $event properties:
  * 'venue', 'venue_link', 'venue_location', 'address', 'city', 'state', 'zip', 'country'
  */
@@ -328,12 +334,16 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 
 	$event['venue_location'] = $event['venue_location'] ? $event['venue_location'] : array( 'address' => '' );
 
-	$home_country = get_option( 'options_home_country' );
+	$home_country       = get_option( 'options_home_country' );
+	$do_display_country = $event['country'] && $home_country !== $event['country'];
+	$is_map_popup       = 'infowindow' === $style;
+	$comma_separator    = ', ';
 
+	// start output
 	$output = '<div class="venue venue-' . $style . '" itemprop="location" itemscope="" itemtype="http://schema.org/MusicVenue">';
-	if ( $event['venue'] ) {
 
-		$is_map_popup = 'infowindow' === $style;
+	// handle venue output
+	if ( $event['venue'] ) {
 
 		// link the venue name to the venue website, unless this is the map popup
 		// @TODO - strip out all 'infowindow' stuff if we fully kill the map feature
@@ -346,56 +356,79 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 			$output .= '<a href="https://www.google.com/maps/search/' . rawurlencode( $event['venue_location']['address'] ) . '"><strong>';
 		}
 
-		$output .= '<span itemprop="name">' . $event['venue'] . '</span> ';
+		// add venue name
+		$output .= '<span itemprop="name">' . $event['venue'] . '</span>';
 
 		// close link for venue website
 		if ( $event['venue_link'] && ! $is_map_popup ) {
-			$output .= '</a> ';
+			$output .= '</a>';
 		}
 
 		// close link for full version of google maps
 		if ( $event['venue_location']['address'] && $is_map_popup ) {
-			$output .= '</strong></a><br> ';
+			$output .= '</strong></a><br>';
 		}
 
+		// add separator after venue (if 1line or citystate)
 		if ( '1line' === $style || 'citystate' === $style ) {
-			$output .= ', ';
+
+			if ( '1line' === $style ) {
+				$has_info_other_than_venue = $event['address'] || $event['city'] || $event['state'] || $event['zip'] || $do_display_country;
+			} else {
+				$has_info_other_than_venue = $event['city'] || $event['state'] || $do_display_country;
+			}
+
+			if ( $has_info_other_than_venue ) {
+				$output .= $comma_separator;
+			}
+		} else {
+			$output .= ' '; // this was after the <br> and </a> above, not sure where we need it, but definitely not before the comma
 		}
 
+		// add linebreak after venue (if 2line or 3line)
 		if ( '2line' === $style || '3line' === $style ) {
 			$output .= '<br>';
 		}
 	}
+
+	// handle address etc output
 	switch ( $style ) {
 		case '1line':
 		case '2line':
 		case '3line':
+			// add address
 			if ( $event['address'] ) {
 				$output .= '<span class="address">' . $event['address'] . '</span>';
 			}
+			// add separator OR line break after address
 			if ( $event['address'] && $event['city'] ) {
 				if ( '1line' === $style || '2line' === $style ) {
-					$output .= ', ';
+					$output .= $comma_separator;
 				}
 				if ( '3line' === $style ) {
 					$output .= '<br>';
 				}
 			}
+			// add city
 			if ( $event['city'] ) {
 				$output .= '<span class="city">' . $event['city'] . '</span>';
 			}
+			// add separator after city
 			if ( $event['city'] && $event['state'] ) {
-				$output .= ', ';
+				$output .= $comma_separator;
 			}
+			// add state
 			if ( $event['state'] ) {
 				$output .= '<span class="state">' . $event['state'] . '</span>';
 			}
+			// add zip
 			if ( $event['zip'] ) {
 				$output .= ' <span class="zip">' . $event['zip'] . '</span>';
 			}
-			if ( $event['country'] && $home_country !== $event['country'] ) {
+			// add country
+			if ( $do_display_country ) {
 				if ( ! empty( $event['address'] ) || ! empty( $event['city'] ) || ! empty( $event['state'] ) || ! empty( $event['zip'] ) ) {
-					$output .= ', ';
+					$output .= $comma_separator;
 				}
 				$output .= '<span class="country">' . $event['country'] . '</span>';
 			}
@@ -452,7 +485,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 				$output .= '<span class="city">' . $event['city'] . '</span>';
 			}
 			if ( $event['city'] && $event['state'] ) {
-				$output .= ', ';
+				$output .= $comma_separator;
 			}
 			if ( $event['state'] ) {
 				$output .= '<span class="state">' . $event['state'] . '</span>';
@@ -460,7 +493,7 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 			if ( $event['zip'] ) {
 				$output .= ' <span class="zip">' . $event['zip'] . '</span>';
 			}
-			if ( $event['country'] && $home_country !== $event['country'] ) {
+			if ( $do_display_country ) {
 				$output .= ', <span class="country">' . $event['country'] . '</span>';
 			}
 			break;
@@ -468,17 +501,18 @@ function get_squarecandy_acf_events_address_display( $event, $style = '2line', $
 		case 'citystate':
 		default:
 			// for short display
+			// City, Country OR if no country City, State
 			if ( $event['city'] ) {
 				$output .= '<span class="city">' . $event['city'] . '</span>';
 			}
-			if ( $home_country && $event['country'] !== $home_country ) {
+			if ( $do_display_country ) {
 				if ( ! empty( $event['city'] ) ) {
-					$output .= ', ';
+					$output .= $comma_separator;
 				}
 				$output .= '<span class="country">' . $event['country'] . '</span>';
 			} elseif ( $event['state'] ) {
 				if ( $event['city'] ) {
-					$output .= ', ';
+					$output .= $comma_separator;
 				}
 				$output .= '<span class="state">' . $event['state'] . '</span>';
 			}
