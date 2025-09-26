@@ -734,7 +734,7 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 	$add_to_gcal = get_option( 'options_add_to_gcal' );
 	if (
 		( $add_to_gcal && 'future' === $add_to_gcal && $is_future ) ||
-		( $add_to_gcal && 1 === $add_to_gcal )
+		( $add_to_gcal && '1' === $add_to_gcal )
 	) :
 		$output .= squarecandy_add_to_calendar( $event );
 	endif;
