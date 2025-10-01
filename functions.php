@@ -736,7 +736,7 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 		( $add_to_gcal && 'future' === $add_to_gcal && $is_future ) ||
 		( $add_to_gcal && '1' === $add_to_gcal )
 	) :
-		$output .= squarecandy_add_to_calendar( $event );
+		$output .= squarecandy_add_to_calendar( $event, $single );
 	endif;
 
 	if ( $echo ) {
@@ -746,7 +746,7 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 	}
 }
 
-function squarecandy_add_to_calendar( $event ) {
+function squarecandy_add_to_calendar( $event, $single = true ) {
 
 	if ( ! is_array( $event ) || empty( $event['start_date'] ) ) {
 		return;
