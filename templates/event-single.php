@@ -47,9 +47,9 @@ get_header(); ?>
 			if ( false === $show_image || ! empty( $show_image ) ) {
 				$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false, $event_id );
 				if ( empty( $event_image_html ) ) {
-					$event_image_html = get_the_post_thumbnail( $event_id, $image_size );
-				}
-				$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
+					$event_image_html = get_the_post_thumbnail( $event_id, 'large' );
+					$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
+				}				
 			}
 			?>
 			<article id="post-<?php echo $event_id; ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
