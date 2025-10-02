@@ -51,7 +51,7 @@ get_header(); ?>
 
 				// if not filtered, get the post thumbnail
 				if ( empty( $event_image_html ) ) {
-					$event_image_html = get_the_post_thumbnail( $event_id, 'large' );
+					$event_image_html = get_the_post_thumbnail( $event_id, $image_size );
 					$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
 				}
 			}
