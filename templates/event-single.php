@@ -10,6 +10,7 @@ if ( empty( $event['archive_date'] ) ) {
 if ( empty( $event['archive_date'] ) ) {
 	$event['archive_date'] = get_field( 'start_date', $event_id ) . ' 23:59:59';
 }
+$is_views2 = sqcdy_is_views2( 'events' );
 
 $template = new SquareCandy_Events_Template_Loader();
 get_header(); ?>
@@ -20,7 +21,7 @@ get_header(); ?>
 		while ( have_posts() ) :
 			the_post();
 
-			if ( sqcdy_is_views2( 'events' ) && get_option( 'options_event_single_header_title' ) ) :
+			if ( $is_views2 && get_option( 'options_event_single_header_title' ) ) :
 				$cpt_object = get_post_type_object( 'event' );
 				$cpt_plural = is_a( $cpt_object, 'WP_Post_Type' ) ? esc_html( $cpt_object->labels->name ) : 'Events';
 				?>
@@ -34,6 +35,8 @@ get_header(); ?>
 
 			$event_image_html = '';
 			$show_image       = get_option( 'options_event_show_image_single' );
+			$image_size       = $is_views2 ? 'large' : 'post-thumbnail'; // fall back to previous default value
+			$image_size       = apply_filters( 'squarecandy_events_single_event_image_size', $image_size, $event_id ); // allow override, including specific to event id
 
 			$image_position = get_option( 'options_event_image_single_position' );
 			if ( empty( $image_position ) ) {
@@ -42,17 +45,17 @@ get_header(); ?>
 
 			// if the checkbox is checked, or has never been set, show the image
 			if ( false === $show_image || ! empty( $show_image ) ) {
-				$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false );
+				$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false, $event_id );
 				if ( empty( $event_image_html ) ) {
-					$event_image_html = get_the_post_thumbnail( $event_id, 'large' );
+					$event_image_html = get_the_post_thumbnail( $event_id, $image_size );
 				}
 				$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
 			}
 			?>
-			<article id="post-<?php the_ID(); ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
+			<article id="post-<?php echo $event_id; ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
 					<?php echo 'top' === $image_position ? $event_image_html : ''; ?>
-					<?php if ( ! sqcdy_is_views2( 'events' ) ) : ?>
+					<?php if ( ! $is_views2 ) : ?>
 						<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
 						<?php do_action( 'squarecandy_after_events_single_title' ); ?>
 						<h2 class="event-date-time" itemprop="startDate" content="<?php echo date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
@@ -87,15 +90,15 @@ get_header(); ?>
 					// default/legacy image position
 					echo 'middle' === $image_position ? $event_image_html : '';
 
-					$test_empty_content = get_the_content();
-					$test_empty_content = wp_strip_all_tags( $test_empty_content );
+					$event_content      = get_the_content();
+					$test_empty_content = wp_strip_all_tags( $event_content );
 					$test_empty_content = str_replace( '&nbsp;', '', $test_empty_content );
 					$test_empty_content = trim( $test_empty_content );
 
 					if ( ! empty( $test_empty_content ) ) {
 						?>
 						<div class="post-content event-description" itemprop="description">
-							<?php echo apply_filters( 'the_content', get_the_content() ); ?>
+							<?php echo apply_filters( 'the_content', $event_content ); ?>
 						</div>
 					<?php } elseif ( ! empty( $event['short_description'] ) ) { ?>
 						<div class="post-content event-description" itemprop="description">
