@@ -35,7 +35,7 @@ if ( $show_image ) :
 	$image_position = get_option( 'options_event_image_preview_position' );
 	$image_position = $image_position ? $image_position : 'bottom';
 	// get thumbnail
-	$image_html     = get_the_post_thumbnail( $event_id, $image_size );
+	$image_html = get_the_post_thumbnail( $event_id, $image_size );
 	// @TODO - add bottom/left/top/right options and css
 	$image_output .= '<div class="event-image-' . $image_position . ' event-image">';
 	if ( $image_html ) :

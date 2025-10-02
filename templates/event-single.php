@@ -55,7 +55,7 @@ get_header(); ?>
 					$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
 				}
 			}
-			
+
 			?>
 			<article id="post-<?php echo $event_id; ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
