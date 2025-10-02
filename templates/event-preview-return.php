@@ -22,6 +22,9 @@ $event_link  = get_permalink( $event_id );
 $event_title = get_the_title( $event_id );
 $show_image  = get_option( 'options_event_show_image' );
 $classes     = array( 'events-preview' );
+
+$is_views2 = sqcdy_is_views2( 'events' );
+
 $image_html  = '';
 if ( $show_image ) :
 	$image_size     = get_option( 'options_event_image_preview_size' );
@@ -33,7 +36,7 @@ if ( $show_image ) :
 	endif;
 endif;
 
-if ( sqcdy_is_views2( 'events' ) ) {
+if ( $is_views2 ) {
 	$classes[] = 'event';
 	$classes[] = 'event-' . $event_id;
 	$classes[] = 'type-event';
@@ -57,31 +60,31 @@ if ( $show_image ) :
 	$image_output .= '</div>';
 endif;
 
-if ( sqcdy_is_views2( 'events' ) ) {
+if ( $is_views2 ) {
 	$output .= $image_output;
 	$output .= '<div class="event-content">';
 }
 
-$date_tag = sqcdy_is_views2( 'events' ) ? 'span' : 'h1';
+$date_tag = $is_views2 ? 'span' : 'h1';
 
 $date_container  = '<' . $date_tag . ' class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
-$date_container .= ! sqcdy_is_views2( 'events' ) ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
+$date_container .= ! $is_views2 ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
 $date_container .= get_squarecandy_acf_events_date_display( $event, $compact );
-$date_container .= ! sqcdy_is_views2( 'events' ) ? '</a>' : '';
+$date_container .= ! $is_views2 ? '</a>' : '';
 $date_container .= '</' . $date_tag . '> ';
 
 
 $title_container = '';
 if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
-	$title_tag        = sqcdy_is_views2( 'events' ) ? 'span' : 'h2';
+	$title_tag        = $is_views2 ? 'span' : 'h2';
 	$title_container  = '<' . $title_tag . ' class="entry-title" itemprop="name">';
-	$title_container .= ! sqcdy_is_views2( 'events' ) ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
+	$title_container .= ! $is_views2 ? '<a href="' . $event_link . '">' : ''; // we're going to wrap the data and title together in views2
 	$title_container .= $event_title;
-	$title_container .= ! sqcdy_is_views2( 'events' ) ? '</a>' : '';
+	$title_container .= ! $is_views2 ? '</a>' : '';
 	$title_container .= '</' . $title_tag . '> ';
 }
 
-if ( ! sqcdy_is_views2( 'events' ) ) {
+if ( ! $is_views2 ) {
 	// legacy title/date layout
 	$output .= $date_container;
 	$output  = apply_filters( 'squarecandy_events_preview_before_title', $output, $event_id );
@@ -122,7 +125,7 @@ if ( ! empty( $event['short_description'] ) ) {
 	}
 }
 
-if ( ! sqcdy_is_views2( 'events' ) ) {
+if ( ! $is_views2 ) {
 	$output .= $image_output;
 }
 
@@ -142,7 +145,7 @@ $output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
 $output .= '<meta itemprop="url" content="' . $event_link . '">';
 
 
-if ( sqcdy_is_views2( 'events' ) ) {
+if ( $is_views2 ) {
 	$output .= '</div><!-- .event-content -->';
 }
 
