@@ -2,20 +2,20 @@
 // Square Candy ACF Events Preview/Listing Post Template
 
 $event_id = empty( $event_id ) ? get_the_ID() : (int) $event_id;
+$event    = get_fields( $event_id );
 
-$event                 = get_fields( $event_id );
-$event['ID']           = $event_id;
-$event['archive_date'] = get_field( 'archive_date', $event_id );
+// start date is required, bail if it's not set
+if ( empty( $event['start_date'] ) ) {
+	return;
+}
+
+$event['ID']           = $event_id; // DO WE USE THIS?
+$event['archive_date'] = get_field( 'archive_date', $event_id ); // DO WE USE THIS?
 if ( empty( $event['archive_date'] ) ) {
 	$event['archive_date'] = get_field( 'end_date', $event_id ) . ' ' . get_field( 'end_time', $event_id );
 }
 if ( empty( $event['archive_date'] ) ) {
 	$event['archive_date'] = get_field( 'start_date', $event_id ) . ' 23:59:59';
-}
-
-// start date is required, bail if it's not set
-if ( empty( $event['start_date'] ) ) {
-	return;
 }
 
 $event_link  = get_permalink( $event_id );
@@ -25,15 +25,26 @@ $classes     = array( 'events-preview' );
 
 $is_views2 = sqcdy_is_views2( 'events' );
 
-$image_html  = '';
+$image_html   = '';
+$image_output = '';
+
 if ( $show_image ) :
+	// get options
 	$image_size     = get_option( 'options_event_image_preview_size' );
 	$image_position = get_option( 'options_event_image_preview_position' );
 	$image_position = $image_position ? $image_position : 'bottom';
+	// get thumbnail
 	$image_html     = get_the_post_thumbnail( $event_id, $image_size );
+	// @TODO - add bottom/left/top/right options and css
+	$image_output .= '<div class="event-image-' . $image_position . ' event-image">';
 	if ( $image_html ) :
 		$classes[] = 'has-image has-image-' . $image_position;
+		// don't add link if no image, but leave outer element in place to avoid screwing up legacy layouts?
+		$image_output .= '<a href="' . $event_link . '" tabindex="-1">';
+		$image_output .= $image_html;
+		$image_output .= '</a>';
 	endif;
+	$image_output .= '</div>';
 endif;
 
 if ( $is_views2 ) {
@@ -44,21 +55,8 @@ if ( $is_views2 ) {
 
 $class = implode( ' ', $classes );
 
+// Begin output
 $output .= '<article id="post-' . $event_id . '" class="' . $class . '" itemscope="" itemtype="http://schema.org/MusicEvent">';
-
-
-$image_output = '';
-if ( $show_image ) :
-	// @TODO - add bottom/left/top/right options and css
-	$image_output .= '<div class="event-image-' . $image_position . ' event-image">';
-	// don't add link if no image, but leave outer element in place to avoid screwing up legacy layouts?
-	if ( $image_html ) :
-		$image_output .= '<a href="' . $event_link . '" tabindex="-1">';
-		$image_output .= $image_html;
-		$image_output .= '</a>';
-	endif;
-	$image_output .= '</div>';
-endif;
 
 if ( $is_views2 ) {
 	$output .= $image_output;
@@ -72,7 +70,6 @@ $date_container .= ! $is_views2 ? '<a href="' . $event_link . '">' : ''; // we'r
 $date_container .= get_squarecandy_acf_events_date_display( $event, $compact );
 $date_container .= ! $is_views2 ? '</a>' : '';
 $date_container .= '</' . $date_tag . '> ';
-
 
 $title_container = '';
 if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
