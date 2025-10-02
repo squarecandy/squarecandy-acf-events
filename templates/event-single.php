@@ -45,12 +45,17 @@ get_header(); ?>
 
 			// if the checkbox is checked, or has never been set, show the image
 			if ( false === $show_image || ! empty( $show_image ) ) {
+
+				// allow shortcircuiting of getting image html via filter, currently used in elenaruehr and sopercussion
 				$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false, $event_id );
+
+				// if not filtered, get the post thumbnail
 				if ( empty( $event_image_html ) ) {
 					$event_image_html = get_the_post_thumbnail( $event_id, 'large' );
 					$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
 				}
 			}
+			
 			?>
 			<article id="post-<?php echo $event_id; ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
