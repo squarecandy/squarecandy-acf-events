@@ -26,6 +26,7 @@ $image_html  = '';
 if ( $show_image ) :
 	$image_size     = get_option( 'options_event_image_preview_size' );
 	$image_position = get_option( 'options_event_image_preview_position' );
+	$image_position = $image_position ? $image_position : 'bottom';
 	$image_html     = get_the_post_thumbnail( $event_id, $image_size );
 	if ( $image_html ) :
 		$classes[] = 'has-image has-image-' . $image_position;
