@@ -1,5 +1,6 @@
 <?php
 // Square Candy ACF Events Preview/Listing Post Template
+// $compact & $moreinfo_post_link are set in squarecandy_events_func() (?)
 
 $event_id = empty( $event_id ) ? get_the_ID() : (int) $event_id;
 $event    = get_fields( $event_id );
@@ -20,11 +21,11 @@ if ( empty( $event['archive_date'] ) ) {
 
 $event_link  = get_permalink( $event_id );
 $event_title = get_the_title( $event_id );
-$show_image  = get_option( 'options_event_show_image' );
 $classes     = array( 'events-preview' );
 
 $is_views2 = sqcdy_is_views2( 'events' );
 
+$show_image   = get_option( 'options_event_show_image' );
 $image_html   = '';
 $image_output = '';
 
@@ -55,14 +56,6 @@ if ( $is_views2 ) {
 
 $class = implode( ' ', $classes );
 
-// Begin output
-$output .= '<article id="post-' . $event_id . '" class="' . $class . '" itemscope="" itemtype="http://schema.org/MusicEvent">';
-
-if ( $is_views2 ) {
-	$output .= $image_output;
-	$output .= '<div class="event-content">';
-}
-
 $date_tag = $is_views2 ? 'span' : 'h1';
 
 $date_container  = '<' . $date_tag . ' class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
@@ -81,6 +74,21 @@ if ( ! $compact || ( $compact && get_field( 'show_title', 'option' ) ) ) {
 	$title_container .= '</' . $title_tag . '> ';
 }
 
+$show_post_link_button = $compact || $moreinfo_post_link ? $event_link : false; // @TODO check if $moreinfo_post_link is passed in properly here
+
+
+// Begin output
+$output .= '<article id="post-' . $event_id . '" class="' . $class . '" itemscope="" itemtype="http://schema.org/MusicEvent">';
+
+if ( $is_views2 ) {
+	// if views2 show image at top
+	$output .= $image_output;
+
+	// if views2 open content div
+	$output .= '<div class="event-content">';
+}
+
+// Add date and title
 if ( ! $is_views2 ) {
 	// legacy title/date layout
 	$output .= $date_container;
@@ -107,6 +115,7 @@ if ( ! $is_views2 ) {
 
 $output = apply_filters( 'squarecandy_events_preview_before_address', $output, $event_id );
 
+// Add address
 if ( ! empty( $event['venue'] ) || ! empty( $event['address'] ) || ! empty( $event['city'] ) ) :
 	if ( $compact ) {
 		$output .= get_squarecandy_acf_events_address_display( $event, 'citystate', true );
@@ -115,6 +124,7 @@ if ( ! empty( $event['venue'] ) || ! empty( $event['address'] ) || ! empty( $eve
 	}
 endif;
 
+// Add description
 if ( ! empty( $event['short_description'] ) ) {
 	$show_description = get_field( 'show_description', 'option' );
 	if ( ! $compact || ( $compact && $show_description ) ) {
@@ -123,11 +133,11 @@ if ( ! empty( $event['short_description'] ) ) {
 }
 
 if ( ! $is_views2 ) {
+	// if NOT views2 add image here
 	$output .= $image_output;
 }
 
-$show_post_link_button = $compact || $moreinfo_post_link ? $event_link : false; // @TODO check if $moreinfo_post_link is passed in properly here
-
+// Add buttons
 $output .= '<div class="more-info-buttons">';
 $output .= squarecandy_events_generate_buttons( $event, $show_post_link_button, false );
 $output .= '</div>';
@@ -138,13 +148,12 @@ if ( ! empty( $event['end_date'] ) ) {
 	$meta_end_date = date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) );
 }
 
+// Add meta
 $output .= '<meta itemprop="endDate" content="' . $meta_end_date . '">';
 $output .= '<meta itemprop="url" content="' . $event_link . '">';
-
 
 if ( $is_views2 ) {
 	$output .= '</div><!-- .event-content -->';
 }
-
 
 $output .= '</article>';
