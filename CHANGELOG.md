@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.9.4...v1.10.0) (2025-10-06)
+
+
+### Features
+
+* add options for showing add-to-cal links on future events only ([d396f64](https://github.com/squarecandy/squarecandy-acf-events/commit/d396f64a6dd85766cfd1cd6a91d95f3bbe25280a))
+* change countries field to a fixed dropdown. Improve the "default country" option. ([70480b4](https://github.com/squarecandy/squarecandy-acf-events/commit/70480b4ca98313dc13cc47f1a9f5681968555a20))
+* many image options for preview and single ([5c055f1](https://github.com/squarecandy/squarecandy-acf-events/commit/5c055f1898ff0a9ef0f57cde35b41b120017d294))
+* revamped add-to-calendar links ([c7eb2c6](https://github.com/squarecandy/squarecandy-acf-events/commit/c7eb2c68cf68a3b10f0781c50980cb5af98e951f))
+* tickets button - add option to show for future only ([9a0d04d](https://github.com/squarecandy/squarecandy-acf-events/commit/9a0d04dcba1038a3f12f87075debf532245a286a))
+* views2 - replace "more info" and "facebook event" fields with flexible button repeater ([8558b9b](https://github.com/squarecandy/squarecandy-acf-events/commit/8558b9bbe4ff93eae39a7fd0cc4ffa67af589fc2))
+
+
+### Bug Fixes
+
+* actually use image size variable ([8f56624](https://github.com/squarecandy/squarecandy-acf-events/commit/8f56624c70e64f154d9bdb7418877cf56b547db7))
+* add accordion mode override in shortcode ([4b8654b](https://github.com/squarecandy/squarecandy-acf-events/commit/4b8654b5bae95aef250b1a669756a3706d5bcddd))
+* add fallback image position ([cd9a3da](https://github.com/squarecandy/squarecandy-acf-events/commit/cd9a3da1c90dfa81af160dd798121aaddd46b4bb))
+* address issues with single event images ([156c082](https://github.com/squarecandy/squarecandy-acf-events/commit/156c08261534d393685e24e204369f467dd78751))
+* allow country value to be empty and handle situations where stored value is not in select options ([f44ff1a](https://github.com/squarecandy/squarecandy-acf-events/commit/f44ff1a501dcfeb091f587b1ec844400b21547fc))
+* attempt to minimize fontawesome icon jumpiness ([44af875](https://github.com/squarecandy/squarecandy-acf-events/commit/44af8753680ad09a53bf6937dd415ea83c49a4e8))
+* avoid php error ([33e2060](https://github.com/squarecandy/squarecandy-acf-events/commit/33e206094367c9455fb27b23d7699cc471be9195))
+* avoid php errors on acf option save ([65c1459](https://github.com/squarecandy/squarecandy-acf-events/commit/65c1459ead0069bb40eac9abd00d056219144fcb))
+* avoid php errors when values unset & refactor get_squarecandy_acf_events_address_display() ([26aca6e](https://github.com/squarecandy/squarecandy-acf-events/commit/26aca6e465c021db5726c79cbba41e38b79ab915))
+* avoid textdomain errors when adding acf options page ([78b3e05](https://github.com/squarecandy/squarecandy-acf-events/commit/78b3e05c78929d88cf1446999e787315de1face2))
+* depreciate and remove visible Google Maps fields (legacy sites can keep it for now by having an existing value in google_maps_api_key) ([4c7f67c](https://github.com/squarecandy/squarecandy-acf-events/commit/4c7f67c4f49ccb565a3c1462f4bdf6df39944fda))
+* don't run the bulk updater ever for views 2 ([67567c6](https://github.com/squarecandy/squarecandy-acf-events/commit/67567c6ca4fac95b500db7c830e4f0eea92c1421))
+* don't wrap overriden event image html ([1acada5](https://github.com/squarecandy/squarecandy-acf-events/commit/1acada57cb178f3dd3c7a669b5d1ea0fe9eb83f9))
+* fix add to gcal option type mismatch ([7e50d4e](https://github.com/squarecandy/squarecandy-acf-events/commit/7e50d4e25d12714d813f545f61e069a6c8c06c31))
+* fix event venue/address display issues, refactor, add comments ([8ca3cf5](https://github.com/squarecandy/squarecandy-acf-events/commit/8ca3cf59a10314e450fb80fc139e234fe6ab3fb9))
+* fix missing variable ([d51d2b1](https://github.com/squarecandy/squarecandy-acf-events/commit/d51d2b18b126cc61cd10c45461798b5ee170da7c))
+* function must be public to work with apply_filters ([d400c8f](https://github.com/squarecandy/squarecandy-acf-events/commit/d400c8f46730ab9a8d63112f007c6badb5ca730d))
+* handle ACF Fontawesome being deactivated ([bd33f7b](https://github.com/squarecandy/squarecandy-acf-events/commit/bd33f7b7b094cee69860a5e52b175d7d6ca21d0c))
+* label style ([c89b235](https://github.com/squarecandy/squarecandy-acf-events/commit/c89b235885df2c8d36f6ee614e003f2552d19345))
+* move featured image to ACF field UI ([2ff48d4](https://github.com/squarecandy/squarecandy-acf-events/commit/2ff48d42d5b3a3892e8f0e6374fc8fd3e03ee582))
+* punctuation between venue and city/state in citystate address style ([1a17fd3](https://github.com/squarecandy/squarecandy-acf-events/commit/1a17fd342e63191feea9e9274a193baf89da6402))
+* refactor past event accordion view ([7b83f2b](https://github.com/squarecandy/squarecandy-acf-events/commit/7b83f2bd07e09e542046c433bbc60e6b8f050135))
+* remove unused code ([5788b9a](https://github.com/squarecandy/squarecandy-acf-events/commit/5788b9af891b136cc1858ca8833cb702461a2a85))
+* reorder & clean up country list ([6147268](https://github.com/squarecandy/squarecandy-acf-events/commit/614726880046e47d9f88538e803df1eae2594d2c))
+* show map link for address without state (ex: intl with city and country only) ([1d5bb48](https://github.com/squarecandy/squarecandy-acf-events/commit/1d5bb48a794ca13006cb07a6ee488463cfa2a21b))
+* simplify map link on views2 ([6dbf6a6](https://github.com/squarecandy/squarecandy-acf-events/commit/6dbf6a65be6ccc03fc47288d1f374aff5840cf47))
+* sync work categories when bulk editing work categories ([c52ebfc](https://github.com/squarecandy/squarecandy-acf-events/commit/c52ebfcf63a608da33454d120a53d0ca80887a10))
+* update Czechia ([50942b3](https://github.com/squarecandy/squarecandy-acf-events/commit/50942b31c54421b36605e3eae168a986060866d0))
+* views2 heading level fixes and style simplifications, preview ([f814a37](https://github.com/squarecandy/squarecandy-acf-events/commit/f814a379b8720a392a073dc8427dc967a3827828))
+* views2 heading level fixes and style simplifications, single ([e2b4bc0](https://github.com/squarecandy/squarecandy-acf-events/commit/e2b4bc04c56a571af59acd404e25755ac5780bb5))
+* views2 remove button icons by default. provide filters to add custom svg icons if needed ([3e731e7](https://github.com/squarecandy/squarecandy-acf-events/commit/3e731e772717b6a8be4a6ba0d7082fd810e481c0))
+
 ### [1.9.4](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.9.2...v1.9.4) (2025-08-19)
 
 
