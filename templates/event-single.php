@@ -3,17 +3,35 @@
 $event_id              = get_the_ID();
 $event                 = get_fields( $event_id );
 $event['ID']           = $event_id;
-$event['archive_date'] = get_field( 'archive_date', $event_id );
-if ( empty( $event['archive_date'] ) ) {
-	$event['archive_date'] = get_field( 'end_date', $event_id ) . ' ' . get_field( 'end_time', $event_id );
-}
-if ( empty( $event['archive_date'] ) ) {
-	$event['archive_date'] = get_field( 'start_date', $event_id ) . ' 23:59:59';
-}
-$is_views2 = sqcdy_is_views2( 'events' );
+$is_views2             = sqcdy_is_views2( 'events' );
+$template              = new SquareCandy_Events_Template_Loader();
 
-$template = new SquareCandy_Events_Template_Loader();
-get_header(); ?>
+// set up image properties
+$event_image_html = '';
+$show_image       = get_option( 'options_event_show_image_single' );
+$image_size       = $is_views2 ? 'large' : 'post-thumbnail'; // fall back to previous default value
+$image_size       = apply_filters( 'squarecandy_events_single_event_image_size', $image_size, $event_id );
+
+$image_position = get_option( 'options_event_image_single_position' );
+if ( empty( $image_position ) ) {
+	$image_position = 'middle';
+}
+
+// if the checkbox is checked, or has never been set, show the image
+if ( false === $show_image || ! empty( $show_image ) ) {
+
+	// allow shortcircuiting of getting image html via filter, currently used in elenaruehr and sopercussion
+	$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false, $event_id );
+
+	// if not filtered, get the post thumbnail
+	if ( empty( $event_image_html ) ) {
+		$event_image_html = get_the_post_thumbnail( $event_id, $image_size );
+		$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
+	}
+}
+
+get_header();
+?>
 
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
@@ -32,30 +50,6 @@ get_header(); ?>
 				</header>
 				<?php
 			endif;
-
-			$event_image_html = '';
-			$show_image       = get_option( 'options_event_show_image_single' );
-			$image_size       = $is_views2 ? 'large' : 'post-thumbnail'; // fall back to previous default value
-			$image_size       = apply_filters( 'squarecandy_events_single_event_image_size', $image_size, $event_id );
-
-			$image_position = get_option( 'options_event_image_single_position' );
-			if ( empty( $image_position ) ) {
-				$image_position = 'middle';
-			}
-
-			// if the checkbox is checked, or has never been set, show the image
-			if ( false === $show_image || ! empty( $show_image ) ) {
-
-				// allow shortcircuiting of getting image html via filter, currently used in elenaruehr and sopercussion
-				$event_image_html = apply_filters( 'squarecandy_events_single_event_image', false, $event_id );
-
-				// if not filtered, get the post thumbnail
-				if ( empty( $event_image_html ) ) {
-					$event_image_html = get_the_post_thumbnail( $event_id, $image_size );
-					$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
-				}
-			}
-
 			?>
 			<article id="post-<?php echo $event_id; ?>" <?php post_class( array( 'events-full', 'events-single' ) ); ?> itemscope="" itemtype="http://schema.org/MusicEvent">
 				<div class="event-single-content-wrapper">
