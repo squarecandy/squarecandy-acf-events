@@ -111,6 +111,9 @@ require ACF_EVENTS_DIR_PATH . '/inc/sqcdy-plugin.php';
 // custom countries list
 require ACF_EVENTS_DIR_PATH . 'inc/countries.php';
 
+// timezones
+require ACF_EVENTS_DIR_PATH . 'inc/timezones.php';
+
 // add ACF fields for events
 require ACF_EVENTS_DIR_PATH . 'inc/acf.php';
 

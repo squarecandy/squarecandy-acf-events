@@ -67,7 +67,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'required'          => 1,
 			'conditional_logic' => 0,
 			'wrapper'           => array(
-				'width' => '40',
+				'width' => '25',
+				'class' => 'start-date',
 			),
 			'display_format'    => 'F j, Y',
 			'return_format'     => 'F j, Y',
@@ -80,6 +81,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'type'          => 'true_false',
 			'wrapper'       => array(
 				'width' => 10,
+				'class' => 'start-date',
 			),
 			'default_value' => 0,
 		);
@@ -89,7 +91,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'name'          => 'multi_day',
 			'type'          => 'true_false',
 			'wrapper'       => array(
-				'width' => '20',
+				'width' => '15',
+				'class' => 'start-date',
 			),
 			'default_value' => 0,
 		);
@@ -109,10 +112,26 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				),
 			),
 			'wrapper'           => array(
-				'width' => '30',
+				'width' => '20',
+				'class' => 'start-date',
 			),
 			'display_format'    => 'g:i a',
 			'return_format'     => 'g:i a',
+		);
+		$eventfields['timezone']      = array(
+			'key'               => 'field_fn48bedm4dn49',
+			'label'             => 'Timezone',
+			'name'              => 'timezone',
+			'type'              => 'select',
+			'conditional_logic' => 0,
+			'choices'       => squarecandy_timezone_choice(),
+			'allow_null'    => 1,
+			'multiple'      => 0,
+			'ui'            => 1,
+			'wrapper'           => array(
+				'width' => '25',
+			),
+			'instructions' => 'leave empty for default timezone',
 		);
 		$eventfields['end_date']   = array(
 			'key'               => 'field_5616bd75112ca',
