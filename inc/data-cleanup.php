@@ -75,7 +75,7 @@ function squarecandy_calculate_event_date_values( $event ) {
 	// check if we have the extra data we need
 	if ( $start_time || isset( $event['id'] ) ) {
 		// get the values
-		$start_time_meta  = get_post_meta( $event['id'], 'start_time', true ); // get raw, not acf formatted
+		$start_time_meta  = isset( $event['start_time_meta'] ) ? $event['start_time_meta'] : get_post_meta( $event['id'], 'start_time', true ); // get raw, not acf formatted
 		$magic_start_time = $start_time_meta ? $start_time_meta : '00:00:01';
 		$seconds_calc     = date_create_from_format( 'Y-m-d h:i:s', "1970-01-01 $magic_start_time", new DateTimeZone( 'UTC' ) ); //use create_from_format so we get false if date not valid
 		$seconds          = $seconds_calc ? (int) $seconds_calc->getTimestamp() : 1; // avoid error if $seconds_calc is false
@@ -130,14 +130,18 @@ function squarecandy_cleanup_event_data( $post_id ) {
 	}
 
 	// try converting the start_time (if is a timestamp)
-	$start_time_meta      = get_post_meta( $post_id, 'start_time', true );
-	$converted_start_time = squarecandy_convert_event_time( $start_time_meta );
+	$start_time_meta      = get_post_meta( $post_id, 'start_time', true ); // unformatted
+	$converted_start_time = squarecandy_convert_event_time( $start_time_meta );	
 
 	if ( $converted_start_time && $start_time_meta !== $converted_start_time ) {
 		update_post_meta( $post_id, 'start_time', $converted_start_time );
 	}
 
-	$date_values = squarecandy_calculate_event_date_values( $post_id );
+	$event                    = get_fields( $event );
+	$event['id']              = $event_id;
+	$event['start_time_meta'] = $start_time_meta;
+
+	$date_values = squarecandy_calculate_event_date_values( $event );
 
 	// set the archive date (will make queries much simpler)
 	update_post_meta( $post_id, 'archive_date', $date_values['archive_date'] );
@@ -145,21 +149,21 @@ function squarecandy_cleanup_event_data( $post_id ) {
 	update_post_meta( $post_id, 'magic_sort_date', $date_values['magic_sort_date'] );
 
 	// if the event is not multi day but there is an end date.
-	if ( ! get_field( 'multi_day', $post_id ) && get_field( 'end_date', $post_id ) ) {
-		update_field( 'end_date', '', $post_id );
+	if ( empty( $event['multi_day'] ) && ! empty( $event['end_date'] ) ) {
+		update_post_meta( $post_id, 'end_date', '' );
 	}
 
 	// if all day checkbox is ticked
-	if ( get_field( 'all_day', $post_id ) ) {
+	if ( ! empty( $event['all_day'] ) ) {
 
 		// remove start_time value
-		if ( get_field( 'start_time', $post_id ) ) {
-			update_field( 'start_time', '', $post_id );
+		if ( ! empty( $event['start_time'] ) ) {
+			update_post_meta( $post_id, 'start_time', '' );
 		}
 
 		// remove end_time value
-		if ( get_field( 'end_time', $post_id ) ) {
-			update_field( 'end_time', '', $post_id );
+		if ( ! empty( $event['end_time'] ) ) {
+			update_post_meta( $post_id, 'end_time', '' );
 		}
 	}
 	return true;
