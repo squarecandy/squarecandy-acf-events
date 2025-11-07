@@ -2,12 +2,12 @@
 // functions for data cleanup
 
 /**
- * Calculate the archive date (archive/take down datetime), sort date, 
- * and magic sort date (can be used for sorting by date decending, time ascending) based on start date and time
+ * Calculate the archive date (archive/take down datetime), sort date,
+ * and magic sort date (can be used for sorting by date descending, time ascending) based on start date and time
  * Produces an array of date strings
  *
  * @param array|int $event An event post ID, or an event array that includes id, start_date, start_time and all_day
- * @return array Array of sort datetimes in YYYY-MM-DD HH:MM:SS
+ * @return array Array of date strings in YYYY-MM-DD HH:MM:SS
  */
 function squarecandy_calculate_event_date_values( $event ) {
 
@@ -19,8 +19,8 @@ function squarecandy_calculate_event_date_values( $event ) {
 	}
 
 	$output_dates = array(
-		'archive_date' => false,
-		'sort_date' => false,
+		'archive_date'    => false,
+		'sort_date'       => false,
 		'magic_sort_date' => false,
 	);
 
@@ -35,6 +35,15 @@ function squarecandy_calculate_event_date_values( $event ) {
 	$start_time = $event['start_time'] ?? false;
 	$end_time   = $event['end_time'] ?? false;
 	$all_day    = $event['all_day'] ?? false;
+	$timezone   = $event['timezone'] ?? false;
+
+	$system_timezone  = wp_timezone_string();
+	$has_timezone     = $timezone && $timezone !== $system_timezone;
+	$create_timezone  = $timezone ? new DateTimeZone( $timezone ) : new DateTimeZone( $system_timezone );
+	$default_timezone = $has_timezone ? new DateTimeZone( $system_timezone ) : false;
+
+	// get the raw, not acf formatted start_time
+	$start_time_meta = isset( $event['start_time_meta'] ) ? $event['start_time_meta'] : get_post_meta( $event['id'], 'start_time', true );
 
 	// calculate archive_date
 
@@ -73,27 +82,65 @@ function squarecandy_calculate_event_date_values( $event ) {
 	// calculate magic_sort_date
 
 	// check if we have the extra data we need
-	if ( $start_time || isset( $event['id'] ) ) {
-		// get the values
-		$start_time_meta  = isset( $event['start_time_meta'] ) ? $event['start_time_meta'] : get_post_meta( $event['id'], 'start_time', true ); // get raw, not acf formatted
+	if ( $start_time_meta ) {
+
+		//date is in 'F j, Y H:i:s' - make a DateTime, maybe convert to local timezone, then get just the time string from that
 		$magic_start_time = $start_time_meta ? $start_time_meta : '00:00:01';
-		$seconds_calc     = date_create_from_format( 'Y-m-d h:i:s', "1970-01-01 $magic_start_time", new DateTimeZone( 'UTC' ) ); //use create_from_format so we get false if date not valid
-		$seconds          = $seconds_calc ? (int) $seconds_calc->getTimestamp() : 1; // avoid error if $seconds_calc is false
-		$seconds          = $seconds < 1 ? 1 : $seconds;
-		$magic_sort_date  = "$start_date +1 day -$seconds seconds";
+		$magic_sort_date  = squarecandy_create_date_time( "$start_date $magic_start_time", false, $create_timezone, $default_timezone );
+		$magic_start_time = $magic_sort_date->format( 'H:i:s' );
+
+		// get just the number of seconds since 12am the day of the event, then *reverse* that so earliest events will belatest etc.
+		$seconds_calc    = squarecandy_calculate_seconds_from_time( $magic_start_time );
+		$seconds         = $seconds_calc < 1 ? 1 : $seconds_calc;
+		$reverse_seconds = 24 * 60 * 60 - $seconds;
+
+		// figure out how that differs from the original so we can adjust the DateTime
+		$seconds_interval = $reverse_seconds - $seconds;
+		$magic_sort_date->add( DateInterval::createFromDateString( $seconds_interval . ' seconds' ) );
 	}
 
 	$output_dates['magic_sort_date'] = $magic_sort_date;
 
 	foreach ( $output_dates as $key => $date ) {
 		if ( $date ) {
+			if ( 'magic_sort_date' !== $key ) {
+				// these are still 'F j, Y g:i a' date strings, not DateTime, convert & maybe apply timezone
+				$date = squarecandy_create_date_time( $date, false, $create_timezone, $default_timezone );
+			}
 			// convert to ISO format for database
-			$output_dates[ $key ] = date_i18n( 'Y-m-d H:i:s', strtotime( $date ) );
-		} 
+			$output_dates[ $key ] = $date->format( 'Y-m-d H:i:s' );
+		}
 	}
 
 	return $output_dates;
 
+}
+
+function squarecandy_create_date_time( $date_string, $format, $create_timezone, $default_timezone ) {
+
+	if ( $format ) {
+		$date_time = date_create_from_format( $format, $date_string, $create_timezone );
+	} else {
+		// if $format is falsey, try creating a DateTime but catch the exception if it's not a valid date string
+		try {
+			$date_time = new DateTime( $date_string, $create_timezone );
+		} catch ( Exception $e ) {
+			return false;
+		}
+	}
+	if ( $default_timezone ) {
+		$date_time->setTimeZone( $default_timezone );
+	}
+		return $date_time;
+}
+
+function squarecandy_calculate_seconds_from_time( $time_string ) {
+	$split = explode( ':', $time_string );
+	if ( count( $split ) !== 3 ) {
+		return 0;
+	}
+	$output = $split[0] * 60 * 60 + $split[1] * 60 + $split[2];
+	return $output;
 }
 
 /**
@@ -102,15 +149,8 @@ function squarecandy_calculate_event_date_values( $event ) {
  * @param int $post_id - The Post ID.
  */
 function squarecandy_acf_events_acf_save_post( $post_id ) {
-
-	// return early if post being saved is not an event.
-	if ( 'event' !== get_post_type( $post_id ) ) {
-		return;
-	}
-
 	// create the archive datetime and cleanup the other date data
 	squarecandy_cleanup_event_data( $post_id );
-
 }
 add_action( 'acf/save_post', 'squarecandy_acf_events_acf_save_post', 15 );
 
@@ -131,14 +171,14 @@ function squarecandy_cleanup_event_data( $post_id ) {
 
 	// try converting the start_time (if is a timestamp)
 	$start_time_meta      = get_post_meta( $post_id, 'start_time', true ); // unformatted
-	$converted_start_time = squarecandy_convert_event_time( $start_time_meta );	
+	$converted_start_time = squarecandy_convert_event_time( $start_time_meta );
 
 	if ( $converted_start_time && $start_time_meta !== $converted_start_time ) {
 		update_post_meta( $post_id, 'start_time', $converted_start_time );
 	}
 
-	$event                    = get_fields( $event );
-	$event['id']              = $event_id;
+	$event                    = get_fields( $post_id );
+	$event['id']              = $post_id;
 	$event['start_time_meta'] = $start_time_meta;
 
 	$date_values = squarecandy_calculate_event_date_values( $event );
