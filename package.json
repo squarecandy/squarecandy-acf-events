@@ -1,6 +1,6 @@
 {
 	"name": "squarecandy-acf-events",
-	"version": "1.10.0",
+	"version": "1.10.1-timezones.0",
 	"description": "Square Candy’s Events plugin",
 	"repository": {
 		"type": "git",
