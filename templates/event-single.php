@@ -1,10 +1,10 @@
 <?php
 // Square Candy ACF Events Single Event Post Template
-$event_id              = get_the_ID();
-$event                 = get_fields( $event_id );
-$event['ID']           = $event_id;
-$is_views2             = sqcdy_is_views2( 'events' );
-$template              = new SquareCandy_Events_Template_Loader();
+$event_id    = get_the_ID();
+$event       = get_fields( $event_id );
+$event['ID'] = $event_id;
+$is_views2   = sqcdy_is_views2( 'events' );
+$template    = new SquareCandy_Events_Template_Loader();
 
 // set up image properties
 $event_image_html = '';
@@ -29,6 +29,9 @@ if ( false === $show_image || ! empty( $show_image ) ) {
 		$event_image_html = '<div class="event-image event-image-' . $image_position . '">' . $event_image_html . '</div>';
 	}
 }
+
+$event_date_meta    = date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) );
+$event_date_display = get_squarecandy_acf_events_date_display( $event );
 
 get_header();
 ?>
@@ -57,15 +60,15 @@ get_header();
 					<?php if ( ! $is_views2 ) : ?>
 						<h1 class="entry-title event-title" itemprop="name"><?php the_title(); ?></h1>
 						<?php do_action( 'squarecandy_after_events_single_title' ); ?>
-						<h2 class="event-date-time" itemprop="startDate" content="<?php echo date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ); ?>">
-							<?php squarecandy_acf_events_date_display( $event ); ?>
+						<h2 class="event-date-time" itemprop="startDate" content="<?php echo $event_date_meta; ?>">
+							<?php echo $event_date_display; ?>
 						</h2>
 					<?php else : ?>
 						<h1 class="event-date-title">
 							<?php
 							$date_first      = get_option( 'options_event_single_date_first' );
-							$date_container  = '<span class="event-date-time" itemprop="startDate" content="' . date_i18n( 'Y-m-d', strtotime( $event['start_date'] ) ) . '">';
-							$date_container .= get_squarecandy_acf_events_date_display( $event );
+							$date_container  = '<span class="event-date-time" itemprop="startDate" content="' . $event_date_meta . '">';
+							$date_container .= $event_date_display;
 							$date_container .= '</span> ';
 							$title_container = '<span class="entry-title" itemprop="name">' . get_the_title() . '</span> ';
 							if ( $date_first ) {
