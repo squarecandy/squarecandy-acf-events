@@ -5,6 +5,11 @@
 
 module.exports = function( grunt ) {
 	const sass = require( 'sass' );
+	const branch = require( 'child_process' )
+		.execSync( 'git branch --show-current', { encoding: 'utf8' } )
+		.trim()
+		.split( '/' )
+		.pop();
 	grunt.initConfig( {
 		pkg: grunt.file.readJSON( 'package.json' ),
 		sass: {
@@ -106,7 +111,7 @@ module.exports = function( grunt ) {
 			},
 			bump: {
 				cmd: 'npm',
-				args: [ 'run', 'release', '--', '--prerelease', 'dev', '--skip.tag', '--skip.changelog' ],
+				args: [ 'run', 'release', '--', '--prerelease', branch, '--skip.tag', '--skip.changelog' ],
 			},
 			ding: {
 				cmd: 'tput',
