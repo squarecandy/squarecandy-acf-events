@@ -118,20 +118,20 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 			'display_format'    => 'g:i a',
 			'return_format'     => 'g:i a',
 		);
-		$eventfields['timezone']      = array(
+		$eventfields['timezone']   = array(
 			'key'               => 'field_fn48bedm4dn49',
 			'label'             => 'Timezone',
 			'name'              => 'timezone',
 			'type'              => 'select',
 			'conditional_logic' => 0,
-			'choices'       => squarecandy_timezone_choice(),
-			'allow_null'    => 1,
-			'multiple'      => 0,
-			'ui'            => 1,
+			'choices'           => squarecandy_timezone_choice(),
+			'allow_null'        => 1,
+			'multiple'          => 0,
+			'ui'                => 1,
 			'wrapper'           => array(
 				'width' => '25',
 			),
-			'instructions' => 'leave empty for default timezone',
+			'instructions'      => 'leave empty for default: ' . wp_timezone_string(),
 		);
 		$eventfields['end_date']   = array(
 			'key'               => 'field_5616bd75112ca',

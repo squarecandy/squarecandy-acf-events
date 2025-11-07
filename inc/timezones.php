@@ -3,13 +3,13 @@
 /**
  * Format & sort raw timezone identifiers
  *    Modeled on wp_timezone_choice() in wp-includes/functions.php
- * 
+ *
  * @param array $tz_identifiers - raw timezone codes as output by timezone_identifiers_list()
  * @param bool|string $single_continent - if not false, will group all timezones into one "continent" and if a string, use the param value as the name of the continent
  * @param array $overwrite_continent - array of original continet names and their replacements, e.g. array( 'America' => 'Americas' )
- * 
+ *
  * @return array
- */ 
+ */
 function squarecandy_build_timezone_options( $tz_identifiers, $single_continent = false, $overwrite_continent = array() ) {
 
 	$continents      = array( 'America', 'Europe', 'Africa', 'Asia', 'Atlantic', 'Australia', 'Indian', 'Pacific', 'Antarctica', 'Arctic' );
@@ -27,21 +27,21 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 		}
 
 		$zone_info = array(
-			'timezone'    => $tzone,
-			'continent'   => ( isset( $zone[0] ) && $zone[0] ? $zone[0] : '' ),
-			'city'        => ( isset( $zone[1] ) && $zone[1] ? $zone[1] : '' ),
-			'subcity'     => ( isset( $zone[2] ) && $zone[2] ? $zone[2] : '' ),
+			'timezone'  => $tzone,
+			'continent' => ( isset( $zone[0] ) && $zone[0] ? $zone[0] : '' ),
+			'city'      => ( isset( $zone[1] ) && $zone[1] ? $zone[1] : '' ),
+			'subcity'   => ( isset( $zone[2] ) && $zone[2] ? $zone[2] : '' ),
 		);
 
 		// get country information
 		$tz                   = new DateTimeZone( $tzone );
 		$location             = $tz->getLocation();
 		$zone_info['country'] = Locale::getDisplayRegion( '-' . $location['country_code'], 'en' );
-		
+
 		// Allow overwriting the names of the continents
 		if ( $single_continent && is_string( $single_continent ) ) {
 			$zone_info['continent'] = $single_continent;
-		} elseif ( in_array( $zone_info['continent'] , array_keys( $overwrite_continent ), true ) ) {
+		} elseif ( in_array( $zone_info['continent'], array_keys( $overwrite_continent ), true ) ) {
 			$zone_info['continent'] = $overwrite_continent[ $zone_info['continent'] ];
 		}
 
@@ -54,14 +54,13 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 		}
 
 		// maybe add country to the display.
+		// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.str_containsFound
 		if ( ! $single_continent && $zone_info['country'] && ! str_contains( $zone_info['display'], $zone_info['country'] ) && ! str_contains( $zone_info['continent'], $zone_info['country'] ) ) {
 			$zone_info['display'] .= ', ' . $zone_info['country'];
 		}
 
 		$timezone_array[ $zone_info['continent'] ][ $tzone ] = $zone_info;
 	}
-
-	//sqcdy_log( $timezone_array, '$timezone_array' );
 
 	// loop through again, maybe sort based on country, build options array
 	foreach ( $timezone_array as $continent => $timezones ) {
@@ -83,7 +82,6 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 
 		}
 	}
-	//sqcdy_log( $select2_options, 'structure' );
 
 	// if it's more than one continent, build it so each group is added in the order of continents specified
 	if ( count( $select2_options ) > 1 ) {
@@ -92,7 +90,6 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 			if ( in_array( $cont, array_keys( $overwrite_continent ), true ) ) {
 				$cont = $overwrite_continent[ $cont ];
 			}
-			//sqcdy_log( $cont, 'cont' );
 			$output[ $cont ] = $select2_options[ $cont ];
 		}
 	} else {
@@ -104,11 +101,11 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 
 /**
  * Modeled on wp_timezone_choice() in wp-includes/functions.php
- */ 
+ */
 function squarecandy_timezone_choice( $selected_zone = null ) {
 
 	$sort_us_first      = apply_filters( 'squarecandy_events_sort_us_first', true );
-	$all_tz_identifiers = timezone_identifiers_list(); 
+	$all_tz_identifiers = timezone_identifiers_list();
 
 	if ( $sort_us_first ) :
 		$us_timezone_identifiers     = DateTimeZone::listIdentifiers( DateTimeZone::PER_COUNTRY, 'US' );
@@ -118,10 +115,8 @@ function squarecandy_timezone_choice( $selected_zone = null ) {
 		$sorted_us_timezones     = squarecandy_build_timezone_options( $us_timezone_identifiers, 'USA' );
 		$sorted_non_us_timezones = squarecandy_build_timezone_options( $non_us_timezone_identifiers );
 		$select_options          = array_merge( $sorted_us_timezones, $sorted_non_us_timezones );
+		$select_options['UTC']   = 'UTC';
 
-		//sqcdy_log( $all_tz_identifiers, '$all_tz_identifiers' );
-		//sqcdy_log( $sorted_us_timezones, '$sorted_us_timezones' );
-		//sqcdy_log( $sorted_non_us_timezones, '$sorted_non_us_timezones' );
 	endif;
 
 	return $select_options;
