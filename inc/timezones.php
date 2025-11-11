@@ -109,18 +109,26 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
  */
 function squarecandy_timezone_choice( $selected_zone = null ) {
 
-	$sort_us_first      = apply_filters( 'squarecandy_events_sort_us_first', true );
-	$all_tz_identifiers = timezone_identifiers_list();
+	$select_options = get_transient( 'squarecandy-events-timezone-options' );
 
-	if ( $sort_us_first ) :
-		$us_timezone_identifiers     = DateTimeZone::listIdentifiers( DateTimeZone::PER_COUNTRY, 'US' );
-		$non_us_timezone_identifiers = array_diff( $all_tz_identifiers, $us_timezone_identifiers );
+	if ( ! $select_options ) :
 
-		// sort the timezones & put non_us after US
-		$sorted_us_timezones     = squarecandy_build_timezone_options( $us_timezone_identifiers, 'USA' );
-		$sorted_non_us_timezones = squarecandy_build_timezone_options( $non_us_timezone_identifiers );
-		$select_options          = array_merge( $sorted_us_timezones, $sorted_non_us_timezones );
-		$select_options['UTC']   = 'UTC';
+		$sort_us_first      = apply_filters( 'squarecandy_events_sort_us_first', true );
+		$all_tz_identifiers = timezone_identifiers_list();
+
+		if ( $sort_us_first ) :
+			$us_timezone_identifiers     = DateTimeZone::listIdentifiers( DateTimeZone::PER_COUNTRY, 'US' );
+			$non_us_timezone_identifiers = array_diff( $all_tz_identifiers, $us_timezone_identifiers );
+
+			// sort the timezones & put non_us after US
+			$sorted_us_timezones     = squarecandy_build_timezone_options( $us_timezone_identifiers, 'USA' );
+			$sorted_non_us_timezones = squarecandy_build_timezone_options( $non_us_timezone_identifiers );
+			$select_options          = array_merge( $sorted_us_timezones, $sorted_non_us_timezones );
+			$select_options['UTC']   = 'UTC';
+
+		endif;
+
+		set_transient( 'squarecandy-events-timezone-options', $select_options, 86400 ); // 24 hours
 
 	endif;
 
