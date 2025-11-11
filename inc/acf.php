@@ -412,9 +412,9 @@ function squarecandy_events_add_fields() {
 		);
 	endif;
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	$on_edit_screen = is_admin() && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && 'event' === get_post_type( $_GET['post'] );
 
-	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	if (
 		// if we're not in views 2 mode
 		( ! $is_views2 ) ||
