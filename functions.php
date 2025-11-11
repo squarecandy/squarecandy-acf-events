@@ -116,6 +116,7 @@ require ACF_EVENTS_DIR_PATH . 'inc/timezones.php';
 
 // add ACF fields for events
 require ACF_EVENTS_DIR_PATH . 'inc/acf.php';
+require ACF_EVENTS_DIR_PATH . 'inc/acf-options.php';
 
 // provide custom theming for individual event pages
 // https://code.tutsplus.com/articles/plugin-templating-within-wordpress--wp-31088
