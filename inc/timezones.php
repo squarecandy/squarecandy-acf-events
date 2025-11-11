@@ -59,6 +59,31 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 		// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.str_containsFound
 		if ( ! $single_continent && $zone_info['country'] && ! str_contains( $zone_info['display'], $zone_info['country'] ) && ! str_contains( $zone_info['continent'], $zone_info['country'] ) ) {
 			$zone_info['display'] .= ', ' . $zone_info['country'];
+		} elseif ( $single_continent ) {
+
+			$pretty_timezone_name = '';
+
+			$us_main_timezones = array(
+				'America/New_York'    => 'Eastern',
+				'America/Chicago'     => 'Central',
+				'America/Denver'      => 'Mountain',
+				'America/Phoenix'     => 'Mountain no DST',
+				'America/Los_Angeles' => 'Pacific',
+				'America/Anchorage'   => 'Alaska',
+				'America/Adak'        => 'Hawaii',
+				'Pacific/Honolulu'    => 'Hawaii no DST',
+			);
+
+			if ( isset( $us_main_timezones[ $tzone ] ) ) {
+				$pretty_timezone_name = $us_main_timezones[ $tzone ];
+			} else {
+				$exploded_comments    = explode( ' ', $location['comments'] );
+				$pretty_timezone_name = $exploded_comments[0] && $exploded_comments[0] !== $abbreviation ? $exploded_comments[0] : '';
+			}
+
+			if ( $pretty_timezone_name ) {
+				$zone_info['display'] .= ' / ' . $pretty_timezone_name;
+			}
 		}
 
 		// add abbreviation
