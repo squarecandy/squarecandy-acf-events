@@ -9,6 +9,7 @@ function squarecandy_events_add_fields() {
 	}
 
 	$eventfields = array();
+	$is_views2   = sqcdy_is_views2( 'events' );
 
 	$eventfields['featured_image'] = array(
 		'key'           => 'field_eventsfeaturedimage94124',
@@ -62,7 +63,8 @@ function squarecandy_events_add_fields() {
 		'return_format'     => 'F j, Y',
 		'first_day'         => 0,
 	);
-	$eventfields['all_day']    = array(
+
+	$eventfields['all_day'] = array(
 		'key'           => 'field_5616bcdfb642d',
 		'label'         => 'All Day',
 		'name'          => 'all_day',
@@ -73,7 +75,8 @@ function squarecandy_events_add_fields() {
 		),
 		'default_value' => 0,
 	);
-	$eventfields['multi_day']  = array(
+
+	$eventfields['multi_day'] = array(
 		'key'           => 'field_5616bd4ca2b0f',
 		'label'         => 'Show End Date/Time',
 		'name'          => 'multi_day',
@@ -84,6 +87,7 @@ function squarecandy_events_add_fields() {
 		),
 		'default_value' => 0,
 	);
+
 	$eventfields['start_time'] = array(
 		'key'               => 'field_5616bc2b9fbed',
 		'label'             => '(Start) Time',
@@ -106,7 +110,8 @@ function squarecandy_events_add_fields() {
 		'display_format'    => 'g:i a',
 		'return_format'     => 'g:i a',
 	);
-	$eventfields['timezone']   = array(
+
+	$eventfields['timezone'] = array(
 		'key'               => 'field_fn48bedm4dn49',
 		'label'             => 'Timezone',
 		'name'              => 'timezone',
@@ -121,7 +126,8 @@ function squarecandy_events_add_fields() {
 		),
 		'instructions'      => 'leave empty for default: ' . wp_timezone_string(),
 	);
-	$eventfields['end_date']   = array(
+
+	$eventfields['end_date'] = array(
 		'key'               => 'field_5616bd75112ca',
 		'label'             => 'End Date',
 		'name'              => 'end_date',
@@ -142,7 +148,8 @@ function squarecandy_events_add_fields() {
 		'return_format'     => 'F j, Y',
 		'first_day'         => 0,
 	);
-	$eventfields['end_time']   = array(
+
+	$eventfields['end_time'] = array(
 		'key'               => 'field_5616bd8e112cb',
 		'label'             => 'End Time',
 		'name'              => 'end_time',
@@ -168,7 +175,8 @@ function squarecandy_events_add_fields() {
 		'display_format'    => 'g:i a',
 		'return_format'     => 'g:i a',
 	);
-	$eventfields['venue']      = array(
+
+	$eventfields['venue'] = array(
 		'key'               => 'field_5616bedeed0a9',
 		'label'             => 'Venue Name',
 		'name'              => 'venue',
@@ -178,6 +186,7 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
+
 	$eventfields['venue_link'] = array(
 		'key'     => 'field_5616beefed0aa',
 		'label'   => 'Venue Link',
@@ -187,13 +196,15 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
-	$eventfields['address']    = array(
+
+	$eventfields['address'] = array(
 		'key'   => 'field_address226474957',
 		'label' => 'Address',
 		'name'  => 'address',
 		'type'  => 'text',
 	);
-	$eventfields['city']       = array(
+
+	$eventfields['city'] = array(
 		'key'     => 'field_city585d8171a157e',
 		'label'   => 'City',
 		'name'    => 'city',
@@ -202,7 +213,8 @@ function squarecandy_events_add_fields() {
 			'width' => 50,
 		),
 	);
-	$eventfields['state']      = array(
+
+	$eventfields['state'] = array(
 		'key'     => 'field_state94823hf873',
 		'label'   => 'State/Province',
 		'name'    => 'state',
@@ -211,7 +223,8 @@ function squarecandy_events_add_fields() {
 			'width' => 25,
 		),
 	);
-	$eventfields['zip']        = array(
+
+	$eventfields['zip'] = array(
 		'key'     => 'field_zipfj8392y38r9',
 		'label'   => 'Postal Code',
 		'name'    => 'zip',
@@ -289,11 +302,12 @@ function squarecandy_events_add_fields() {
 		'type'  => 'url',
 	);
 
-	if ( sqcdy_is_views2( 'events' ) ) :
+	if ( $is_views2 ) :
 
 		$subfields = array();
 
 		if ( is_acf_fontawesome_plugin_active() ) {
+
 			$subfields[] = array(
 				'key'               => 'field_67a37d2867e36',
 				'label'             => 'Icon',
@@ -350,6 +364,7 @@ function squarecandy_events_add_fields() {
 			'append'            => '',
 			'parent_repeater'   => 'field_67a37d0867e35',
 		);
+
 		$subfields[] = array(
 			'key'               => 'field_67a37e8d67e37',
 			'label'             => 'Link',
@@ -397,24 +412,25 @@ function squarecandy_events_add_fields() {
 		);
 	endif;
 
+	$on_edit_screen = is_admin() && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && 'event' === get_post_type( $_GET['post'] );
+
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	if (
 		// if we're not in views 2 mode
-		( ! sqcdy_is_views2( 'events' ) ) ||
+		( ! $is_views2 ) ||
 		// or if we're on the front end anytime
 		( ! is_admin() ) ||
 		// or if we're on the edit screen for an event and the current event has a value for more_info_link
-		( is_admin() && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && 'event' === get_post_type( $_GET['post'] ) && get_field( 'more_info_link', $_GET['post'] ) ) ||
+		( $on_edit_screen && get_field( 'more_info_link', $_GET['post'] ) ) ||
 		// or if we're on the edit screen for an event and the current event has a value for facebook_link
-		( is_admin() && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && 'event' === get_post_type( $_GET['post'] ) && get_field( 'facebook_link', $_GET['post'] ) ) ||
+		( $on_edit_screen && get_field( 'facebook_link', $_GET['post'] ) ) ||
 		// or if we're in the admin and not editing an event (needed for saving legacy values, etc)
 		( is_admin() && ! isset( $_GET['post'] ) && ! isset( $_GET['post_type'] ) )
 	) :
-		$label = sqcdy_is_views2( 'events' ) ? 'More Info Link (Legacy)' : 'More Info Link';
 
 		$eventfields['more_info_link'] = array(
 			'key'     => 'field_5616befced0ab',
-			'label'   => $label,
+			'label'   => $is_views2 ? 'More Info Link (Legacy)' : 'More Info Link',
 			'name'    => 'more_info_link',
 			'type'    => 'url',
 			'wrapper' => array(
@@ -422,11 +438,9 @@ function squarecandy_events_add_fields() {
 			),
 		);
 
-		$label = sqcdy_is_views2( 'events' ) ? 'Facebook Event Link (Legacy)' : 'Facebook Event Link';
-
 		$eventfields['facebook_link'] = array(
 			'key'     => 'field_facebooklink7293484',
-			'label'   => $label,
+			'label'   => $is_views2 ? 'Facebook Event Link (Legacy)' : 'Facebook Event Link',
 			'name'    => 'facebook_link',
 			'type'    => 'url',
 			'wrapper' => array(

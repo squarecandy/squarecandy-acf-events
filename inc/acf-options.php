@@ -204,7 +204,6 @@ add_action(
 					'width' => '50',
 				),
 			),
-
 			array(
 				'key'           => 'field_5a711b987ee7c',
 				'label'         => 'Add to Calendar Links',
@@ -454,6 +453,7 @@ add_action(
 		// Keep these fields for legacy sites.
 		// But once you delete the google maps api key, or if it never gets entered, don't show the fields or allow the feature to be used.
 		if ( get_option( 'options_google_maps_api_key' ) ) :
+
 			$event_settings_fields[] = array(
 				'key'          => 'field_5a6e820093be4',
 				'label'        => 'Google Maps API Key',
@@ -464,6 +464,7 @@ add_action(
 					'width' => '50',
 				),
 			);
+
 			$event_settings_fields[] = array(
 				'key'           => 'field_5a71494e83bcb',
 				'label'         => 'Show Map',
@@ -475,6 +476,7 @@ add_action(
 					'width' => '50',
 				),
 			);
+
 			$event_settings_fields[] = array(
 				'key'           => 'field_5a8123e9241f6',
 				'label'         => 'Default Map Zoom Level',
@@ -491,6 +493,7 @@ add_action(
 					'width' => '50',
 				),
 			);
+
 			$event_settings_fields[] = array(
 				'key'          => 'field_mapjson738474635',
 				'label'        => 'Google Maps JSON',
@@ -515,6 +518,7 @@ add_action(
 		// override with our own custom countries list if available
 		// use define('SQCDY_EVENTS_LEGACY_COUNTRY_FIELD', true); in wp-config.php to force use of the legacy text field instead
 		if ( function_exists( 'squarecandy_get_countries' ) && ! defined( 'SQCDY_EVENTS_LEGACY_COUNTRY_FIELD' ) ) {
+
 			$event_settings_fields[] = array(
 				'key'           => $home_country_basics['key'],
 				'label'         => $home_country_basics['label'],
@@ -530,6 +534,7 @@ add_action(
 				'return_format' => 'value',
 			);
 		} else {
+
 			$event_settings_fields[] = array(
 				'key'           => $home_country_basics['key'],
 				'label'         => $home_country_basics['label'],
@@ -542,6 +547,7 @@ add_action(
 
 		// if squarecandy-acf-works is present, add checkbox to sync work categories to events
 		if ( taxonomy_exists( 'works-category' ) && post_type_exists( 'works' ) ) {
+
 			$event_settings_fields[] = array(
 				'key'           => 'field_eventworkcats39194651',
 				'label'         => 'Sync Work Categories to Associated Events',
@@ -557,6 +563,7 @@ add_action(
 
 		// if views 2, add checkbox to put the title first in event preview
 		if ( sqcdy_is_views2( 'events' ) ) {
+
 			$event_settings_fields[] = array(
 				'key'           => 'field_eventtitlefirst39264951',
 				'label'         => 'Event Preview Title First',
@@ -684,7 +691,7 @@ add_action(
 					'description'           => '',
 				)
 			);
+		endif;
 
-	endif;
 	}
 );
