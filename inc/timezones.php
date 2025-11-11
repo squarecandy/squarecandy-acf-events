@@ -33,10 +33,12 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 			'subcity'   => ( isset( $zone[2] ) && $zone[2] ? $zone[2] : '' ),
 		);
 
-		// get country information
+		// get country & abbreviation
 		$tz                   = new DateTimeZone( $tzone );
 		$location             = $tz->getLocation();
 		$zone_info['country'] = Locale::getDisplayRegion( '-' . $location['country_code'], 'en' );
+		$dt                   = new DateTime( 'now', $tz );
+		$abbreviation         = $dt->format( 'T' );
 
 		// Allow overwriting the names of the continents
 		if ( $single_continent && is_string( $single_continent ) ) {
@@ -58,6 +60,9 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 		if ( ! $single_continent && $zone_info['country'] && ! str_contains( $zone_info['display'], $zone_info['country'] ) && ! str_contains( $zone_info['continent'], $zone_info['country'] ) ) {
 			$zone_info['display'] .= ', ' . $zone_info['country'];
 		}
+
+		// add abbreviation
+		$zone_info['display'] .= ' (' . $abbreviation . ')';
 
 		$timezone_array[ $zone_info['continent'] ][ $tzone ] = $zone_info;
 	}
