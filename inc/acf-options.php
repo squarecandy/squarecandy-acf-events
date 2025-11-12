@@ -191,7 +191,29 @@ add_action(
 						),
 					),
 				),
-
+			),
+			array(
+				'key'        => 'field_timezonestring20d63sn49',
+				'label'      => 'Site Timezone',
+				'name'       => 'timezone_string',
+				'type'       => 'select',
+				'choices'    => squarecandy_timezone_choice(),
+				'allow_null' => 1,
+				'multiple'   => 0,
+				'ui'         => 1,
+				'wrapper'    => array(
+					'width' => '50',
+				),
+			),
+			array(
+				'key'           => 'field_showtimezonesn683dsn39',
+				'label'         => 'Show Timezone on every Event',
+				'name'          => 'show_timezones',
+				'type'          => 'true_false',
+				'default_value' => '0',
+				'wrapper'       => array(
+					'width' => '50',
+				),
 			),
 			array(
 				'key'           => 'field_5a711b7d7ee7b',
@@ -201,7 +223,7 @@ add_action(
 				'message'       => 'Display Map Link Buttons',
 				'default_value' => 1,
 				'wrapper'       => array(
-					'width' => '50',
+					'width' => '100',
 				),
 			),
 			array(
@@ -501,7 +523,8 @@ add_action(
 				'type'         => 'textarea',
 				'instructions' => 'Generate JSON map stype code or edit existing code here: <a href="https://mapstyle.withgoogle.com/">https://mapstyle.withgoogle.com</a>',
 			);
-	endif;
+
+		endif; // get_option( 'options_google_maps_api_key' )
 
 		$home_country_basics = array(
 			'key'           => 'field_homecountry17593483',
@@ -695,3 +718,20 @@ add_action(
 
 	}
 );
+
+// when loading the 'update_option_options_timezone_string' option, use WP 'timezone_string' option value
+add_filter( 'acf/load_value', 'squarecandy_events_load_timezone', 100, 3 );
+function squarecandy_events_load_timezone( $value, $post_id, $field ) {
+	if ( 'field_timezonestring20d63sn49' === $field['key'] ) {
+		$value = get_option( 'timezone_string' );
+	}
+	return $value;
+}
+
+// when saving the 'update_option_options_timezone_string' option, write it also to the WP 'timezone_string' option
+add_action( 'update_option_options_timezone_string', 'squarecandy_events_save_timezone', 10, 3 );
+function squarecandy_events_save_timezone( $old_value, $value, $option ) {
+	if ( $value ) {
+		update_option( 'timezone_string', $value );
+	}
+}
