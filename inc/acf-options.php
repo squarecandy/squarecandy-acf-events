@@ -524,7 +524,7 @@ add_action(
 				'instructions' => 'Generate JSON map stype code or edit existing code here: <a href="https://mapstyle.withgoogle.com/">https://mapstyle.withgoogle.com</a>',
 			);
 
-		endif; // get_option( 'options_google_maps_api_key' )
+		endif; // 'options_google_maps_api_key'
 
 		$home_country_basics = array(
 			'key'           => 'field_homecountry17593483',

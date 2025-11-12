@@ -193,7 +193,7 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 	$start_time = $event['start_time'] ?? false;
 	$end_time   = $event['end_time'] ?? false;
 
-	$always_show_timezones = get_option( 'options_show_timezones' ); sqcdy_log( $always_show_timezones, '$always_show_timezones' );
+	$always_show_timezones = get_option( 'options_show_timezones' );
 	$always_show_timezones = apply_filters( 'squarecandy_always_show_timezones', $always_show_timezones );
 	$event_timezone        = isset( $event['timezone'] ) ? $event['timezone'] : false;
 	$event_timezone        = ! $event_timezone && $always_show_timezones ? get_option( 'timezone_string' ) : $event_timezone;
