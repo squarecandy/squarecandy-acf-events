@@ -12,10 +12,20 @@
  */
 function squarecandy_build_timezone_options( $tz_identifiers, $single_continent = false, $overwrite_continent = array() ) {
 
-	$continents      = array( 'America', 'Europe', 'Africa', 'Asia', 'Atlantic', 'Australia', 'Indian', 'Pacific', 'Antarctica', 'Arctic' );
-	$timezone_array  = array();
-	$select2_options = array();
-	$output          = array();
+	$continents        = array( 'America', 'Europe', 'Africa', 'Asia', 'Atlantic', 'Australia', 'Indian', 'Pacific', 'Antarctica', 'Arctic' );
+	$timezone_array    = array();
+	$select2_options   = array();
+	$output            = array();
+	$us_main_timezones = array(
+		'America/New_York'    => 'Eastern',
+		'America/Chicago'     => 'Central',
+		'America/Denver'      => 'Mountain',
+		'America/Phoenix'     => 'Mountain no DST',
+		'America/Los_Angeles' => 'Pacific',
+		'America/Anchorage'   => 'Alaska',
+		'America/Adak'        => 'Hawaii',
+		'Pacific/Honolulu'    => 'Hawaii no DST',
+	);
 
 	// loop through and calculate country & display fields
 	foreach ( $tz_identifiers as $tzone ) {
@@ -63,17 +73,6 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 
 			$pretty_timezone_name = '';
 
-			$us_main_timezones = array(
-				'America/New_York'    => 'Eastern',
-				'America/Chicago'     => 'Central',
-				'America/Denver'      => 'Mountain',
-				'America/Phoenix'     => 'Mountain no DST',
-				'America/Los_Angeles' => 'Pacific',
-				'America/Anchorage'   => 'Alaska',
-				'America/Adak'        => 'Hawaii',
-				'Pacific/Honolulu'    => 'Hawaii no DST',
-			);
-
 			if ( isset( $us_main_timezones[ $tzone ] ) ) {
 				$pretty_timezone_name = $us_main_timezones[ $tzone ];
 			} else {
@@ -95,9 +94,21 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 	// loop through again, maybe sort based on country, build options array
 	foreach ( $timezone_array as $continent => $timezones ) {
 
-		// maybe sort by country
+		// sort by country or if USA, sort main timezones to top
 		if ( ! $single_continent ) {
+
 			$timezones = wp_list_sort( $timezones, 'country' );
+
+		} elseif ( 'USA' === $continent ) {
+
+			$first_timezones = array();
+			foreach ( $us_main_timezones as $us_main_timezone => $info ) {
+				if ( isset( $timezones[ $us_main_timezone ] ) ) {
+					$first_timezones[ $us_main_timezone ] = $timezones[ $us_main_timezone ];
+					unset( $timezones[ $us_main_timezone ] );
+				}
+			}
+			$timezones = array_merge( $first_timezones, $timezones );
 		}
 
 		foreach ( $timezones as $zone_info ) {
@@ -109,12 +120,12 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 				$select2_options[ $continent ] = array();
 			}
 			$select2_options[ $continent ][ $zone_info['timezone'] ] = $display;
-
 		}
 	}
 
 	// if it's more than one continent, build it so each group is added in the order of continents specified
 	if ( count( $select2_options ) > 1 ) {
+
 		foreach ( $continents as $cont ) {
 			// allowing us to rename continents
 			if ( in_array( $cont, array_keys( $overwrite_continent ), true ) ) {
@@ -147,7 +158,7 @@ function squarecandy_timezone_choice( $selected_zone = null ) {
 
 			// sort the timezones & put non_us after US
 			$sorted_us_timezones     = squarecandy_build_timezone_options( $us_timezone_identifiers, 'USA' );
-			$sorted_non_us_timezones = squarecandy_build_timezone_options( $non_us_timezone_identifiers );
+			$sorted_non_us_timezones = squarecandy_build_timezone_options( $non_us_timezone_identifiers, false, array( 'America' => 'Americas' ) );
 			$select_options          = array_merge( $sorted_us_timezones, $sorted_non_us_timezones );
 			$select_options['UTC']   = 'UTC';
 
