@@ -866,9 +866,24 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 			$url_params .= '&location=' . rawurlencode( $event_address );
 		}
 
-		// @TODO - use google calendar URL format directly to decrease dependence on 3rd party service
+		// generate links for each service
 		foreach ( $services as $service => $name ) {
-			$url     = 'https://calndr.link/d/event/?service=' . $service . $url_params;
+			if ( 'google' === $service ) {
+				// use google calendar URL format directly to decrease dependence on 3rd party service
+				$url = squarecandy_add_to_gcal_url(
+					$event_title,
+					$start_date,
+					$end_date,
+					$event['short_description'] ?? '',
+					$event_address,
+					$event['all_day'] ?? false,
+					$timezone
+				);
+			} else {
+				// other services use calndr.link
+				$url = 'https://calndr.link/d/event/?service=' . $service . $url_params;
+			}
+
 			$output .= '<a href="' . esc_url( $url ) . '" class="add-to-calendar-link">' . esc_html( $name ) . '</a>';
 		}
 
