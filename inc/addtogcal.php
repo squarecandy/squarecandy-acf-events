@@ -56,13 +56,13 @@ if ( ! function_exists( 'squarecandy_add_to_gcal' ) && ! function_exists( 'squar
 	 * @author Peter Wise / Square Candy Design
 	 * @link https://gist.github.com/petertwise/26611bbcfc63f9c7e3a7dc45e9145133
 	 * @param string    $name          The main title of the event
-	 * @param string	$startdate     The start date and time in any format that strtotime can digest
-	 * @param string	$enddate       The end date and time in any format that strtotime can digest
-	 * @param string	$description   The longer description text of the event
-	 * @param string	$location      The event location - any text google maps can parse as a single point
-	 * @param bool		$allday        Is the event "All Day" with no times displayed?
-	 * @param string	$timezone      The timezone identifier, e.g. 'America/New_York'
-	 * @return string A URL to add the event
+	 * @param string    $startdate     The start date and time in any format that strtotime can digest
+	 * @param string    $enddate       The end date and time in any format that strtotime can digest
+	 * @param string    $description   The longer description text of the event
+	 * @param string    $location      The event location - any text google maps can parse as a single point
+	 * @param bool      $allday        Is the event "All Day" with no times displayed?
+	 * @param string    $timezone      The timezone identifier, e.g. 'America/New_York'
+	 * @return string   A URL to add the event
 	 */
 	function squarecandy_add_to_gcal_url(
 		$name,

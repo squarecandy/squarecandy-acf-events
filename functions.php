@@ -838,8 +838,8 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 		$url_params = '';
 
 		if ( ! empty( $event['all_day'] ) ) {
-			$url_params .= '&all_day=true';
-			$timezone = false; // floating timezone always used for all day events
+			$url_params     .= '&all_day=true';
+			$timezone        = false; // floating timezone always used for all day events
 			$url_date_format = 'Y-m-d';
 		}
 
