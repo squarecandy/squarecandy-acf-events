@@ -166,7 +166,7 @@ function squarecandy_acf_events_template_chooser( $template ) {
  * @param string $date_time_string - date & time in a format aceptable to DateTime
  * @param string $timezone_string - timezone string e.g. America/New_york
  * @return string - timezone abbreviation e.g. EDT
- */ 
+ */
 function squarecandy_acf_events_get_timezone_abbreviation( $date_time_string, $timezone_string ) {
 	try {
 		// try using date and time to get correct timezone abbreviation for that date/time
@@ -175,7 +175,7 @@ function squarecandy_acf_events_get_timezone_abbreviation( $date_time_string, $t
 		// fall back to using 'now'
 		sqcdy_log( 'Error creating DateTime with ' . $date_time_string );
 		$date_time = new DateTime( 'now' );
-	}		
+	}
 	$date_time->setTimeZone( new DateTimeZone( $timezone_string ) );
 	return $date_time->format( 'T' );
 }

@@ -28,14 +28,14 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 	);
 
 	// get all abbreviations
-	$all_abbreviations   = timezone_abbreviations_list(); 
+	$all_abbreviations   = timezone_abbreviations_list();
 	$abbreviation_lookup = array();
 	foreach ( $all_abbreviations as $abbreviation => $timezones_for_abbrev ) {
 		foreach ( $timezones_for_abbrev as $at ) {
-			$atz_id = $at[ 'timezone_id' ];
+			$atz_id = $at['timezone_id'];
 			$abbrev = $abbreviation;
 			// only use non daytime savings abbrevations
-			if ( ! $at[ 'dst' ] ) {
+			if ( ! $at['dst'] ) {
 				if ( isset( $abbreviation_lookup[ $atz_id ] ) ) {
 					$abbreviation_lookup[ $atz_id ][] = $abbrev;
 				} else {
