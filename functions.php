@@ -3,7 +3,7 @@
 
 define( 'ACF_EVENTS_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ACF_EVENTS_URL', plugin_dir_url( __FILE__ ) );
-define( 'ACF_EVENTS_VERSION', 'version-1.10.1-timezones.3' );
+define( 'ACF_EVENTS_VERSION', 'version-1.11.0-timezones.0' );
 
 // don't let users activate w/o ACF
 register_activation_hook( __FILE__, 'squarecandy_acf_events_activate' );
@@ -193,8 +193,7 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 	$start_time = $event['start_time'] ?? false;
 	$end_time   = $event['end_time'] ?? false;
 
-	$always_show_timezones = get_option( 'options_show_timezones' );
-	$always_show_timezones = apply_filters( 'squarecandy_always_show_timezones', $always_show_timezones );
+	$always_show_timezones = apply_filters( 'squarecandy_always_show_timezones', false );
 	$event_timezone        = isset( $event['timezone'] ) ? $event['timezone'] : false;
 	$event_timezone        = ! $event_timezone && $always_show_timezones ? get_option( 'timezone_string' ) : $event_timezone;
 	$timezone_abbrev       = '';
@@ -807,7 +806,9 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 
 	else :
 
-		// https://calndr.link/api-docs
+		// documentation:
+		// https://addcal.co/integrations/smart-links
+		// https://addcal.co/api-docs
 		// additional valid values: 'yahoo', 'outlookcom'
 		$services = array(
 			'google'    => 'Google',
@@ -822,39 +823,67 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 		$output  = '<div class="squarecandy-add-to-calendar">';
 		$output .= '<span class="label add-to-calendar-label">' . __( 'Add to Calendar:', 'squarecandy-acf-events' ) . '</span>';
 
-		// timezone
-		// use WordPress timezone
-		// $timezone = get_option( 'timezone_string' );
-		// @TODO - add per-event timezone option
+		// if event has a timezone set, use that
+		if ( ! empty( $event['timezone'] ) ) {
+			$timezone = $event['timezone'];
+		} else {
+			// fallback for no per-event timezone set
+			// @TODO - create a settings option to choose defaulting to WP timezone or no timezone at all.
+			// use WordPress timezone
+			$timezone = get_option( 'timezone_string' );
+		}
+
+		$url_date_format = 'Y-m-d\TH:i:s';
+
+		$url_params = '';
+
+		if ( ! empty( $event['all_day'] ) ) {
+			$url_params     .= '&all_day=true';
+			$timezone        = false; // floating timezone always used for all day events
+			$url_date_format = 'Y-m-d';
+		}
 
 		// convert start date to ISO format
-		$start_date = date_i18n( 'c', strtotime( $start_date ) );
+		$start_date = date_i18n( $url_date_format, strtotime( $start_date ) );
 
 		// convert end date to ISO format
 		if ( ! empty( $end_date ) && $multi_day ) {
-			$end_date = date_i18n( 'c', strtotime( $end_date ) );
+			$end_date = date_i18n( $url_date_format, strtotime( $end_date ) );
 		}
 
-		$url_params  = '&title=' . rawurlencode( $event_title );
-		$url_params .= '&start=' . rawurlencode( $start_date );
+		$url_params .= '&start=' . $start_date;
 		if ( ! empty( $end_date ) ) {
-			$url_params .= '&end=' . rawurlencode( $end_date );
+			$url_params .= '&end=' . $end_date;
 		}
+
+		$url_params .= '&timezone=' . rawurlencode( $timezone );
+
+		$url_params .= '&title=' . rawurlencode( $event_title );
 		if ( ! empty( $event['short_description'] ) ) {
 			$url_params .= '&description=' . rawurlencode( $event['short_description'] );
 		}
 		if ( ! empty( $event_address ) ) {
 			$url_params .= '&location=' . rawurlencode( $event_address );
 		}
-		if ( ! empty( $event['all_day'] ) ) {
-			$url_params .= '&all_day=true';
-		}
 
-		// @TODO add timezone support
-		// $url_params .= '&timezone=' . rawurlencode( $timezone );
-
+		// generate links for each service
 		foreach ( $services as $service => $name ) {
-			$url     = 'https://calndr.link/d/event/?service=' . $service . $url_params;
+			if ( 'google' === $service ) {
+				// use google calendar URL format directly to decrease dependence on 3rd party service
+				$url = squarecandy_add_to_gcal_url(
+					$event_title,
+					$start_date,
+					$end_date,
+					$event['short_description'] ?? '',
+					$event_address,
+					$event['all_day'] ?? false,
+					$timezone
+				);
+			} else {
+				// other services use calndr.link
+				$url = 'https://calndr.link/d/event/?service=' . $service . $url_params;
+			}
+
 			$output .= '<a href="' . esc_url( $url ) . '" class="add-to-calendar-link">' . esc_html( $name ) . '</a>';
 		}
 
