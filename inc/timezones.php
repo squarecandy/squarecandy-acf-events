@@ -27,6 +27,24 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 		'Pacific/Honolulu'    => 'Hawaii no DST',
 	);
 
+	// get all abbreviations
+	$all_abbreviations   = timezone_abbreviations_list(); 
+	$abbreviation_lookup = array();
+	foreach ( $all_abbreviations as $abbreviation => $timezones_for_abbrev ) {
+		foreach ( $timezones_for_abbrev as $at ) {
+			$atz_id = $at[ 'timezone_id' ];
+			$abbrev = $abbreviation;
+			// only use non daytime savings abbrevations
+			if ( ! $at[ 'dst' ] ) {
+				if ( isset( $abbreviation_lookup[ $atz_id ] ) ) {
+					$abbreviation_lookup[ $atz_id ][] = $abbrev;
+				} else {
+					$abbreviation_lookup[ $atz_id ] = array( $abbrev );
+				}
+			}
+		}
+	}
+
 	// loop through and calculate country & display fields
 	foreach ( $tz_identifiers as $tzone ) {
 
@@ -49,6 +67,10 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 		$zone_info['country'] = Locale::getDisplayRegion( '-' . $location['country_code'], 'en' );
 		$dt                   = new DateTime( 'now', $tz );
 		$abbreviation         = $dt->format( 'T' );
+		// for non-numeric (i.e. offset) abbreviations, use the first matching non-DST abbreviation
+		if ( ! is_numeric( $abbreviation ) && isset( $abbreviation_lookup[ $tzone ][0] ) ) {
+			$abbreviation = strtoupper( $abbreviation_lookup[ $tzone ][0] );
+		}
 
 		// Allow overwriting the names of the continents
 		if ( $single_continent && is_string( $single_continent ) ) {
@@ -145,7 +167,9 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
  */
 function squarecandy_timezone_choice( $selected_zone = null ) {
 
-	$select_options = get_transient( 'squarecandy-events-timezone-options' );
+	$use_transient = true; // false for debugging
+
+	$select_options = $use_transient ? get_transient( 'squarecandy-events-timezone-options' ) : false;
 
 	if ( ! $select_options ) :
 
@@ -160,11 +184,12 @@ function squarecandy_timezone_choice( $selected_zone = null ) {
 			$sorted_us_timezones     = squarecandy_build_timezone_options( $us_timezone_identifiers, 'USA' );
 			$sorted_non_us_timezones = squarecandy_build_timezone_options( $non_us_timezone_identifiers, false, array( 'America' => 'Americas' ) );
 			$select_options          = array_merge( $sorted_us_timezones, $sorted_non_us_timezones );
-			$select_options['UTC']   = 'UTC';
+			$select_options['UTC']   = array( 'UTC' => 'UTC' );
 
 		endif;
-
-		set_transient( 'squarecandy-events-timezone-options', $select_options, 86400 ); // 24 hours
+		if ( $use_transient ) {
+			set_transient( 'squarecandy-events-timezone-options', $select_options, 86400 ); // 24 hours
+		}
 
 	endif;
 
