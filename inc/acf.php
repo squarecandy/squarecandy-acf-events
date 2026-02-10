@@ -111,21 +111,51 @@ function squarecandy_events_add_fields() {
 		'return_format'     => 'g:i a',
 	);
 
-	$eventfields['timezone'] = array(
-		'key'               => 'field_fn48bedm4dn49',
-		'label'             => 'Timezone',
-		'name'              => 'timezone',
-		'type'              => 'select',
-		'conditional_logic' => 0,
-		'choices'           => squarecandy_timezone_choice(),
-		'allow_null'        => 1,
-		'multiple'          => 0,
-		'ui'                => 1,
-		'wrapper'           => array(
-			'width' => '25',
-		),
-		'instructions'      => 'leave empty for default: ' . wp_timezone_string(),
-	);
+	$never_show_timezones = get_option( 'options_never_show_timezones' );
+	if ( ! $never_show_timezones ) :
+
+		$timezone_choices = squarecandy_timezone_choice();
+		$wp_timezone      = wp_timezone_string();
+		$pretty_timezone  = '';
+		// get default website timezone in same format as picker
+		foreach ( $timezone_choices as $country => $timezones ) {
+			if ( ! is_array( $timezones ) ) {
+				continue;
+			}
+			foreach ( $timezones as $timezone => $timezone_display ) {
+				if ( $timezone === $wp_timezone ) {
+					$pretty_timezone = $timezone_display;
+					break;
+				}
+			}
+		}
+		$pretty_timezone = $pretty_timezone ? $pretty_timezone : str_replace( '_', ' ', $wp_timezone );
+
+		$eventfields['timezone'] = array(
+			'key'               => 'field_fn48bedm4dn49',
+			'label'             => 'Timezone',
+			'name'              => 'timezone',
+			'type'              => 'select',
+			'conditional_logic' => 0,
+			'choices'           => $timezone_choices,
+			'allow_null'        => 1,
+			'multiple'          => 0,
+			'ui'                => 1,
+			'conditional_logic' => array(
+				array(
+					array(
+						'field'    => 'field_5616bcdfb642d', // all_day
+						'operator' => '!=',
+						'value'    => '1',
+					),
+				),
+			),
+			'wrapper'           => array(
+				'width' => '25',
+			),
+			'instructions'      => 'leave empty for default: ' . $pretty_timezone,
+		);
+	endif;
 
 	$eventfields['end_date'] = array(
 		'key'               => 'field_5616bd75112ca',

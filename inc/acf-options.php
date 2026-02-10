@@ -208,7 +208,17 @@ add_action(
 			array(
 				'key'           => 'field_showtimezonesn683dsn39',
 				'label'         => 'Show Timezone on every Event',
-				'name'          => 'show_timezones',
+				'name'          => 'always_show_timezones',
+				'type'          => 'true_false',
+				'default_value' => '0',
+				'wrapper'       => array(
+					'width' => '50',
+				),
+			),
+			array(
+				'key'           => 'field_hidealltimezonesdb37820sj',
+				'label'         => 'Hide Timezones and Timezone UI',
+				'name'          => 'never_show_timezones',
 				'type'          => 'true_false',
 				'default_value' => '0',
 				'wrapper'       => array(
