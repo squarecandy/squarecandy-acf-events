@@ -162,6 +162,25 @@ function squarecandy_acf_events_template_chooser( $template ) {
 }
 
 /**
+ * Get the timezone abbreviation for a date/time
+ * @param string $date_time_string - date & time in a format aceptable to DateTime
+ * @param string $timezone_string - timezone string e.g. America/New_york
+ * @return string - timezone abbreviation e.g. EDT
+ */ 
+function squarecandy_acf_events_get_timezone_abbreviation( $date_time_string, $timezone_string ) {
+	try {
+		// try using date and time to get correct timezone abbreviation for that date/time
+		$date_time = new DateTime( $date_time_string );
+	} catch ( Exception $e ) {
+		// fall back to using 'now'
+		sqcdy_log( 'Error creating DateTime with ' . $date_time_string );
+		$date_time = new DateTime( 'now' );
+	}		
+	$date_time->setTimeZone( new DateTimeZone( $timezone_string ) );
+	return $date_time->format( 'T' );
+}
+
+/**
  * Take event (as array) and create formatted date string
  *
  * @param array $event [ 'multi_day', 'all_day', 'start_date', 'end_date', 'start_time', 'end_time' ]
@@ -193,15 +212,26 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 	$start_time = $event['start_time'] ?? false;
 	$end_time   = $event['end_time'] ?? false;
 
-	$always_show_timezones = apply_filters( 'squarecandy_always_show_timezones', false );
+	$always_show_timezones = get_option( 'options_always_show_timezones' );
+	$never_show_timezones  = get_option( 'options_never_show_timezones' );
+	$always_show_timezones = apply_filters( 'squarecandy_always_show_timezones', $always_show_timezones );
 	$event_timezone        = isset( $event['timezone'] ) ? $event['timezone'] : false;
 	$event_timezone        = ! $event_timezone && $always_show_timezones ? get_option( 'timezone_string' ) : $event_timezone;
 	$timezone_abbrev       = '';
+	$end_timezone_abbrev   = '';
 
-	if ( $event_timezone ) {
-		$date_time = new DateTime();
-		$date_time->setTimeZone( new DateTimeZone( $event_timezone ) );
-		$timezone_abbrev = ' ' . $date_time->format( 'T' );
+	if ( $event_timezone && ! $never_show_timezones ) {
+		$full_start_date = $start_time ? $start_date . ' ' . $start_time : $start_date;
+		$timezone_abbrev = squarecandy_acf_events_get_timezone_abbreviation( $full_start_date, $event_timezone );
+		$timezone_abbrev = ' <span class="timezone">' . $timezone_abbrev . '</span>';
+
+		// if we have a range of dates & times, calculate the end timezone abbreviation as it may be different
+		if ( ! $all_day &&
+			$start_date !== $end_date ) {
+			$full_end_date       = $end_time ? $end_date . ' ' . $end_time : $end_date;
+			$end_timezone_abbrev = squarecandy_acf_events_get_timezone_abbreviation( $full_end_date, $event_timezone );
+			$end_timezone_abbrev = ' <span class="timezone">' . $end_timezone_abbrev . '</span>';
+		}
 	}
 
 	if ( $compact ) {
@@ -219,9 +249,7 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 		if ( ! $all_day ) {
 			// with time
 			// example: June 3, 2019 - 3:00pm
-			$output .= $sep . '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) ) . $timezone_abbrev . '</span>';
-		} else {
-			$output .= $timezone_abbrev; // should there be timezone on the end of just a date?
+			$output .= $sep . '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) ) . '</span>' . $timezone_abbrev;
 		}
 	} else {
 		// multi day
@@ -247,7 +275,6 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 			$output .= date_i18n( $formats['date_format_multi_start'], strtotime( $start_date ) );
 			$output .= $range;
 			$output .= date_i18n( $formats['date_format_multi_end'], strtotime( $end_date ) );
-			$output .= $timezone_abbrev; // should there be timezone on the end of just a date?
 		} elseif (
 			$all_day &&
 			$start_date === $end_date
@@ -255,7 +282,6 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 			// fringe case: start and end date are set the same, no time (all day)
 			// example: June 3, 2019
 			$output .= date_i18n( $formats['date_format'], strtotime( $start_date ) );
-			$output .= $timezone_abbrev; // should there be timezone on the end of just a date?
 		} elseif (
 			! $all_day &&
 			$start_date === $end_date &&
@@ -264,7 +290,7 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 			// fringe case: start and end time and date are set the same
 			// example: June 3, 2019 - 3pm
 			$output .= date_i18n( $formats['date_format'], strtotime( $start_date ) );
-			$output .= $sep . '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) ) . $timezone_abbrev . '</span>';
+			$output .= $sep . '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) ) . '</span>' . $timezone_abbrev;
 		} elseif (
 			! $all_day &&
 			$start_date !== $end_date &&
@@ -277,7 +303,7 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 			$output .= date_i18n( $formats['date_format_multi_start'], strtotime( $start_date ) );
 			$output .= $range;
 			$output .= date_i18n( $formats['date_format_multi_end'], strtotime( $end_date ) );
-			$output .= $sep . '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) ) . $timezone_abbrev . '</span>';
+			$output .= $sep . '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) ) . '</span>' . $timezone_abbrev;
 		} elseif (
 			// start and end date are set the same, all day not checked
 			(
@@ -299,19 +325,21 @@ function get_squarecandy_acf_events_date_display( $event, $compact = null ) {
 			$output .= $sep;
 			$output .= '<span class="time">' . date_i18n( $formats['time_format'], strtotime( $start_time ) );
 			$output .= $range;
-			$output .= date_i18n( $formats['time_format'], strtotime( $end_time ) ) . $timezone_abbrev . '</span>';
+			$output .= date_i18n( $formats['time_format'], strtotime( $end_time ) ) . '</span>' . $timezone_abbrev;
 		} elseif (
 			! $all_day &&
 			$start_date !== $end_date
 		) {
 			// range of dates and times
 			// example: // example: Jun 20 at 3pm — Jun 21 at 5pm
-			$output .= date_i18n( $formats['date_format_multi_start'], strtotime( $start_date ) ) . $sep2 . '<span class="time">' . $start_time . '</span> ';
-			$output .= $range . ' ' . date_i18n( $formats['date_format_multi_end'], strtotime( $end_date ) ) . $sep2 . '<span class="time">' . $end_time . $timezone_abbrev . '</span>';
+			$output .= date_i18n( $formats['date_format_multi_start'], strtotime( $start_date ) ) . $sep2 . '<span class="time">' . $start_time . '</span>';
+			$output .= $timezone_abbrev !== $end_timezone_abbrev ? $timezone_abbrev : ''; // add start timezone abbrev if it's different to end
+			$output .= ' ' . $range . ' ' . date_i18n( $formats['date_format_multi_end'], strtotime( $end_date ) ) . $sep2 . '<span class="time">' . $end_time . '</span>' . $end_timezone_abbrev;
 		}
 	}
 	return $output;
 }
+
 function squarecandy_acf_events_date_display( $event ) {
 	echo get_squarecandy_acf_events_date_display( $event );
 }
