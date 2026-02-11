@@ -167,26 +167,67 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
  */
 function squarecandy_timezone_choice( $selected_zone = null ) {
 
-	$use_transient = true; // false for debugging
+	$use_transient = ! sqcdy_is_debug(); // don't use transient when debugging
 
 	$select_options = $use_transient ? get_transient( 'squarecandy-events-timezone-options' ) : false;
 
 	if ( ! $select_options ) :
 
-		$sort_us_first      = apply_filters( 'squarecandy_events_sort_us_first', true );
-		$all_tz_identifiers = timezone_identifiers_list();
+		$all_tz_identifiers         = timezone_identifiers_list();
+		$first_timezone_identifiers = apply_filters( 'squarecandy_timezone_options_first_timezones', array() );
+		$sort_popular_first         = apply_filters( 'squarecandy_events_sort_popular_first', true );
 
-		if ( $sort_us_first ) :
-			$us_timezone_identifiers     = DateTimeZone::listIdentifiers( DateTimeZone::PER_COUNTRY, 'US' );
-			$non_us_timezone_identifiers = array_diff( $all_tz_identifiers, $us_timezone_identifiers );
-
+		if ( $first_timezone_identifiers ) :
+			$non_first_timezone_identifiers = array_diff( $all_tz_identifiers, $first_timezone_identifiers );
+			$first_timezones_title          = apply_filters( 'squarecandy_timezone_options_first_timezones_title', 'USA' );
 			// sort the timezones & put non_us after US
-			$sorted_us_timezones     = squarecandy_build_timezone_options( $us_timezone_identifiers, 'USA' );
-			$sorted_non_us_timezones = squarecandy_build_timezone_options( $non_us_timezone_identifiers, false, array( 'America' => 'Americas' ) );
-			$select_options          = array_merge( $sorted_us_timezones, $sorted_non_us_timezones );
-			$select_options['UTC']   = array( 'UTC' => 'UTC' );
-
+			$sorted_first_timezones     = squarecandy_build_timezone_options( $first_timezone_identifiers, $first_timezones_title );
+			$sorted_non_first_timezones = squarecandy_build_timezone_options( $non_first_timezone_identifiers, false, array( 'America' => 'Americas' ) );
+			$select_options             = array_merge( $sorted_first_timezones, $sorted_non_first_timezones );
+		else :
+			$select_options = squarecandy_build_timezone_options( $all_tz_identifiers, false, array( 'America' => 'Americas' ) );
 		endif;
+
+		// add UTC to the list
+		$select_options['UTC'] = array( 'UTC' => 'UTC' );
+
+		if ( $sort_popular_first ) :
+			// get most used timezones from the db
+			global $wpdb;
+			$popular_timezones = $wpdb->get_col( "SELECT `meta_value` FROM $wpdb->postmeta WHERE `meta_key` = 'timezone' AND `meta_value` != '' GROUP BY `meta_value` ORDER BY count(`post_id`) DESC, `meta_value` ASC LIMIT 5" );
+			$popular_options   = array();
+			$popular_count     = count( $popular_timezones );
+			$wp_timezone       = wp_timezone_string();
+			$popular_timezones = $popular_count ? $popular_timezones : array( $wp_timezone );
+			$popular_title     = 'Most Used';
+
+			// get info for most used timezones
+			foreach ( $select_options as $continent => $timezones ) {
+				foreach ( $timezones as $tz => $tz_display ) {
+					if ( in_array( $tz, $popular_timezones, true ) ) {
+						$popular_options[ $tz ] = $tz_display;
+						unset( $select_options[ $continent ][ $tz ] ); // remove from the main list, otherwise the selct gets confused
+					}
+				}
+			}
+
+			if ( $popular_count > 1 ) {
+				// resort most used timezones to roder from sql query
+				uksort(
+					$popular_options,
+					function( $n ) use ( $popular_timezones ) {
+						return array_search( $n, $popular_timezones, true );
+					}
+				);
+			} elseif ( $popular_timezones[0] === $wp_timezone ) {
+				// if the only timezone in the list is the default, title it that way
+				$popular_title = 'Default';
+			}
+
+			// recombine with rest of options
+			$select_options = array_merge( array( $popular_title => $popular_options ), $select_options );
+		endif;
+
 		if ( $use_transient ) {
 			set_transient( 'squarecandy-events-timezone-options', $select_options, 86400 ); // 24 hours
 		}
@@ -195,6 +236,18 @@ function squarecandy_timezone_choice( $selected_zone = null ) {
 
 	return $select_options;
 }
+
+
+// by default, list US timezones at the top of the timezone list.
+add_filter( 'squarecandy_timezone_options_first_timezones', 'squarecandy_timezone_us_timezone_identifiers' );
+function squarecandy_timezone_us_timezone_identifiers( $first_timezones ) {
+	// can short circuit this
+	if ( ! $first_timezones ) {
+		$first_timezones = DateTimeZone::listIdentifiers( DateTimeZone::PER_COUNTRY, 'US' );
+	}
+	return $first_timezones;
+}
+
 
 add_filter( 'acf/load_field/name=tztest', 'squarecandy_tz_load_field' );
 function squarecandy_tz_load_field( $field ) {
