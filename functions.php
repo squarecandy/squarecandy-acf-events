@@ -816,6 +816,21 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 
 	$event_title = get_the_title();
 
+	$never_show_timezones  = get_option( 'options_never_show_timezones' );
+	$add_to_cal_use_local_timezone = get_option( 'options_add_to_cal_use_local_timezone' );
+
+	if ( ! $never_show_timezones && ! empty( $event['timezone'] ) ) {
+		// if the single event has a timezone, use that - unless the full timezones feature is disabled.
+		$timezone = $event['timezone'];
+	} elseif ( empty( $event['timezone'] ) && $add_to_cal_use_local_timezone && get_option( 'timezone_string' ) ) {
+		// if the single event doesn't have a timezone, but the option to use the local timezone for calendar links is enabled, use the WP local timezone
+		$timezone = get_option( 'timezone_string' );
+	} else {
+		// in all other cases, don't include a timezone in the calendar link
+		// (this will cause it to default to the user's local timezone on their own calendar)
+		$timezone = false;
+	}
+
 	if ( ! sqcdy_is_views2( 'events' ) ) :
 
 		// shortcode also wraps this text & uses different icon
@@ -829,7 +844,8 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 			$event_address,
 			$event['all_day'] ?? false,
 			$linktext,
-			array( 'gcal-button', 'button', 'button-bold' )
+			array( 'gcal-button', 'button', 'button-bold' ),
+			$timezone
 		);
 
 	else :
@@ -850,16 +866,6 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 
 		$output  = '<div class="squarecandy-add-to-calendar">';
 		$output .= '<span class="label add-to-calendar-label">' . __( 'Add to Calendar:', 'squarecandy-acf-events' ) . '</span>';
-
-		// if event has a timezone set, use that
-		if ( ! empty( $event['timezone'] ) ) {
-			$timezone = $event['timezone'];
-		} else {
-			// fallback for no per-event timezone set
-			// @TODO - create a settings option to choose defaulting to WP timezone or no timezone at all.
-			// use WordPress timezone
-			$timezone = get_option( 'timezone_string' );
-		}
 
 		$url_date_format = 'Y-m-d\TH:i:s';
 
@@ -884,7 +890,9 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 			$url_params .= '&end=' . $end_date;
 		}
 
-		$url_params .= '&timezone=' . rawurlencode( $timezone );
+		if ( $timezone ) {
+			$url_params .= '&timezone=' . rawurlencode( $timezone );
+		}
 
 		$url_params .= '&title=' . rawurlencode( $event_title );
 		if ( ! empty( $event['short_description'] ) ) {

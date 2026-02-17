@@ -205,10 +205,10 @@ add_action(
 					'width' => '50',
 				),
 			),
-			array(
-				'key'           => 'field_showtimezonesn683dsn39',
-				'label'         => 'Show Timezone on every Event',
-				'name'          => 'always_show_timezones',
+				array(
+				'key'           => 'field_hidealltimezonesdb37820sj',
+				'label'         => 'Hide Timezones and Timezone UI',
+				'name'          => 'never_show_timezones',
 				'type'          => 'true_false',
 				'default_value' => '0',
 				'wrapper'       => array(
@@ -216,9 +216,31 @@ add_action(
 				),
 			),
 			array(
-				'key'           => 'field_hidealltimezonesdb37820sj',
-				'label'         => 'Hide Timezones and Timezone UI',
-				'name'          => 'never_show_timezones',
+				'key'           => 'field_showtimezonesn683dsn39',
+				'label'         => 'Empty Timezone Field Behavior',
+				'name'          => 'always_show_timezones',
+				'type'          => 'true_false',
+				'instructions'   => 'When an event does not have a timezone specified, show the Site Timezone on the front end, instead of nothing.',
+				'message'       => 'Show Timezone on every Event',
+				'default_value' => '0',
+				'wrapper'       => array(
+					'width' => '50',
+				),
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_hidealltimezonesdb37820sj',
+							'operator' => '!=',
+							'value'    => '1',
+						),
+					),
+				),
+			),
+			array(
+				'key'           => 'field_addtocaltimezones_62834628',
+				'label'         => 'Default Timezone for Add to Calendar Links',
+				'name'          => 'add_to_cal_use_local_timezone',
+				'message'       => 'Use the site timezone for add to calendar links when per-event timezones are not specified/shown',
 				'type'          => 'true_false',
 				'default_value' => '0',
 				'wrapper'       => array(
@@ -645,6 +667,16 @@ add_action(
 			'media_upload'  => 0,
 			'delay'         => 0,
 		);
+
+		if ( ! sqcdy_is_views2() ) : // if the whole site is on views 2, this option is not needed
+			$event_settings_fields[] = array(
+				'key'           => 'field_eventsviews2_68539451',
+				'label'         => 'Views 2',
+				'name'          => 'events_views2',
+				'type'          => 'true_false',
+				'message'       => 'Enable Views 2 for Events',
+			);
+		endif;
 
 		//add ACF fields on 'Events Settings' page
 		acf_add_local_field_group(
