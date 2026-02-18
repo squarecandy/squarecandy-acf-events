@@ -15,17 +15,17 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [24.x]
 
     steps:
-    - name: Make sure we are using composer v1
+    - name: Make sure we are using composer v2
       run: |
-        sudo composer self-update --1
+        sudo composer self-update --2
         sudo chown $USER $HOME/.composer
     - uses: actions/checkout@v3
     - uses: nanasess/setup-php@master
       with:
-        php-version: '7.4'
+        php-version: '8.2'
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:

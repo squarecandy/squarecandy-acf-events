@@ -1,0 +1,18 @@
+{
+	"sassFiles": {
+		"dist/css/main.min.css": "css/main.scss",
+		"dist/css/views2.min.css": "css/views2.scss",
+		"dist/css/admin.min.css": "css/admin.scss"
+	},
+	"copyType": "plugin",
+	"phpFiles": [ "*.php", "inc/*.php", "post-types/*.php", "taxonomies/*.php", "templates/*.php" ],
+	"additionalCopyFiles": [],
+	"copyCycle2": false,
+	"copyMagnific": false,
+	"copyMixitup": false,
+	"customGruntfile": false,
+	"customPackageJson": false,
+	"customComposerJson": false,
+	"doModernizr": false,
+	"doSvgStore": false
+}
