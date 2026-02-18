@@ -714,16 +714,16 @@ add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
  * Generate and echo/return html to display buttons for an event
  * @param array $event
  * @param bool $show_post_link_button
- * @param bool $echo
+ * @param bool $echo_output
  * @return string $output OR echos string $output
  *
  * button types / $event properties:
  * 'tickets_link', 'more_info_link', 'facebook_link', 'add_to_gcal'
  */
-function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo = true ) {
+function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo_output = true ) {
 
 	$output = '';
-	$single = $echo;
+	$single = $echo_output;
 
 	$now       = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
 	$is_future = ! empty( $event['archive_date'] ) && $event['archive_date'] > $now;
@@ -786,7 +786,7 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 		$output .= squarecandy_add_to_calendar( $event, $single );
 	endif;
 
-	if ( $echo ) {
+	if ( $echo_output ) {
 		echo $output;
 	} else {
 		return $output;
@@ -816,7 +816,7 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 
 	$event_title = get_the_title();
 
-	$never_show_timezones  = get_option( 'options_never_show_timezones' );
+	$never_show_timezones          = get_option( 'options_never_show_timezones' );
 	$add_to_cal_use_local_timezone = get_option( 'options_add_to_cal_use_local_timezone' );
 
 	if ( ! empty( $event['all_day'] ) ) {

@@ -205,7 +205,7 @@ add_action(
 					'width' => '50',
 				),
 			),
-				array(
+			array(
 				'key'           => 'field_hidealltimezonesdb37820sj',
 				'label'         => 'Hide Timezones and Timezone UI',
 				'name'          => 'never_show_timezones',
@@ -216,14 +216,14 @@ add_action(
 				),
 			),
 			array(
-				'key'           => 'field_showtimezonesn683dsn39',
-				'label'         => 'Empty Timezone Field Behavior',
-				'name'          => 'always_show_timezones',
-				'type'          => 'true_false',
-				'instructions'   => 'When an event does not have a timezone specified, show the Site Timezone on the front end, instead of nothing.',
-				'message'       => 'Show Timezone on every Event',
-				'default_value' => '0',
-				'wrapper'       => array(
+				'key'               => 'field_showtimezonesn683dsn39',
+				'label'             => 'Empty Timezone Field Behavior',
+				'name'              => 'always_show_timezones',
+				'type'              => 'true_false',
+				'instructions'      => 'When an event does not have a timezone specified, show the Site Timezone on the front end, instead of nothing.',
+				'message'           => 'Show Timezone on every Event',
+				'default_value'     => '0',
+				'wrapper'           => array(
 					'width' => '50',
 				),
 				'conditional_logic' => array(
@@ -670,11 +670,11 @@ add_action(
 
 		if ( ! sqcdy_is_views2() ) : // if the whole site is on views 2, this option is not needed
 			$event_settings_fields[] = array(
-				'key'           => 'field_eventsviews2_68539451',
-				'label'         => 'Views 2',
-				'name'          => 'events_views2',
-				'type'          => 'true_false',
-				'message'       => 'Enable Views 2 for Events',
+				'key'     => 'field_eventsviews2_68539451',
+				'label'   => 'Views 2',
+				'name'    => 'events_views2',
+				'type'    => 'true_false',
+				'message' => 'Enable Views 2 for Events',
 			);
 		endif;
 

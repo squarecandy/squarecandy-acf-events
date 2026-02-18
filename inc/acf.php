@@ -41,9 +41,9 @@ function squarecandy_events_add_fields() {
 		),
 		'message'           => '',
 		'default_value'     => 0,
-		'ui'            => 1,
-		'ui_on_text'    => '✓',
-		'ui_off_text'   => ' ',
+		'ui'                => 1,
+		'ui_on_text'        => '✓',
+		'ui_off_text'       => ' ',
 	);
 
 	$eventfields['all_day'] = array(
@@ -91,8 +91,6 @@ function squarecandy_events_add_fields() {
 		'return_format'     => 'F j, Y',
 		'first_day'         => 0,
 	);
-
-
 
 	$eventfields['start_time'] = array(
 		'key'               => 'field_5616bc2b9fbed',
