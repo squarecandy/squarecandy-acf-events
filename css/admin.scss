@@ -39,9 +39,13 @@
 	content: "";
 }
 
-.acf-field.start-date .acf-label {
-	display: flex;
-	align-items: flex-end;
-	min-height: calc(2.9em + 6px);
-	content: "";
+@media screen and (max-width: 600px) {
+
+	.mobile-100 {
+		width: 100% !important;
+	}
+
+	.mobile-50 {
+		width: 50% !important;
+	}
 }
