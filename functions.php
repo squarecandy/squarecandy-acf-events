@@ -819,7 +819,10 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 	$never_show_timezones  = get_option( 'options_never_show_timezones' );
 	$add_to_cal_use_local_timezone = get_option( 'options_add_to_cal_use_local_timezone' );
 
-	if ( ! $never_show_timezones && ! empty( $event['timezone'] ) ) {
+	if ( ! empty( $event['all_day'] ) ) {
+		// all day events always use a floating timezone
+		$timezone = false;
+	} elseif ( ! $never_show_timezones && ! empty( $event['timezone'] ) ) {
 		// if the single event has a timezone, use that - unless the full timezones feature is disabled.
 		$timezone = $event['timezone'];
 	} elseif ( empty( $event['timezone'] ) && $add_to_cal_use_local_timezone && get_option( 'timezone_string' ) ) {
@@ -873,7 +876,6 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 
 		if ( ! empty( $event['all_day'] ) ) {
 			$url_params     .= '&all_day=true';
-			$timezone        = false; // floating timezone always used for all day events
 			$url_date_format = 'Y-m-d';
 		}
 
