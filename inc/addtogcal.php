@@ -128,4 +128,3 @@ endif;
  * // URL only
  * echo squarecandy_add_to_gcal_url('Example Event', 'June 30, 2017 8:00pm', 'July 2, 2017 10:00am', 'This is my detailed event description', '1600 Pennsylvania Ave NW, Washington, DC 20500', false, 'America/New_York' );
  */
-

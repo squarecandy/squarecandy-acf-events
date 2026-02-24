@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP code that should be distributed to all themes & plugins goes here.
- * Version: 1.7.0
+ * Version: 2.0.3
  */
 
 // for debugging
@@ -19,10 +19,10 @@ if ( ! function_exists( 'sqcdy_is_debug' ) ) :
 endif;
 
 if ( ! function_exists( 'pre_r' ) ) :
-	function pre_r( $array ) {
+	function pre_r( $debug_array ) {
 		if ( sqcdy_is_debug() ) {
 			print '<pre class="squarecandy-pre-r">';
-			print_r( $array ); // phpcs:ignore
+			print_r( $debug_array ); // phpcs:ignore
 			print '</pre>';
 		}
 	}
@@ -31,26 +31,26 @@ endif;
 //utility log function to handle arrays, objects etc.
 //phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log, WordPress.PHP.DevelopmentFunctions.error_log_print_r
 if ( ! function_exists( 'sqcdy_log' ) ) :
-	function sqcdy_log( $object, $message = '', $override_debug = false ) {
+	function sqcdy_log( $log_object, $message = '', $override_debug = false ) {
 		$debug_mode = sqcdy_is_debug();
-		$is_string  = is_string( $object );
-		$is_numeric = is_numeric( $object );
+		$is_string  = is_string( $log_object );
+		$is_numeric = is_numeric( $log_object );
 
 		if ( $debug_mode || $override_debug ) :
 			if ( ! is_string( $message ) ) {
 				$message = '';
 			}
 			if ( $message && ( $is_string || $is_numeric ) ) {
-				error_log( trim( $message ) . ': ' . trim( $object ) );
+				error_log( trim( $message ) . ': ' . trim( $log_object ) );
 				return;
 			}
 			if ( $message ) {
 				error_log( $message . ':' );
 			}
 			if ( $is_string || $is_numeric ) {
-				error_log( $object );
+				error_log( $log_object );
 			} else {
-				error_log( print_r( $object, true ) );
+				error_log( print_r( $log_object, true ) );
 			}
 		endif;
 	}
@@ -240,20 +240,36 @@ endif;
 
 // wrapper for acf_add_options_page
 if ( ! function_exists( 'squarecandy_add_options_page' ) ) :
-	function squarecandy_add_options_page( $array, $is_subpage = false ) {
+	function squarecandy_add_options_page( $option_page, $is_subpage = false ) {
 		$acf_present = function_exists( 'acf_add_options_page' );
 		if ( ! $acf_present ) {
 			return;
 		}
 		add_action(
 			'init',
-			function() use ( $array, $is_subpage ) {
+			function () use ( $option_page, $is_subpage ) {
 				if ( $is_subpage ) {
-					acf_add_options_sub_page( $array );
+					acf_add_options_sub_page( $option_page );
 				} else {
-					acf_add_options_page( $array );
+					acf_add_options_page( $option_page );
 				}
 			}
 		);
 	}
 endif;
+
+if ( ! function_exists( 'is_acf_fontawesome_plugin_active' ) ) {
+	function is_acf_fontawesome_plugin_active() {
+		if (
+			class_exists( 'acf_field_font_awesome' ) ||
+			in_array(
+				'advanced-custom-fields-font-awesome/acf-font-awesome.php',
+				(array) get_option( 'active_plugins', array() ),
+				true
+			)
+		) {
+			return true;
+		}
+		return false;
+	}
+}

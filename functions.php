@@ -714,16 +714,16 @@ add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
  * Generate and echo/return html to display buttons for an event
  * @param array $event
  * @param bool $show_post_link_button
- * @param bool $echo
+ * @param bool $echo_output
  * @return string $output OR echos string $output
  *
  * button types / $event properties:
  * 'tickets_link', 'more_info_link', 'facebook_link', 'add_to_gcal'
  */
-function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo = true ) {
+function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo_output = true ) {
 
 	$output = '';
-	$single = $echo;
+	$single = $echo_output;
 
 	$now       = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
 	$is_future = ! empty( $event['archive_date'] ) && $event['archive_date'] > $now;
@@ -786,7 +786,7 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 		$output .= squarecandy_add_to_calendar( $event, $single );
 	endif;
 
-	if ( $echo ) {
+	if ( $echo_output ) {
 		echo $output;
 	} else {
 		return $output;
@@ -816,6 +816,24 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 
 	$event_title = get_the_title();
 
+	$never_show_timezones          = get_option( 'options_never_show_timezones' );
+	$add_to_cal_use_local_timezone = get_option( 'options_add_to_cal_use_local_timezone' );
+
+	if ( ! empty( $event['all_day'] ) ) {
+		// all day events always use a floating timezone
+		$timezone = false;
+	} elseif ( ! $never_show_timezones && ! empty( $event['timezone'] ) ) {
+		// if the single event has a timezone, use that - unless the full timezones feature is disabled.
+		$timezone = $event['timezone'];
+	} elseif ( empty( $event['timezone'] ) && $add_to_cal_use_local_timezone && get_option( 'timezone_string' ) ) {
+		// if the single event doesn't have a timezone, but the option to use the local timezone for calendar links is enabled, use the WP local timezone
+		$timezone = get_option( 'timezone_string' );
+	} else {
+		// in all other cases, don't include a timezone in the calendar link
+		// (this will cause it to default to the user's local timezone on their own calendar)
+		$timezone = false;
+	}
+
 	if ( ! sqcdy_is_views2( 'events' ) ) :
 
 		// shortcode also wraps this text & uses different icon
@@ -829,7 +847,8 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 			$event_address,
 			$event['all_day'] ?? false,
 			$linktext,
-			array( 'gcal-button', 'button', 'button-bold' )
+			array( 'gcal-button', 'button', 'button-bold' ),
+			$timezone
 		);
 
 	else :
@@ -851,23 +870,12 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 		$output  = '<div class="squarecandy-add-to-calendar">';
 		$output .= '<span class="label add-to-calendar-label">' . __( 'Add to Calendar:', 'squarecandy-acf-events' ) . '</span>';
 
-		// if event has a timezone set, use that
-		if ( ! empty( $event['timezone'] ) ) {
-			$timezone = $event['timezone'];
-		} else {
-			// fallback for no per-event timezone set
-			// @TODO - create a settings option to choose defaulting to WP timezone or no timezone at all.
-			// use WordPress timezone
-			$timezone = get_option( 'timezone_string' );
-		}
-
 		$url_date_format = 'Y-m-d\TH:i:s';
 
 		$url_params = '';
 
 		if ( ! empty( $event['all_day'] ) ) {
 			$url_params     .= '&all_day=true';
-			$timezone        = false; // floating timezone always used for all day events
 			$url_date_format = 'Y-m-d';
 		}
 
@@ -884,7 +892,9 @@ function squarecandy_add_to_calendar( $event, $single = true ) {
 			$url_params .= '&end=' . $end_date;
 		}
 
-		$url_params .= '&timezone=' . rawurlencode( $timezone );
+		if ( $timezone ) {
+			$url_params .= '&timezone=' . rawurlencode( $timezone );
+		}
 
 		$url_params .= '&title=' . rawurlencode( $event_title );
 		if ( ! empty( $event['short_description'] ) ) {

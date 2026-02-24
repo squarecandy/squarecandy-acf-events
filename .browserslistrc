@@ -1,0 +1,19 @@
+# Browsers that we support
+# To get the list of currently support browsers and versions, run:
+# npx browserslist
+#
+# Exclude browsers above 0.5% globally, but not popular in North America:
+# KaiOS, Opera Mini, Opera Mobile, Opera, QQ Browser, UC Browser
+#
+> 0.5%
+last 7 versions
+Firefox ESR
+not dead
+Safari >= 16
+iOS >= 16
+not KaiOS > 0
+not OperaMini all
+not op_mob > 0
+not opera > 0
+not and_qq > 0
+not and_uc > 0

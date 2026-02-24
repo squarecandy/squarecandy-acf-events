@@ -23,8 +23,7 @@ function squarecandy_events_add_fields() {
 		'library'       => 'all',
 		'wrapper'       => array(
 			'width' => '39',
-			'class' => '',
-			'id'    => '',
+			'class' => 'mobile-50',
 		),
 	);
 
@@ -38,14 +37,43 @@ function squarecandy_events_add_fields() {
 		'conditional_logic' => 0,
 		'wrapper'           => array(
 			'width' => '61',
-			'class' => '',
-			'id'    => '',
+			'class' => 'mobile-50',
 		),
 		'message'           => '',
 		'default_value'     => 0,
 		'ui'                => 1,
-		'ui_on_text'        => 'Yes',
-		'ui_off_text'       => 'No',
+		'ui_on_text'        => '✓',
+		'ui_off_text'       => ' ',
+	);
+
+	$eventfields['all_day'] = array(
+		'key'           => 'field_5616bcdfb642d',
+		'label'         => 'All Day',
+		'name'          => 'all_day',
+		'type'          => 'true_false',
+		'wrapper'       => array(
+			'width' => 39,
+			'class' => 'mobile-50',
+		),
+		'default_value' => 0,
+		'ui'            => 1,
+		'ui_on_text'    => '✓',
+		'ui_off_text'   => ' ',
+	);
+
+	$eventfields['multi_day'] = array(
+		'key'           => 'field_5616bd4ca2b0f',
+		'label'         => 'Show End Date/Time',
+		'name'          => 'multi_day',
+		'type'          => 'true_false',
+		'wrapper'       => array(
+			'width' => 39,
+			'class' => 'mobile-50',
+		),
+		'default_value' => 0,
+		'ui'            => 1,
+		'ui_on_text'    => '✓',
+		'ui_off_text'   => ' ',
 	);
 
 	$eventfields['start_date'] = array(
@@ -56,36 +84,12 @@ function squarecandy_events_add_fields() {
 		'required'          => 1,
 		'conditional_logic' => 0,
 		'wrapper'           => array(
-			'width' => '25',
-			'class' => 'start-date',
+			'width' => 52,
+			'class' => 'mobile-50',
 		),
 		'display_format'    => 'F j, Y',
 		'return_format'     => 'F j, Y',
 		'first_day'         => 0,
-	);
-
-	$eventfields['all_day'] = array(
-		'key'           => 'field_5616bcdfb642d',
-		'label'         => 'All Day',
-		'name'          => 'all_day',
-		'type'          => 'true_false',
-		'wrapper'       => array(
-			'width' => 10,
-			'class' => 'start-date',
-		),
-		'default_value' => 0,
-	);
-
-	$eventfields['multi_day'] = array(
-		'key'           => 'field_5616bd4ca2b0f',
-		'label'         => 'Show End Date/Time',
-		'name'          => 'multi_day',
-		'type'          => 'true_false',
-		'wrapper'       => array(
-			'width' => '15',
-			'class' => 'start-date',
-		),
-		'default_value' => 0,
 	);
 
 	$eventfields['start_time'] = array(
@@ -104,8 +108,8 @@ function squarecandy_events_add_fields() {
 			),
 		),
 		'wrapper'           => array(
-			'width' => '20',
-			'class' => 'start-date',
+			'width' => 24,
+			'class' => 'mobile-50',
 		),
 		'display_format'    => 'g:i a',
 		'return_format'     => 'g:i a',
@@ -131,6 +135,13 @@ function squarecandy_events_add_fields() {
 		}
 		$pretty_timezone = $pretty_timezone ? $pretty_timezone : str_replace( '_', ' ', $wp_timezone );
 
+		// instruct user to "leave empty for default" only if it's true.
+		$always_show_timezones = get_option( 'options_always_show_timezones' );
+		$timezone_instructions = '';
+		if ( $always_show_timezones ) {
+			$timezone_instructions = 'leave empty for default: ' . $pretty_timezone;
+		}
+
 		$eventfields['timezone'] = array(
 			'key'               => 'field_fn48bedm4dn49',
 			'label'             => 'Timezone',
@@ -151,9 +162,10 @@ function squarecandy_events_add_fields() {
 				),
 			),
 			'wrapper'           => array(
-				'width' => '25',
+				'width' => 24,
+				'class' => 'mobile-100',
 			),
-			'instructions'      => 'leave empty for default: ' . $pretty_timezone,
+			'instructions'      => $timezone_instructions,
 		);
 	endif;
 
@@ -172,7 +184,8 @@ function squarecandy_events_add_fields() {
 			),
 		),
 		'wrapper'           => array(
-			'width' => '70',
+			'width' => 52,
+			'class' => 'mobile-50',
 		),
 		'display_format'    => 'F j, Y',
 		'return_format'     => 'F j, Y',
@@ -200,7 +213,8 @@ function squarecandy_events_add_fields() {
 			),
 		),
 		'wrapper'           => array(
-			'width' => '30',
+			'width' => 24,
+			'class' => 'mobile-50',
 		),
 		'display_format'    => 'g:i a',
 		'return_format'     => 'g:i a',
@@ -213,7 +227,8 @@ function squarecandy_events_add_fields() {
 		'type'              => 'text',
 		'conditional_logic' => 0,
 		'wrapper'           => array(
-			'width' => 50,
+			'width' => 52,
+			'class' => 'mobile-100',
 		),
 	);
 
@@ -223,7 +238,8 @@ function squarecandy_events_add_fields() {
 		'name'    => 'venue_link',
 		'type'    => 'url',
 		'wrapper' => array(
-			'width' => 50,
+			'width' => 48,
+			'class' => 'mobile-100',
 		),
 	);
 
@@ -241,6 +257,7 @@ function squarecandy_events_add_fields() {
 		'type'    => 'text',
 		'wrapper' => array(
 			'width' => 50,
+			'class' => 'mobile-100',
 		),
 	);
 
@@ -251,6 +268,7 @@ function squarecandy_events_add_fields() {
 		'type'    => 'text',
 		'wrapper' => array(
 			'width' => 25,
+			'class' => 'mobile-50',
 		),
 	);
 
@@ -261,6 +279,7 @@ function squarecandy_events_add_fields() {
 		'type'    => 'text',
 		'wrapper' => array(
 			'width' => 25,
+			'class' => 'mobile-50',
 		),
 	);
 
@@ -557,7 +576,7 @@ function squarecandy_events_add_fields() {
 			'position'              => 'acf_after_title',
 			'style'                 => 'seamless',
 			'label_placement'       => 'top',
-			'instruction_placement' => 'label',
+			'instruction_placement' => 'field',
 			'hide_on_screen'        => array(
 				0 => 'excerpt',
 				1 => 'custom_fields',
