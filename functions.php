@@ -725,6 +725,9 @@ function squarecandy_events_generate_buttons( $event, $show_post_link_button = f
 	$output = '';
 	$single = $echo_output;
 
+	if ( ! isset( $event['archive_date'] ) ) {
+		$event['archive_date'] = get_post_meta( $event['ID'], 'archive_date', true );
+	}
 	$now       = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
 	$is_future = ! empty( $event['archive_date'] ) && $event['archive_date'] > $now;
 

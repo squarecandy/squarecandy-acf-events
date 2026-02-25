@@ -1,7 +1,7 @@
 <?php
 // Square Candy ACF Events Single Event Post Template
 $event_id    = get_the_ID();
-$event       = get_fields( $event_id );
+$event       = get_fields( $event_id ); // NB this doesn't get all post_meta, just post_meta bset by ACF
 $event['ID'] = $event_id;
 $is_views2   = sqcdy_is_views2( 'events' );
 $template    = new SquareCandy_Events_Template_Loader();
