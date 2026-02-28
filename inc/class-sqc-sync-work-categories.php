@@ -54,7 +54,13 @@ class SQC_Sync_Work_Categories {
 				add_action( 'pre_post_update', array( $this, 'pre_post_update_work' ), 10, 2 );
 
 				// handle changes when bulk editing using Admin Columns Pro
-				add_filter( 'acp/editing/save_value', array( $this, 'acp_bulk_edit' ), 10, 3 );
+				if ( defined( 'ACP_VERSION' ) ) {
+					if ( ACP_VERSION > 7 ) {
+						add_filter( 'ac/editing/save_value', array( $this, 'ac_bulk_edit' ), 10, 3 );
+					} else {
+						add_filter( 'acp/editing/save_value', array( $this, 'acp_bulk_edit' ), 10, 3 );
+					}
+				}
 
 			endif;
 
@@ -438,6 +444,33 @@ class SQC_Sync_Work_Categories {
 
 		return $value;
 	}
+
+
+	/**
+	 * handle changes when bulk editing using Admin Columns Pro > 7
+	 * @param array{ string } $value
+	 * @param AC\Column $column
+	 * @param int|string $post_id
+	 *
+	 * @return array{}
+	 */
+
+	public function ac_bulk_edit( $value, $column, $post_id ) {
+
+		if ( $column->get_post_type() === self::ORIGINAL_POST_TYPE && $column->get_type() === self::WORKS_CAT_FIELD ) {
+
+			$cats        = get_the_terms( $post_id, self::ORIGINAL_TAX_SLUG );
+			$cat_ids     = $cats ? wp_list_pluck( $cats, 'term_id' ) : array(); // array of ints
+			$cat_strings = array_map( 'strval', $cat_ids );
+
+			if ( $cat_strings !== $value ) {
+				$this->handle_work_changes( $post_id, $cat_ids, $value );
+			}
+		}
+
+		return $value;
+	}
+
 
 	/**
 	 * When a work's categories are updated, populate those changes to the associated events.
