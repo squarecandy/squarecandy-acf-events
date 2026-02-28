@@ -722,15 +722,18 @@ add_action( 'pmxi_saved_post', 'squarecandy_events_pmxi_saved_post', 999, 3 );
  */
 function squarecandy_events_generate_buttons( $event, $show_post_link_button = false, $echo_output = true ) {
 
-	$output = '';
-	$single = $echo_output;
+	if ( ! isset( $event['ID'] ) ) {
+		$event['ID'] = get_the_ID();
+	}
 
 	if ( ! isset( $event['archive_date'] ) ) {
 		$event['archive_date'] = get_post_meta( $event['ID'], 'archive_date', true );
 	}
-	$now       = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
-	$is_future = ! empty( $event['archive_date'] ) && $event['archive_date'] > $now;
 
+	$output            = '';
+	$single            = $echo_output;
+	$now               = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
+	$is_future         = ! empty( $event['archive_date'] ) && $event['archive_date'] > $now;
 	$show_tickets_link = get_option( 'options_show_tickets_link' );
 
 	if (
