@@ -22,8 +22,7 @@ function squarecandy_events_add_fields() {
 		'preview_size'  => 'medium',
 		'library'       => 'all',
 		'wrapper'       => array(
-			'width' => '39',
-			'class' => 'mobile-50',
+			'width' => '100',
 		),
 	);
 
@@ -32,14 +31,11 @@ function squarecandy_events_add_fields() {
 		'label'             => 'Feature Event',
 		'name'              => 'featured',
 		'type'              => 'true_false',
-		'instructions'      => '',
-		'required'          => 0,
 		'conditional_logic' => 0,
 		'wrapper'           => array(
-			'width' => '61',
+			'width' => '15',
 			'class' => 'mobile-50',
 		),
-		'message'           => '',
 		'default_value'     => 0,
 		'ui'                => 1,
 		'ui_on_text'        => '✓',
@@ -52,7 +48,7 @@ function squarecandy_events_add_fields() {
 		'name'          => 'all_day',
 		'type'          => 'true_false',
 		'wrapper'       => array(
-			'width' => 39,
+			'width' => '15',
 			'class' => 'mobile-50',
 		),
 		'default_value' => 0,
@@ -67,8 +63,8 @@ function squarecandy_events_add_fields() {
 		'name'          => 'multi_day',
 		'type'          => 'true_false',
 		'wrapper'       => array(
-			'width' => 39,
-			'class' => 'mobile-50',
+			'width' => '50',
+			'class' => 'mobile-100',
 		),
 		'default_value' => 0,
 		'ui'            => 1,
