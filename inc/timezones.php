@@ -249,8 +249,16 @@ function squarecandy_timezone_us_timezone_identifiers( $first_timezones ) {
 }
 
 
-add_filter( 'acf/load_field/name=tztest', 'squarecandy_tz_load_field' );
-function squarecandy_tz_load_field( $field ) {
-	$field['choices'] = squarecandy_timezone_choice();
-	return $field;
+/**
+ * Avoid an edge issue in ACP that throws a warning when trying to set up column sorting, by disabling sort on the Timezone column if added
+ * `PHP Warning:  Array to string conversion in .../wp-content/plugins/admin-columns-pro/addons/acf/classes/Sorting/ModelFactory.php on line 106`
+ * `106:                 natcasesort($choices);`
+ * Their code is expecting $choices will be a simple $array, but we're setting it up as a multidimensional array to get optgroups.
+ */
+add_filter( 'manage_edit-event_sortable_columns', 'squarecandy_events_timezone_sortable_columns', 1000 );
+function squarecandy_events_timezone_sortable_columns( $columns ) {
+	if ( isset( $columns['2b31cc87c5a1ca'] ) ) {
+		unset( $columns['2b31cc87c5a1ca'] );
+	}
+	return $columns;
 }
