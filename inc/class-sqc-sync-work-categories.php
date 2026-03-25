@@ -162,6 +162,7 @@ class SQC_Sync_Work_Categories {
 			'meta_box_cb'           => false,
 		);
 
+		// On staging/local, show admin ui for this taxonomy
 		if ( WP_DEBUG ) {
 			$taxonomy_args['show_ui'] = true;
 			unset( $taxonomy_args['meta_box_cb'] );
