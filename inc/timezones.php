@@ -254,11 +254,17 @@ function squarecandy_timezone_us_timezone_identifiers( $first_timezones ) {
  * `PHP Warning:  Array to string conversion in .../wp-content/plugins/admin-columns-pro/addons/acf/classes/Sorting/ModelFactory.php on line 106`
  * `106:                 natcasesort($choices);`
  * Their code is expecting $choices will be a simple $array, but we're setting it up as a multidimensional array to get optgroups.
+ * This causes errors like above in the logs, and also the value of the field doesn't display in the column.
+ * If AC is active, unless we're on a single event edit screen, flatten the options so AC can process them.
  */
-add_filter( 'manage_edit-event_sortable_columns', 'squarecandy_events_timezone_sortable_columns', 1000 );
-function squarecandy_events_timezone_sortable_columns( $columns ) {
-	if ( isset( $columns['2b31cc87c5a1ca'] ) ) {
-		unset( $columns['2b31cc87c5a1ca'] );
-	}
-	return $columns;
+function squarecandy_events_timezone_field_choices( $field ) {
+	if ( is_admin() && class_exists( 'ACP\AdminColumnsPro' ) ) :
+		$screen               = get_current_screen();
+		$is_edit_event_single = isset( $screen->base ) && 'post' === $screen->base && isset( $screen->post_type ) && 'event' === $screen->post_type;
+		if ( ! $is_edit_event_single ) {
+			$field['choices'] = call_user_func_array( 'array_merge', array_values( $field['choices'] ) );
+		}
+	endif;
+	return $field;
 }
+add_filter( 'acf/load_field/name=timezone', 'squarecandy_events_timezone_field_choices' );
