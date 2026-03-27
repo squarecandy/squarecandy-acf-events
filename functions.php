@@ -940,3 +940,24 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 	require ACF_EVENTS_DIR_PATH . 'inc/class-gamajo-template-loader.php';
 }
 require ACF_EVENTS_DIR_PATH . 'inc/class-squarecandy-events-template-loader.php';
+
+
+/**
+ * ACP 7 removes display format for ACF time_picker fields (perhaps they'll bring it back?)
+ * Shim to reinstate the use of whatever display_format is set on the ACF field
+ */
+function squarecandy_events_acp_acf_timepicker_format( string $value, AC\Column\Context $column, $id, AC\TableScreen $table, AC\ListScreen $list_screen ) {
+	// Target time_picker columns on the "Event" list table
+	if (
+		$table instanceof AC\PostType && // this is a post type
+		$table->get_post_type()->equals( 'event' ) && // this is a "Page" list table
+		$column instanceof AC\Column\CustomFieldContext && // this is a "Custom Field" column
+		'time_picker' === $column->get_field_type()
+	) {
+		$field  = $column->get_field();
+		$format = isset( $field['display_format'] ) ? $field['display_format'] : 'g:i a';
+		$value  = acf_format_date( $value, $format ); // nb uses date_i18n so maybe revisit
+	}
+	return $value;
+}
+add_filter( 'ac/column/render', 'squarecandy_events_acp_acf_timepicker_format', 10, 5 );
