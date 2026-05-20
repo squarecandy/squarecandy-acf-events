@@ -168,7 +168,7 @@ h2.accordion-header {
 	}
 }
 
-.js .accordion-content {
+.js .accordion-content:not(details .accordion-content) {
 	display: none;
 }
 
