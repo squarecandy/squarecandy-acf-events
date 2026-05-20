@@ -612,6 +612,9 @@ add_filter(
 require ACF_EVENTS_DIR_PATH . 'inc/data-cleanup.php';
 
 // run the bulk update if it has not been done yet.
+/*
+// remove this feature now - it was only needed for a one-time cleanup and all sites should have run it by now.
+// keeping here for reference in case we need it in an unexpected circumstance, or if we need a similar bulk update in the future.
 if ( ! get_transient( 'squarecandy_event_cleanup_complete5' ) && ! sqcdy_is_views2( 'events' ) ) {
 	// Bulk Update Script
 	function squarecandy_acf_events_bulk_update_enqueue() {
@@ -629,6 +632,7 @@ if ( ! get_transient( 'squarecandy_event_cleanup_complete5' ) && ! sqcdy_is_view
 	add_action( 'admin_enqueue_scripts', 'squarecandy_acf_events_bulk_update_enqueue' );
 	require ACF_EVENTS_DIR_PATH . 'inc/bulk-update.php';
 }
+*/
 
 /**
  * Add sortable start_date column to admin event list, sort descending by default
