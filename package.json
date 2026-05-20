@@ -1,5 +1,5 @@
 {
-	"version": "1.11.0-timezones.8",
+	"version": "1.11.0-develop.0",
 	"scripts": {
 		"release": "standard-version"
 	},
