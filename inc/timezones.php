@@ -64,7 +64,9 @@ function squarecandy_build_timezone_options( $tz_identifiers, $single_continent 
 		// get country & abbreviation
 		$tz                   = new DateTimeZone( $tzone );
 		$location             = $tz->getLocation();
-		$zone_info['country'] = Locale::getDisplayRegion( '-' . $location['country_code'], 'en' );
+		$zone_info['country'] = class_exists( 'Locale' )
+			? Locale::getDisplayRegion( '-' . $location['country_code'], 'en' )
+			: $location['country_code'];
 		$dt                   = new DateTime( 'now', $tz );
 		$abbreviation         = $dt->format( 'T' );
 		// for non-numeric (i.e. offset) abbreviations, use the first matching non-DST abbreviation
