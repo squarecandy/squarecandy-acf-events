@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.10.0...v1.11.0) (2026-05-21)
+
+
+### Features
+
+* add option for default timezone or not in Add to Calendar; Reorder and add conditional logic to some options ([7249a6f](https://github.com/squarecandy/squarecandy-acf-events/commit/7249a6f97a86e08481f33598584a2d30d0020315))
+* add timezone support to add to cal links ([8b72fc1](https://github.com/squarecandy/squarecandy-acf-events/commit/8b72fc128e48842a7542947d86d7c2583a0b28de))
+* use directly google cal link instead of 3rd party ([8800e5b](https://github.com/squarecandy/squarecandy-acf-events/commit/8800e5b36838ee4abf6f2e65e414adff5aaf1366))
+
+
+### Bug Fixes
+
+* add more informative info to us timezones ([f07dfee](https://github.com/squarecandy/squarecandy-acf-events/commit/f07dfee967fde1f84c9ccf1fc8270effd7d59a12))
+* add option to hide timezones and ui, improve format of default timezone display above picker ([8dcd379](https://github.com/squarecandy/squarecandy-acf-events/commit/8dcd3793aaa5fc38944bdf83da0303d467123926))
+* add span & style to timezone display; don't show timezone if no time, add support for different start and end timezones ([e311eee](https://github.com/squarecandy/squarecandy-acf-events/commit/e311eee6d954eb45103d1af1c75fb8af8cca094d))
+* add timezone abbreviations to dropdown ([ee35cc3](https://github.com/squarecandy/squarecandy-acf-events/commit/ee35cc35fd471ce4d45078402cebfebec355ce99))
+* add timezone field to events ([32fe7b5](https://github.com/squarecandy/squarecandy-acf-events/commit/32fe7b52cec7ff25799feb7ec2296c44ad1580f3))
+* add timezone options to event options ([d68a0b1](https://github.com/squarecandy/squarecandy-acf-events/commit/d68a0b18e9546037bfbc56ab8388f6d2bbba2403))
+* add timezone to time display function ([187ffb0](https://github.com/squarecandy/squarecandy-acf-events/commit/187ffb0f7b1dd95f9d4ce533e000566a04657164))
+* add transient so we don't calculate timezone choices every time ([ecded41](https://github.com/squarecandy/squarecandy-acf-events/commit/ecded416907cdc533922f5e55bb44d1157875d9b))
+* all day events always use a floating timezone (views 1 and 2) ([76f2a49](https://github.com/squarecandy/squarecandy-acf-events/commit/76f2a49d2dc44742bff4df8e116dd6fd703d5849))
+* avoid errors with Admin Columns Pro ([cca1419](https://github.com/squarecandy/squarecandy-acf-events/commit/cca141968b7c871da4c01c604658b537ab403deb))
+* better fix for ACP issues ([dc14819](https://github.com/squarecandy/squarecandy-acf-events/commit/dc14819839cddaec180552ccf62809538de73e2c))
+* fix ACP 7 time format issue ([68ca4e7](https://github.com/squarecandy/squarecandy-acf-events/commit/68ca4e72eb91fe846546effcd8548473293d2f77))
+* fix archive_date not set bug ([65a0e87](https://github.com/squarecandy/squarecandy-acf-events/commit/65a0e875767fadf2e429d0edd4afe14a144d7740))
+* fix event id not set error ([79ec2c7](https://github.com/squarecandy/squarecandy-acf-events/commit/79ec2c77f59d3662afdb577f4249d7ac004ff762))
+* float most used timezones to the top, make it easier to override the USA first sorting ([6831d09](https://github.com/squarecandy/squarecandy-acf-events/commit/6831d09720fefbe933973e859db253fa8e2a035e))
+* improve display of date time acf fields ([f87689c](https://github.com/squarecandy/squarecandy-acf-events/commit/f87689c428a81400e4d437cd528f1720a4d211a6))
+* minor display adjustments ([6a2dcdb](https://github.com/squarecandy/squarecandy-acf-events/commit/6a2dcdbe2ac30a802553d9fb77055067e6c97c5f))
+* need fallback for servers without PHP intl extension installed. ([84d4e9f](https://github.com/squarecandy/squarecandy-acf-events/commit/84d4e9f111d02121eee06f108316dddae2bfa02a))
+* only add "leave empty for defaut" instruction when it's true; reorganize Edit screen fields; small screen fields styles ([047f114](https://github.com/squarecandy/squarecandy-acf-events/commit/047f114f80639c81a6b9fc76bfd2e5500495d0d8))
+* refactor cleanup_data so we can add timezone calc in one place ([6791399](https://github.com/squarecandy/squarecandy-acf-events/commit/67913998e2a7ea738f19443bc824b32980d9be4c))
+* refactor single event to avoid repeated function calls ([f8b18bd](https://github.com/squarecandy/squarecandy-acf-events/commit/f8b18bda2e56909860ae079000be9e1acc12030f))
+* refactor sungle event & remove unused archive_date ([a706857](https://github.com/squarecandy/squarecandy-acf-events/commit/a706857c90f668741c4d9b47bd8813b96c359215))
+* refactor to reduce get_field etc calls ([6317dcf](https://github.com/squarecandy/squarecandy-acf-events/commit/6317dcfcaf7fb25d63b8cf6dc5c8421e69bad0b0))
+* remove bulk update tool. Should be run everywhere by now. ([201e240](https://github.com/squarecandy/squarecandy-acf-events/commit/201e2404ef490ef4c04d17662875ebffed6142e0))
+* sort main US timezones to top of select list ([ff84049](https://github.com/squarecandy/squarecandy-acf-events/commit/ff840496ec8ffe0a4b593582c0c7463f04848cba))
+* split acf field group files & add to action ([ca2d08b](https://github.com/squarecandy/squarecandy-acf-events/commit/ca2d08b92a2439e18e70b8e2795fdbd8129d8758))
+* Termageddon accordions conflict ([746bd4e](https://github.com/squarecandy/squarecandy-acf-events/commit/746bd4e7578cfd65a5bcf47dc840ecfc8fb45209))
+* update for ACP > 7 ([8508deb](https://github.com/squarecandy/squarecandy-acf-events/commit/8508deb5d507a85a50749f781333e7fa1f7a31f1))
+* update gruntfile ([385372b](https://github.com/squarecandy/squarecandy-acf-events/commit/385372bb003988adec91787b5cdf54fa68b20d8a))
+* use non daylight savings abbreviations for timezone picker ([f512dd3](https://github.com/squarecandy/squarecandy-acf-events/commit/f512dd370f8b162723c4ae7d98434bd335e00bde))
+* use timezones in data-cleanup functions ([f779c62](https://github.com/squarecandy/squarecandy-acf-events/commit/f779c629594303208cb358eb6eb71cd53c68cdd0))
+
 ## [1.10.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.9.4...v1.10.0) (2025-10-06)
 
 
