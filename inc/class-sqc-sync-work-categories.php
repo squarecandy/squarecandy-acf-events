@@ -449,7 +449,7 @@ class SQC_Sync_Work_Categories {
 
 	/**
 	 * handle changes when bulk editing using Admin Columns Pro > 7
-	 * @param array{ string } $value
+	 * @param array{ string } $value / changed at some point to array( [value] => array{ string (tax ids) }, [method] => { string (replace|add|remove) } )
 	 * @param AC\Column $column
 	 * @param int|string $post_id
 	 *
@@ -460,12 +460,46 @@ class SQC_Sync_Work_Categories {
 
 		if ( $column->get_post_type() === self::ORIGINAL_POST_TYPE && $column->get_type() === self::WORKS_CAT_FIELD ) {
 
+			sqcdy_log( $post_id, 'ac_bulk_edit' );
+			sqcdy_log( $value, 'Edit value' );
+
 			$cats        = get_the_terms( $post_id, self::ORIGINAL_TAX_SLUG );
 			$cat_ids     = $cats ? wp_list_pluck( $cats, 'term_id' ) : array(); // array of ints
 			$cat_strings = array_map( 'strval', $cat_ids );
+			sqcdy_log( $cat_strings, 'ac_bulk_edit: existing cats' );
 
-			if ( $cat_strings !== $value ) {
-				$this->handle_work_changes( $post_id, $cat_ids, $value );
+			// previously $updated cats was a simple array with all the terms ids after update 
+			// but now it's an array like array( [value] => array( [0] => 235 ), [method] => add )
+			// where method can be remove, add, replace
+
+			// handle new acp updated categories sctructure
+			if ( array_key_exists( 'method', $value ) ) {
+				switch ( $value['method'] ) {
+					case 'replace':
+						$updated_cats = $value['value'];
+						break;
+					case 'add':
+						$updated_cats = array_merge( $cat_strings, $value['value'] );
+						break;
+					case 'remove':
+						foreach ( $value['value'] as $remove_tax ) {
+							$updated_cats     = $cat_strings;
+							$remove_tax_index = array_search( $remove_tax, $updated_cats, true );
+							if ( $remove_tax_index !== false ) {
+								unset( $updated_cats[ $remove_tax_index ] );
+							}
+						}
+						break;					
+					default:
+						$updated_cats = $cat_strings; // something weird happened, don't change anything
+						break;
+				}
+			} else {
+				$updated_cats = $value;
+			}
+
+			if ( $cat_strings !== $updated_cats ) {
+				$this->handle_work_changes( $post_id, $cat_ids, $updated_cats );
 			}
 		}
 
