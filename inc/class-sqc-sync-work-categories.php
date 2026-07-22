@@ -41,8 +41,14 @@ class SQC_Sync_Work_Categories {
 
 				add_action( 'admin_init', array( $this, 'bulk_sync_categories' ) );
 
+				// when we're inserting a new work category
+				add_action( 'created_' . self::ORIGINAL_TAX_SLUG, array( $this, 'created_original_category' ), 10, 3 );
+
 				// when we're changing the name or slug of the original category
 				add_action( 'edited_' . self::ORIGINAL_TAX_SLUG, array( $this, 'edited_original_category' ), 10, 2 );
+
+				// when we're deleting a work category
+				add_action( 'pre_delete_term', array( $this, 'pre_delete_original_category' ), 10, 2 );
 
 				// when we're editing an event check if we added or removed a work
 				add_action( 'acf/save_post', array( $this, 'save_post_event' ), 5 ); // 5 so pre-save
@@ -197,15 +203,7 @@ class SQC_Sync_Work_Categories {
 		if ( $work_cats ) :
 
 			foreach ( $work_cats as $work_cat ) :
-				$new_cat = null;
-				if ( ! get_term_by( 'slug', $work_cat->slug, self::TARGET_TAX_SLUG ) ) {
-					$new_cat = wp_insert_term( $work_cat->name, self::TARGET_TAX_SLUG, array( 'slug' => $work_cat->slug ) );
-				}
-				if ( $new_cat && ! is_wp_error( $new_cat ) ) {
-					// store bidirectional meta to look up the two taxonomies
-					update_term_meta( $work_cat->term_id, 'event_work_cat_id', $new_cat['term_id'] );
-					update_term_meta( $new_cat['term_id'], 'work_cat_id', $work_cat->term_id );
-				}
+				$this->maybe_create_event_work_cat( $work_cat );
 			endforeach;
 
 		endif;
@@ -253,12 +251,64 @@ class SQC_Sync_Work_Categories {
 		}
 	}
 
-	// when we're changing the name or slug of the original category
+	/**
+	 * If it doesn't already exist, create the associated Event Work Category & connect them via term_meta
+	 * @param $work_cat WP_Term object
+	 * @return int Term id of the new Event Work Category
+	 */
+	public function maybe_create_event_work_cat( $work_cat ) {
+		if ( ! is_object( $work_cat ) ) {
+			$work_cat = get_term( $work_cat );
+		}
+
+		if ( is_wp_error( $work_cat ) ) {
+			return;
+		}
+
+		$new_cat = null;
+		if ( ! get_term_by( 'slug', $work_cat->slug, self::TARGET_TAX_SLUG ) ) {
+			$new_cat = wp_insert_term( $work_cat->name, self::TARGET_TAX_SLUG, array( 'slug' => $work_cat->slug ) );
+			sqcdy_log( $new_cat, 'Inserted new event work category for work category ' . $work_cat->term_id . ': ' . $work_cat->slug );
+		}
+		if ( $new_cat && ! is_wp_error( $new_cat ) ) {
+			// store bidirectional meta to look up the two taxonomies
+			update_term_meta( $work_cat->term_id, 'event_work_cat_id', $new_cat['term_id'] );
+			update_term_meta( $new_cat['term_id'], 'work_cat_id', $work_cat->term_id );
+		}
+		return $new_cat['term_id'];
+	}
+
+	/**
+	 * @param int   $term_id Term ID.
+	 * @param int   $tt_id   Term taxonomy ID.
+	 * @param array $args    Arguments passed to wp_insert_term().
+	 */
+	public function created_original_category( $term_id, $tt_id, $args ) {
+		sqcdy_log( 'Creating work category ' . $term_id );
+		$work_cat_term     = get_term( $term_id );
+		$event_work_cat_id = get_term_meta( $term_id, 'event_work_cat_id', true );
+		if ( ! $event_work_cat_id ) {
+			$event_work_cat_id = $this->maybe_create_event_work_cat( $term_id );
+		}
+	}
+
+
+	/**
+	 * When we're changing the name or slug of the original category
+	 *
+	 * @param int   $term_id Term ID.
+	 * @param int   $tt_id   Term taxonomy ID.
+	 * @param array $args    Arguments passed to wp_update_term().
+	 */
 	public function edited_original_category( $term_id, $tt_id ) {
 
 		// get the id of the corresponding event work category
-		$work_cat_term       = get_term( $term_id );
-		$event_work_cat_id   = get_term_meta( $term_id, 'event_work_cat_id', true );
+		$work_cat_term     = get_term( $term_id );
+		$event_work_cat_id = get_term_meta( $term_id, 'event_work_cat_id', true );
+		if ( ! $event_work_cat_id ) {
+			$event_work_cat_id = $this->maybe_create_event_work_cat( $added_cat_id );
+		}
+
 		$event_work_cat_term = get_term( $event_work_cat_id );
 		$track_properties    = array( 'name', 'slug' );
 		$changed_properties  = array();
@@ -275,6 +325,28 @@ class SQC_Sync_Work_Categories {
 			wp_update_term( $event_work_cat_id, self::TARGET_TAX_SLUG, $changed_properties );
 		}
 
+	}
+
+
+	/**
+	 * @param int    $term     Term ID.
+	 * @param string $taxonomy Taxonomy name.
+	 */
+	public function pre_delete_original_category( $term, $taxonomy ) {
+		sqcdy_log( 'Deleting work category ' . $term . ': ' . $taxonomy );
+
+		if ( self::ORIGINAL_TAX_SLUG === $taxonomy ) {
+
+			sqcdy_log( 'Deleting work category ' . $term );
+			$event_work_cat_id = get_term_meta( $term, 'event_work_cat_id', true );
+
+			if ( $event_work_cat_id ) {
+				$deleted = wp_delete_term( $event_work_cat_id, self::TARGET_TAX_SLUG );
+				sqcdy_log( $deleted, 'Deleted event work category ' . $event_work_cat_id . ' associated with work category ' . $term );
+			} else {
+				sqcdy_log( 'No matching event work categories' );
+			}
+		}
 	}
 
 	public function save_post_event( $post_id ) {
@@ -569,6 +641,9 @@ class SQC_Sync_Work_Categories {
 				foreach ( $updated_cats as $added_cat_id ) {
 					sqcdy_log( $added_cat_id, 'Adding categories to event' );
 					$event_work_cat_id = get_term_meta( $added_cat_id, 'event_work_cat_id', true );
+					if ( ! $event_work_cat_id ) {
+						$event_work_cat_id = $this->maybe_create_event_work_cat( $added_cat_id );
+					}
 					wp_set_post_terms( $event_id, array( (int) $event_work_cat_id ), self::TARGET_TAX_SLUG, true );
 					$work_meta[ $post_id ][ $added_cat_id ] = $event_work_cat_id;
 				}
