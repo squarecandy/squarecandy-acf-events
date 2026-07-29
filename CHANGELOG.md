@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.1](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.11.0...v1.11.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* handle ACP bulk edit changes in v 7.1 + ([fefa22a](https://github.com/squarecandy/squarecandy-acf-events/commit/fefa22ab7b00b96c0d3c03d860f5966ca360db59))
+* handle event sync when creating and deleting work categories ([a56b437](https://github.com/squarecandy/squarecandy-acf-events/commit/a56b437c48263d8ae66b234724da76d82cc28b18))
+
 ## [1.11.0](https://github.com/squarecandy/squarecandy-acf-events/compare/v1.10.0...v1.11.0) (2026-05-21)
 
 
